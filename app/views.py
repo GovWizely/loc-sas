@@ -1,103 +1,99 @@
+import calendar
+
 from flask import g
-from flask_appbuilder import ModelView
+from flask_appbuilder import GroupByChartView, ModelView, aggregate_count
 from flask_appbuilder.models.sqla.filters import FilterEqualFunction
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 
 from . import appbuilder, db
-from .models import Contact, ContactGroup
+from .models import CopyrightApplication, Organization
+
+LIST_APPLICATION_STATUS = [
+    "title",
+    "created_on",
+    "organization.name",
+    "created_by.username",
+    "application_status",
+]
 
 
 def get_user():
     return g.user
 
 
-class ContactModelView(ModelView):
-    datamodel = SQLAInterface(Contact)
-    list_columns = [
-        "name",
-        "personal_celphone",
-        "birthday",
-        "contact_group.name",
-        "created_by.username",
-    ]
+class CopyrightApplicationModelView(ModelView):
+    datamodel = SQLAInterface(CopyrightApplication)
+    list_columns = LIST_APPLICATION_STATUS
     add_columns = [
-        "name",
-        "address",
-        "birthday",
-        "personal_phone",
-        "personal_celphone",
-        "contact_group",
-        "gender",
+        "title",
+        "organization",
     ]
-    edit_columns = [
-        "name",
-        "address",
-        "birthday",
-        "personal_phone",
-        "personal_celphone",
-        "contact_group",
-        "gender",
-    ]
-    base_order = ("name", "asc")
+    base_order = ("created_on", "desc")
     base_filters = [["created_by", FilterEqualFunction, get_user]]
 
 
-class SuperUserContactModelView(ModelView):
-    datamodel = SQLAInterface(Contact)
-    list_columns = [
-        "name",
-        "personal_celphone",
-        "birthday",
-        "contact_group.name",
-        "created_by.username",
-    ]
-    add_columns = [
-        "name",
-        "address",
-        "birthday",
-        "personal_phone",
-        "personal_celphone",
-        "contact_group",
-        "gender",
-    ]
+class SuperUserCopyrightApplicationModelView(ModelView):
+    datamodel = SQLAInterface(CopyrightApplication)
+    list_columns = LIST_APPLICATION_STATUS
     edit_columns = [
-        "name",
-        "address",
-        "birthday",
-        "personal_phone",
-        "personal_celphone",
-        "contact_group",
-        "gender",
+        "application_status",
     ]
-    base_order = ("name", "asc")
-    class_permission_name = "contacts"
-    method_permission_name = {
-        "get_list": "access",
-        "get": "access",
-        "post": "access",
-        "put": "access",
-        "delete": "access",
-        "info": "access"
-    }
+    base_order = ("changed_on", "desc")
 
 
-class GroupModelView(ModelView):
-    datamodel = SQLAInterface(ContactGroup)
-    related_views = [ContactModelView]
+class OrganizationModelView(ModelView):
+    datamodel = SQLAInterface(Organization)
+    related_views = [CopyrightApplicationModelView]
+
+
+def pretty_month_year(value):
+    return calendar.month_name[value.month] + " " + str(value.year)
+
+
+def pretty_year(value):
+    return str(value.year)
+
+
+class ApplicationTimeChartView(GroupByChartView):
+    datamodel = SQLAInterface(CopyrightApplication)
+
+    chart_title = "Applications by Date"
+    chart_type = "AreaChart"
+    label_columns = SuperUserCopyrightApplicationModelView.label_columns
+    definitions = [
+        {
+            "group": "month_year",
+            "formatter": pretty_month_year,
+            "series": [(aggregate_count, "group")],
+        },
+        {
+            "group": "year",
+            "formatter": pretty_year,
+            "series": [(aggregate_count, "group")],
+        },
+    ]
 
 
 db.create_all()
 appbuilder.add_view(
-    GroupModelView,
-    "List Groups",
+    OrganizationModelView,
+    "List Organizations",
     icon="fa-folder-open-o",
-    category="Contacts",
+    category="Copyright Applications",
     category_icon="fa-envelope",
 )
-appbuilder.add_separator("Contacts")
+appbuilder.add_separator("Copyright Applications")
 appbuilder.add_view(
-    ContactModelView, "List Contacts", icon="fa-envelope", category="Contacts"
+    CopyrightApplicationModelView, "List Copyright Applications", icon="fa-envelope",
+    category="Copyright Applications"
 )
 appbuilder.add_view(
-    SuperUserContactModelView, "Admin List Contacts", icon="fa-envelope", category="Contacts"
+    SuperUserCopyrightApplicationModelView, "Admin List Copyright Applications", icon="fa-envelope",
+    category="Copyright Applications"
+)
+appbuilder.add_view(
+    ApplicationTimeChartView,
+    "Applications by Date",
+    icon="fa-dashboard",
+    category="Copyright Applications"
 )

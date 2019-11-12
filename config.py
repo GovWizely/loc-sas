@@ -36,24 +36,21 @@ AUTH_TYPE = 1
 AUTH_ROLE_ADMIN = "Admin"
 AUTH_ROLE_PUBLIC = "Public"
 APP_NAME = "LOC SAS"
-# APP_THEME = ""  # default
-# APP_THEME = "cerulean.css"      # COOL
-# APP_THEME = "amelia.css"
-# APP_THEME = "cosmo.css"
-# APP_THEME = "cyborg.css"       # COOL
-# APP_THEME = "flatly.css"
-# APP_THEME = "journal.css"
-# APP_THEME = "readable.css"
-# APP_THEME = "simplex.css"
-# APP_THEME = "slate.css"          # COOL
-APP_THEME = "spacelab.css"      # NICE
-# APP_THEME = "united.css"
-
-USER_ACCESS = "^(?!(Admin|Security|List Groups))"
-ADMIN_ACCESS = "^(?!List Contacts)"
+APP_THEME = ""  # default
+# APP_THEME = "spacelab.css"
+USER_FORBIDDEN = ['Admin',
+                  'Security',
+                  'List Organizations',
+                  'CopyrightApplicationModelView',
+                  'Applications by Date']
+USER_ACCESS = f"^(?!({'|'.join(USER_FORBIDDEN)}))"
+ADMIN_ACCESS = "^(?!List Copyright Applications)"
 FAB_ROLES = {
     "User": [
-        [USER_ACCESS, ".*"]
+        [USER_ACCESS, ".*"],
+        ["CopyrightApplicationModelView", "can_list"],
+        ["CopyrightApplicationModelView", "can_show"],
+        ["CopyrightApplicationModelView", "can_add"],
     ],
     "Admin": [
         [ADMIN_ACCESS, ".*"]
