@@ -38,6 +38,7 @@ class SuperUserCopyrightApplicationModelView(ModelView):
     edit_columns = [
         "application_status",
     ]
+    label_columns = {'month_year': 'Month', 'year': 'Year'}
     base_order = ("changed_on", "desc")
 
 
@@ -64,7 +65,7 @@ class ApplicationTimeChartView(GroupByChartView):
         {
             "group": "month_year",
             "formatter": pretty_month_year,
-            "series": [(aggregate_count, "group")],
+            "series": [(aggregate_count, "group")]
         },
         {
             "group": "year",

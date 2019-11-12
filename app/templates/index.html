@@ -1,0 +1,21 @@
+{% extends "appbuilder/base.html" %}
+{% block content %}
+<div class="jumbotron">
+    <div class="container">
+        <h1>{{_("Copyright Application Demo")}}</h1>
+        <p>{{_("This proof of concept application demonstrates various functionality:")}}</p>
+        <ul>
+            <li>"active admin"-like functionality around a basic copyright application (name, title, date,
+                organization)
+            </li>
+            <li>Filterable chart of applications by year/month and year</li>
+        </ul>
+        {% if current_user.is_authenticated %}
+        <p>Welcome {{ current_user }}!</p>
+        <a href="{{ url_for('CopyrightApplicationModelView.list') }}">
+            Manage your copyright applications
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
