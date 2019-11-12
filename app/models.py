@@ -1,7 +1,10 @@
 import datetime
 
+from flask import url_for
 from flask_appbuilder import Model
-from flask_appbuilder.models.mixins import AuditMixin
+from flask_appbuilder.filemanager import get_file_original_name
+from flask_appbuilder.models.mixins import AuditMixin, FileColumn
+from markupsafe import Markup
 from sqlalchemy import Column, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
@@ -22,6 +25,7 @@ class CopyrightApplication(AuditMixin, Model):
     organization_id = Column(Integer, ForeignKey("organization.id"), nullable=False)
     organization = relationship("Organization")
     application_status = Column(Enum("New", "Pending", "Approved"), default="New")
+    pdf = Column(FileColumn, nullable=True)
 
     def __repr__(self):
         return self.title
@@ -33,3 +37,13 @@ class CopyrightApplication(AuditMixin, Model):
     def year(self):
         date = self.created_on
         return datetime.datetime(date.year, 1, 1)
+
+    def download(self):
+        return Markup(
+            '<a href="'
+            + url_for("CopyrightApplicationModelView.download", filename=str(self.pdf))
+            + '">Download</a>'
+        )
+
+    def file_name(self):
+        return get_file_original_name(str(self.pdf))

@@ -51,6 +51,7 @@ FAB_ROLES = {
         ["CopyrightApplicationModelView", "can_list"],
         ["CopyrightApplicationModelView", "can_show"],
         ["CopyrightApplicationModelView", "can_add"],
+        ["CopyrightApplicationModelView", "can_download"],
     ],
     "Admin": [
         [ADMIN_ACCESS, ".*"]

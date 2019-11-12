@@ -16,6 +16,8 @@ LIST_APPLICATION_STATUS = [
     "application_status",
 ]
 
+SHOW_APPLICATION_STATUS = LIST_APPLICATION_STATUS + ["file_name", "download"]
+
 
 def get_user():
     return g.user
@@ -27,7 +29,10 @@ class CopyrightApplicationModelView(ModelView):
     add_columns = [
         "title",
         "organization",
+        "pdf"
     ]
+    show_columns = SHOW_APPLICATION_STATUS
+    label_columns = {"download": "Download", "file_name": "File Name"}
     base_order = ("created_on", "desc")
     base_filters = [["created_by", FilterEqualFunction, get_user]]
 
@@ -38,7 +43,9 @@ class SuperUserCopyrightApplicationModelView(ModelView):
     edit_columns = [
         "application_status",
     ]
-    label_columns = {'month_year': 'Month', 'year': 'Year'}
+    label_columns = {'month_year': 'Month', 'year': 'Year', "download": "Download",
+                     "file_name": "File Name"}
+    show_columns = SHOW_APPLICATION_STATUS
     base_order = ("changed_on", "desc")
 
 
