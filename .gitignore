@@ -7,3 +7,4 @@ env
 venv
 *.sublime*
 __pycache__
+app/static/uploads/*
