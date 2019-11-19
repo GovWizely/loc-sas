@@ -1,4 +1,4 @@
-apispec==3.1.0
+apispec[yaml]<2,>=1.1.1
 attrs==19.3.0
 Babel==2.7.0
 Click==7.0
@@ -17,7 +17,7 @@ itsdangerous==1.1.0
 Jinja2==2.10.3
 jsonschema==3.2.0
 MarkupSafe==1.1.1
-marshmallow==3.2.2
+marshmallow<2.20,>=2.18.0
 marshmallow-enum==1.5.1
 marshmallow-sqlalchemy==0.19.0
 more-itertools==7.2.0
