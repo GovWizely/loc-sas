@@ -8,3 +8,7 @@ venv
 *.sublime*
 __pycache__
 app/static/uploads/*
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
