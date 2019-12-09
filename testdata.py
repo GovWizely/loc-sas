@@ -1,6 +1,6 @@
-from datetime import datetime
 import logging
 import random
+from datetime import datetime
 
 from app import appbuilder, db
 from app.models import CopyrightApplication, Organization

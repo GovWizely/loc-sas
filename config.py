@@ -3,7 +3,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 CSRF_ENABLED = True
-SECRET_KEY = "\2\1thisismyscretkey\1\2\e\y\y\h"
+SECRET_KEY = "thisismysecretkey"
 
 OPENID_PROVIDERS = [
     {"name": "Google", "url": "https://www.google.com/accounts/o8/id"},
@@ -17,6 +17,7 @@ SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "app.db")
 # SQLALCHEMY_DATABASE_URI = 'mysql://root:password@localhost/quickhowto'
 # SQLALCHEMY_DATABASE_URI = 'postgresql://scott:tiger@localhost:5432/myapp'
 # SQLALCHEMY_ECHO = True
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 BABEL_DEFAULT_LOCALE = "en"
 BABEL_DEFAULT_FOLDER = "translations"
