@@ -19,7 +19,7 @@ jsonschema==3.2.0
 MarkupSafe==1.1.1
 marshmallow<2.20,>=2.18.0
 marshmallow-enum==1.5.1
-marshmallow-sqlalchemy==0.19.0
+marshmallow-sqlalchemy==0.21.0
 more-itertools==7.2.0
 prison==0.1.2
 PyJWT==1.7.1
