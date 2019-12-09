@@ -12,3 +12,4 @@ app/static/uploads/*
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+.coverage
