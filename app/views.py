@@ -1,7 +1,7 @@
 import calendar
 
 from flask import g
-from flask_appbuilder import GroupByChartView, ModelView, aggregate_count
+from flask_appbuilder import aggregate_count, GroupByChartView, ModelView
 from flask_appbuilder.models.sqla.filters import FilterEqualFunction
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 
