@@ -1,17 +1,16 @@
 import calendar
 
 from flask import g
-from flask_appbuilder import aggregate_count, GroupByChartView, ModelView
+from flask_appbuilder import GroupByChartView, ModelView, aggregate_count
 from flask_appbuilder.models.sqla.filters import FilterEqualFunction
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 
 from . import appbuilder, db
-from .models import CopyrightApplication, Organization
+from .models import CopyrightApplication
 
 LIST_APPLICATION_STATUS = [
     "title",
     "created_on",
-    "organization.name",
     "created_by.username",
     "application_status",
 ]
@@ -28,7 +27,48 @@ class CopyrightApplicationModelView(ModelView):
     list_columns = LIST_APPLICATION_STATUS
     add_columns = [
         "title",
-        "organization",
+        "alternative_title",
+        "year_completed",
+        "author_prefix",
+        "author_first_name",
+        "author_middle_name",
+        "author_last_name",
+        "author_suffix",
+        "author_pseudonym",
+        "author_anonymous",
+        "author_citizenship",
+        "claimant_prefix",
+        "claimant_first_name",
+        "claimant_middle_name",
+        "claimant_last_name",
+        "claimant_suffix",
+        "claimant_address",
+        "claimant_alternative_address",
+        "claimant_city",
+        "claimant_state",
+        "claimant_postal_code",
+        "contact_prefix",
+        "contact_first_name",
+        "contact_middle_name",
+        "contact_last_name",
+        "contact_suffix",
+        "contact_address",
+        "contact_alternative_address",
+        "contact_city",
+        "contact_state",
+        "contact_postal_code",
+        "contact_2_prefix",
+        "contact_2_first_name",
+        "contact_2_middle_name",
+        "contact_2_last_name",
+        "contact_2_suffix",
+        "contact_2_address",
+        "contact_2_alternative_address",
+        "contact_2_city",
+        "contact_2_state",
+        "contact_2_postal_code",
+        "correspondence_email",
+        "correspondence_phone_number",
         "pdf"
     ]
     show_columns = SHOW_APPLICATION_STATUS
@@ -47,11 +87,6 @@ class SuperUserCopyrightApplicationModelView(ModelView):
                      "file_name": "File Name"}
     show_columns = SHOW_APPLICATION_STATUS
     base_order = ("changed_on", "desc")
-
-
-class OrganizationModelView(ModelView):
-    datamodel = SQLAInterface(Organization)
-    related_views = [CopyrightApplicationModelView]
 
 
 def pretty_month_year(value):
@@ -83,14 +118,6 @@ class ApplicationTimeChartView(GroupByChartView):
 
 
 db.create_all()
-appbuilder.add_view(
-    OrganizationModelView,
-    "List Organizations",
-    icon="fa-folder-open-o",
-    category="Copyright Applications",
-    category_icon="fa-envelope",
-)
-appbuilder.add_separator("Copyright Applications")
 appbuilder.add_view(
     CopyrightApplicationModelView, "List Copyright Applications", icon="fa-envelope",
     category="Copyright Applications"
