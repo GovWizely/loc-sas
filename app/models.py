@@ -20,8 +20,8 @@ class Organization(Model):
 
 class CopyrightApplication(AuditMixin, Model):
     id = Column(Integer, primary_key=True)
-    title = Column(String(150), nullable=False)
-    alternative_title = Column(String(150), nullable=True)
+    title = Column(String(2000), nullable=False)
+    alternative_title = Column(String(2000), nullable=True)
     year_completed = Column(String(150), nullable=False)
     author_prefix = Column(String(150), nullable=True)
     author_first_name = Column(String(150), nullable=False)
