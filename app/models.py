@@ -10,14 +10,6 @@ from sqlalchemy import Column, Enum, Integer, String
 date_today = datetime.date.today()
 
 
-class Organization(Model):
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True, nullable=False)
-
-    def __repr__(self):
-        return self.name
-
-
 class CopyrightApplication(AuditMixin, Model):
     id = Column(Integer, primary_key=True)
     title = Column(String(2000), nullable=False)
