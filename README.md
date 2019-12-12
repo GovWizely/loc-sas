@@ -51,8 +51,6 @@ To run a single test:
 
 List All Applications
 ![List All Applications](screenshots/admin_list_applications.png)
-List All Organizations
-![List All Organizations](screenshots/admin_list_organizations.png)
 Show Application and Download PDF Attachment
 ![Show Application and Download PDF Attachment](screenshots/admin_show_and_download.png)
 Changing Application State

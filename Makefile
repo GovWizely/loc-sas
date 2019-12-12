@@ -13,7 +13,7 @@ clean:  ## Remove build, cache, pyc files, test Sqlite DBs, and build artifacts
 ensure-venv:
 	@ ( \
 		[ \( "x${VIRTUAL_ENV}" != "x" \) -o \( "x${CI}" != "x" \) ] || \
-		( echo 'Please activate your venv using "workon $PROJECT"'; exit 1 ) \
+		( echo 'Please activate your venv using "workon ${PROJECT}"'; exit 1 ) \
 	)
 
 pip-install:  ## Pip install `requirements.txt`
