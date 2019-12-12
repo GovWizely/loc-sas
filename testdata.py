@@ -3,7 +3,7 @@ import random
 from datetime import datetime
 
 from app import appbuilder, db
-from app.models import CopyrightApplication, Organization
+from app.models import CopyrightApplication
 
 log = logging.getLogger(__name__)
 

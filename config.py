@@ -1,4 +1,5 @@
 import os
+import sys
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -13,11 +14,6 @@ OPENID_PROVIDERS = [
     {"name": "MyOpenID", "url": "https://www.myopenid.com"},
 ]
 
-SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "app.db")
-# SQLALCHEMY_DATABASE_URI = 'mysql://root:password@localhost/quickhowto'
-# SQLALCHEMY_DATABASE_URI = 'postgresql://scott:tiger@localhost:5432/myapp'
-# SQLALCHEMY_ECHO = True
-SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 BABEL_DEFAULT_LOCALE = "en"
 BABEL_DEFAULT_FOLDER = "translations"
@@ -58,3 +54,22 @@ FAB_ROLES = {
         [ADMIN_ACCESS, ".*"]
     ]
 }
+
+sqlite_file_name = "app.db"
+if "pytest" in sys.modules:
+    # Bcrypt algorithm hashing rounds (reduced for testing purposes only!)
+    BCRYPT_LOG_ROUNDS = 4
+
+    # Enable the TESTING flag to disable the error catching during request handling
+    # so that you get better error reports when performing test requests against the application.
+    TESTING = True
+
+    # Disable CSRF tokens in the Forms (only valid for testing purposes!)
+    WTF_CSRF_ENABLED = False
+    sqlite_file_name = "test.db"
+
+SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, sqlite_file_name)
+# SQLALCHEMY_DATABASE_URI = 'mysql://root:password@localhost/quickhowto'
+# SQLALCHEMY_DATABASE_URI = 'postgresql://scott:tiger@localhost:5432/myapp'
+# SQLALCHEMY_ECHO = True
+SQLALCHEMY_TRACK_MODIFICATIONS = False

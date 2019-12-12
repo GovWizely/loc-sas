@@ -36,7 +36,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python -m pytest --disable-pytest-warnings tests --cov=app --cov-report=html:test-reports --cov-fail-under=87
+            python -m pytest --disable-pytest-warnings tests --cov=app --cov-report=html:test-reports --cov-fail-under=90
 
       - store_artifacts:
           path: test-reports
