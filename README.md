@@ -30,6 +30,16 @@ FLASK_APP=app/__init__.py FLASK_DEBUG=1 flask run
 
 Open `http://localhost:5000` and log in as `user1`, `user2`, or `user3` with password `password`. Or login with `admin/admin`.
 
+### Testing
+To run the whole test-suite along with linting:
+```
+make test-local
+```
+
+To run a single test:
+1. Annotate the test with `@pytest.mark.focus`
+1. `python -m pytest -s --disable-pytest-warnings -m focus`
+
 ### Features
 
 * "Active admin"-like functionality around a basic copyright application (name, title, date, PDF upload)
