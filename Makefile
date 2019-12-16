@@ -16,8 +16,8 @@ ensure-venv:
 		( echo 'Please activate your venv using "workon ${PROJECT}"'; exit 1 ) \
 	)
 
-pip-install:  ## Pip install `requirements.txt`
-	pip install -r requirements.txt
+pip-install:  ## Pip install `requirements-test.txt` and `requirements.txt`
+	pip install -r requirements-test.txt
 
 # =========
 # = Tests =
