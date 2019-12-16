@@ -13,3 +13,7 @@ app/static/uploads/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 .coverage
+local-run.sh
+app/static/css/
+app/static/img/*
+app/static/js/*
