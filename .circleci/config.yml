@@ -1,43 +1,60 @@
-# Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
-version: 2
+version: 2.1
+cache_key: &cache_key
+    v1-<< parameters.python_version >>-<< parameters.build_image >>-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
+
+docker_defaults: &docker_defaults
+  << parameters.build_image >>
+
 jobs:
-  build:
+  test:
     docker:
-      - image: circleci/python:3.7.3
-
-    working_directory: ~/repo
-
+      - image: *docker_defaults
     steps:
       - checkout
-
-      # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "requirements-test.txt" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
+            - *cache_key
       - run:
           name: install dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements-test.txt
-
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ checksum "requirements-test.txt" }}
-
+          key: *cache_key
+      - run: mkdir -p /tmp/test-results && mkdir -p /tmp/test-artifacts
       - run:
           name: run tests
           command: |
             . venv/bin/activate
-            python -m pytest --disable-pytest-warnings tests --cov=app --cov-report=html:test-reports --cov-fail-under=90
-
+            python -m pytest --disable-pytest-warnings tests --cov=app --cov-report=html:/tmp/test-artifacts/coverage --cov-fail-under=90 --junitxml=/tmp/test-results/pytest.xml
+      - store_test_results:
+          path: /tmp/test-results
       - store_artifacts:
-          path: test-reports
-          destination: test-reports
+          path: /tmp/test-artifacts
+
+workflows:
+  version: 2.1
+
+  py36:
+    jobs:
+      - test:
+          name: test_py36
+          build_image: circleci/python:3.6.9
+          python_version: python3.6
+
+  py37:
+    jobs:
+      - test:
+          name: test_py37
+          build_image: circleci/python:3.7.3
+          python_version: python3.7
+
+  py38:
+    jobs:
+      - test:
+          name: test_py38
+          build_image: circleci/python:3.8.0
+          python_version: python3.8

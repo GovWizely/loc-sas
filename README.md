@@ -5,9 +5,9 @@ This project demonstrates a copyright application portal. Users can submit appli
 
 # Installation
 
-### Python
+### Dependencies
 
-This repository has been built against [Python 3.7](https://www.python.org/downloads/release/python-375/) and Flask.
+This project is built on [Flask-AppBuilder](https://github.com/dpgaspar/Flask-AppBuilder) and tested against Python 3.6+ in [CircleCI](https://app.circleci.com/github/GovWizely/loc-sas/pipelines).
 
 ### Local Development
 
@@ -17,6 +17,8 @@ git clone git@github.com:GovWizely/loc-sas.git
 cd loc-sas
 mkvirtualenv -p /usr/local/bin/python3.7 -r requirements.txt loc-sas
 ```
+
+If you are using PyCharm, make sure you enable code compatibility inspections for Python 3.6/3.7/3.8.
 
 ### Running locally
 
