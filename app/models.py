@@ -14,7 +14,7 @@ class CopyrightApplication(AuditMixin, Model):
     id = Column(Integer, primary_key=True)
     primary_title = Column(String(2000), nullable=False)
     alternate_title = Column(String(2000), nullable=True)
-    year_completed = Column(String(150), nullable=False)
+    year_completed = Column(Integer, nullable=False)
     author_prefix = Column(String(150), nullable=True)
     author_first_name = Column(String(255), nullable=False)
     author_middle_name = Column(String(255), nullable=True)
