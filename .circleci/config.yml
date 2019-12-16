@@ -1,4 +1,14 @@
 version: 2.1
+
+defaults: &defaults
+  parameters:
+    build_image:
+      type: string
+      default: circleci/python:3.7.3
+    python_version:
+      type: string
+      default: python3.7
+
 cache_key: &cache_key
     v1-<< parameters.python_version >>-<< parameters.build_image >>-{{ checksum "requirements.txt" }}-{{ checksum "requirements-test.txt" }}
 
@@ -7,6 +17,7 @@ docker_defaults: &docker_defaults
 
 jobs:
   test:
+    <<: *defaults
     docker:
       - image: *docker_defaults
     steps:
@@ -49,8 +60,6 @@ workflows:
     jobs:
       - test:
           name: test_py37
-          build_image: circleci/python:3.7.3
-          python_version: python3.7
 
   py38:
     jobs:
