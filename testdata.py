@@ -33,7 +33,7 @@ names_list = [x.strip() for x in f.readlines()]
 f.close()
 
 j = 1
-for i in range(1, 100):
+for i in range(1, 75):
     c = CopyrightApplication()
     c.primary_title = get_random_name(names_list, random.randrange(2, 5))
     c.year_completed = random.choice(range(2013, 2019))

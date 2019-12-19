@@ -13,4 +13,4 @@ app.config.from_object("config")
 db = SQLA(app)
 appbuilder = AppBuilder(app, db.session, indexview=CopyrightApplicationIndexView)
 
-from . import models, views  # noqa
+from . import models, views, api  # noqa

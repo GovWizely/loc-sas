@@ -65,3 +65,4 @@ if "pytest" in sys.modules:
 
 SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, sqlite_file_name)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+FAB_API_SWAGGER_UI = True

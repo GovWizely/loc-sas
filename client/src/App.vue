@@ -1,32 +1,86 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/create">Create</router-link> |
-      <router-link to="/about">About</router-link>
+    <md-toolbar class="md-primary" md-elevation="1">
+      <img class="logo" src="./assets/copyrightLogo.png" /> |
+      <h1 class="md-title" style="flex: 1">Registration System</h1>
+      <div v-if="userIsAuthenticated">
+        <div id="nav">
+          <md-tabs md-sync-route class="md-primary">
+            <md-tab id="tab-home" md-label="Home" to="/" exact></md-tab>
+          </md-tabs>
+        </div>
+      </div>
+      <md-button v-if="!userIsAuthenticated" @click="login()">Login</md-button>
+      <md-button v-else @click="logout()">Logout</md-button>
+    </md-toolbar>
+    <div class="current-route md-caption">
+      {{this.$route.name}} /
     </div>
     <router-view />
   </div>
 </template>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+<style lang="scss">
+@import "~vue-material/dist/theme/engine";
+
+@include md-register-theme("default", (
+  primary: md-get-palette-color(blue, 900),
+  accent: md-get-palette-color(blue, 700)
+));
+
+@import "~vue-material/dist/theme/all";
+
+.logo {
+  margin: 0 10px 0 0;
 }
 
-#nav {
-  padding: 30px;
+#app .md-toolbar {
+  min-height: 0;
 }
 
-#nav a {
+#app .md-title {
   font-weight: bold;
-  color: #2c3e50;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+#nav .md-button-content {
+  font-weight: bold;
+}
+
+.nav {
+  margin: 0 20px 0 0;
+}
+
+.header {
+  display: flex;
+}
+
+.header-title {
+  margin-left: 25px;
+}
+
+.current-route {
+  margin: 15px;
 }
 </style>
+
+<script>
+import Repository from './repositories/Repository'
+
+export default {
+  data: () => ({
+    userIsAuthenticated: false
+  }),
+  async created () {
+    const repository = new Repository()
+    this.userIsAuthenticated = await repository._userIsAuthenticated()
+  },
+  methods: {
+    logout () {
+      window.location = '/logout'
+    },
+    login () {
+      window.location = '/login'
+    }
+  }
+}
+</script>
