@@ -17,3 +17,4 @@ local-run.sh
 app/static/css/
 app/static/img/*
 app/static/js/*
+.scannerwork
