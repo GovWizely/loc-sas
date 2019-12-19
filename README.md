@@ -7,7 +7,8 @@ This project demonstrates a copyright application portal. Users can submit appli
 
 ### Dependencies
 
-This project is built on [Flask-AppBuilder](https://github.com/dpgaspar/Flask-AppBuilder) and tested against Python 3.6+ in [CircleCI](https://app.circleci.com/github/GovWizely/loc-sas/pipelines).
+ - This project is built on [Flask-AppBuilder](https://github.com/dpgaspar/Flask-AppBuilder) and tested against Python 3.6+ in [CircleCI](https://app.circleci.com/github/GovWizely/loc-sas/pipelines).
+ - The frontend utilizes Vue JS; NPM is required to build and run it [Install NPM](https://www.npmjs.com/get-npm)
 
 ### Local Development
 
@@ -21,6 +22,7 @@ mkvirtualenv -p /usr/local/bin/python3.7 -r requirements.txt loc-sas
 If you are using PyCharm, make sure you enable code compatibility inspections for Python 3.6/3.7/3.8.
 
 ### Running locally
+***Backend***
 
 These commands will remove any stray local Sqlite database, create some test data and test users, create an admin user, and run the Flask application.
 ```
@@ -32,8 +34,23 @@ FLASK_APP=app/__init__.py FLASK_DEBUG=1 flask run
 
 Open `http://localhost:5000` and log in as `user1`, `user2`, or `user3` with password `password`. Or login with `admin/admin`.
 
+***Frontend***
+```
+cd client 
+npm install
+npm run serve
+```
+
+To build the frontend into the flask server for production: 
+```
+cd ..
+./build-client.sh
+```
+
 ### Testing
-To run the whole test-suite along with linting:
+***Backend***
+
+To run the backend test-suite along with linting:
 ```
 make test-local
 ```
@@ -42,6 +59,13 @@ To run a single test:
 1. Annotate the test with `@pytest.mark.focus`
 1. `python -m pytest -s --disable-pytest-warnings -m focus`
 
+***Frontend***
+
+To run the frontend test-suite:
+```
+cd client 
+npm test
+```
 ### Features
 
 * "Active admin"-like functionality around a basic copyright application (name, title, date, PDF upload)
