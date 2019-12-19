@@ -57,7 +57,7 @@ class CopyrightApplication(AuditMixin, Model):
     possible_rights_and_permissions_state = Column(String(150), nullable=True)
     possible_rights_and_permissions_postal_code = Column(String(150), nullable=True)
     possible_rights_and_permissions_country = Column(String(150), nullable=True)
-    correspondence_email = Column(String(150), nullable=False)
+    correspondence_email = Column(String(255), nullable=False)
     correspondence_phone_number = Column(String(150), nullable=False)
     application_status = Column(Enum("New", "Pending", "Approved"), default="New")
     pdf = Column(FileColumn, nullable=True)
