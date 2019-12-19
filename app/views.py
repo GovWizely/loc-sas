@@ -1,5 +1,4 @@
 import calendar
-import datetime
 
 from flask import g
 from flask_appbuilder import aggregate_count, GroupByChartView, ModelView
