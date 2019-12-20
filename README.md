@@ -66,6 +66,26 @@ To run the frontend test-suite:
 cd client 
 npm test
 ```
+
+***SonarQube***
+
+You can run LoC's SonarQube analysis locally against your current feature branch.
+
+[Download the sonar scanner](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/) for your development environment OS.
+
+Set up this environment variable based on where you installed the scanner:
+```
+export SONAR_SCANNER=/Users/loren/Downloads/sonar-scanner-4.2.0.1873-macosx/bin/sonar-scanner
+```
+
+Ensure your LoC VPN is enabled.
+
+Generate the test results in the Cobertura format that SonarQube requires and send the results in to the scanner:
+
+```
+make sonarqube
+```
+
 ### Features
 
 * "Active admin"-like functionality around a basic copyright application (name, title, date, PDF upload)

@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 def get_random_name(names_list, size=1):
     name_lst = [
         names_list[random.randrange(0, len(names_list))].decode("utf-8").capitalize()
-        for _dummy in range(0, size)
+        for _ in range(0, size)
     ]
     return " ".join(name_lst)
 
