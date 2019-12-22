@@ -50,7 +50,7 @@ FAB_ROLES = {
     ]
 }
 
-sqlite_file_name = "app.db"
+
 if "pytest" in sys.modules:
     # Bcrypt algorithm hashing rounds (reduced for testing purposes only!)
     BCRYPT_LOG_ROUNDS = 4
@@ -63,6 +63,18 @@ if "pytest" in sys.modules:
     WTF_CSRF_ENABLED = False
     sqlite_file_name = "test.db"
 
-SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, sqlite_file_name)
+
+if 'RDS_HOSTNAME' in os.environ:
+    rds_host = os.environ['RDS_HOSTNAME']
+    rds_user = os.environ['RDS_USERNAME']
+    rds_pw = os.environ['RDS_PASSWORD']
+    rds_port = os.environ['RDS_PORT']
+    rds_db = os.environ['RDS_DB_NAME']
+    SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{rds_user}:{rds_pw}@{rds_host}:{rds_port}/{rds_db}'
+    AUTH_DB = rds_pw
+else:
+    sqlite_file_name = "app.db"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, sqlite_file_name)
+
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 FAB_API_SWAGGER_UI = True
