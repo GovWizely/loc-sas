@@ -57,6 +57,7 @@ class CopyrightApplicationModelApi(ModelRestApi):
         'possible_rights_and_permissions_country',
         'correspondence_email',
         'correspondence_phone_number',
+        'correspondence_phone_number_extension',
         'application_status',
         'pdf'
     ]

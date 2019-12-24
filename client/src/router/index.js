@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Repository from '../repositories/Repository'
-import CopyrightApplications from '../views/CopyrightApplications'
-import CreateCopyrightApplication from '../views/CreateCopyrightApplication'
+import Repository from '@/repositories/Repository'
+import CopyrightApplications from '@/views/CopyrightApplications'
+import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
 
 Vue.use(VueRouter)
 
