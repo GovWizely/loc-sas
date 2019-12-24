@@ -1,7 +1,15 @@
 module.exports = {
   devServer: {
-    proxy: 'http://localhost:5000',
-    port: 5001
+    port: 5001,
+    proxy: {
+      '/api/v1/*': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      },
+      '/users/api/readvalues': {
+        target: 'http://localhost:5000'
+      }
+    }
   },
   runtimeCompiler: true,
   assetsDir: process.env.NODE_ENV === 'production' ? '../static' : 'dist',

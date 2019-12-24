@@ -3,6 +3,7 @@
 ./tmp
 ./build/*
 .idea
+.vscode
 env
 venv
 *.sublime*
