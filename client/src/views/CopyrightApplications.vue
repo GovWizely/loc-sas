@@ -2,10 +2,10 @@
   <div>
     <div v-if="copyrightApplications">
       <div class="header">
-        <h2 class="header-title" style="flex: 1">Copyright applicaitons</h2>
+        <h2 class="header-title" style="flex: 1">Copyright applications</h2>
         <md-button class="md-raised md-accent" to="/create">NEW APPLICATION</md-button>
       </div>
-      <md-table v-model="copyrightApplications" md-sort="id" md-sort-order="asc">
+      <md-table v-model="copyrightApplications" md-sort="id" md-sort-order="desc">
         <md-table-row slot-scope="{ item }" slot="md-table-row" :id="getId(item.id)">
           <md-table-cell md-label="Primary Title" md-sort-by="primary_title">{{item.primary_title}}</md-table-cell>
           <md-table-cell md-label="Created On" md-sort-by="created_on">{{item.created_on}}</md-table-cell>

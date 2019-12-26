@@ -67,14 +67,14 @@
             <md-card-header class="md-headline">Author</md-card-header>
             <md-card-content>
               <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
+                <div class="md-layout-item md-size-10">
                   <md-autocomplete v-model="form.authorPrefix" :md-options="prefixes">
-                    <label>Author Prefix</label>
+                    <label>Prefix</label>
                   </md-autocomplete>
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('authorFirstName')">
-                    <label for="author-first-name">Author First Name</label>
+                    <label for="author-first-name">First Name</label>
                     <md-input
                       name="author-first-name"
                       id="author-first-name"
@@ -91,7 +91,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('authorLastName')">
-                    <label for="author-last-name">Author Last Name</label>
+                    <label for="author-last-name">Last Name</label>
                     <md-input
                       name="author-last-name"
                       id="author-last-name"
@@ -106,14 +106,14 @@
                     >The author last name is required</span>
                   </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100">
+                <div class="md-layout-item md-size-10">
                   <md-autocomplete v-model="form.authorSuffix" :md-options="suffixes">
-                    <label>Author Suffix</label>
+                    <label>Suffix</label>
                   </md-autocomplete>
                 </div>
-                <div class="md-layout-item md-small-size-100">
+                <div class="md-layout-item md-size-10">
                   <md-field :class="getValidationClass('authorCitizenship')">
-                    <label for="author-citizenship">Author Citizenship</label>
+                    <label for="author-citizenship">Citizenship</label>
                     <md-input
                       name="author-citizenship"
                       id="author-citizenship"
@@ -134,14 +134,14 @@
             <md-card-header class="md-headline">Claimant</md-card-header>
             <md-card-content>
               <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
+                <div class="md-layout-item md-size-10">
                   <md-autocomplete v-model="form.claimantPrefix" :md-options="prefixes">
-                    <label>Claimant Prefix</label>
+                    <label>Prefix</label>
                   </md-autocomplete>
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('claimantFirstName')">
-                    <label for="claimant-first-name">Claimant First Name</label>
+                    <label for="claimant-first-name">First Name</label>
                     <md-input
                       name="claimant-first-name"
                       id="claimant-first-name"
@@ -157,7 +157,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('claimantLastName')">
-                    <label for="claimant-first-name">Claimant Last Name</label>
+                    <label for="claimant-first-name">Last Name</label>
                     <md-input
                       name="claimant-last-name"
                       id="claimant-last-name"
@@ -171,10 +171,107 @@
                     >The claimant last name is required</span>
                   </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100">
+                <div class="md-layout-item md-size-10">
                   <md-autocomplete v-model="form.claimantSuffix" :md-options="suffixes">
-                    <label>Claimant Suffix</label>
+                    <label>Suffix</label>
                   </md-autocomplete>
+                </div>
+              </div>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100">
+                  <md-field :class="getValidationClass('claimantAddress')">
+                    <label for="claimant-address">Address</label>
+                    <md-input
+                      name="claimant-address"
+                      id="claimant-address"
+                      v-model="form.claimantAddress"
+                      :disabled="sending"
+                      required
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.claimantAddress.required"
+                    >The claimant address is required</span>
+                  </md-field>
+                </div>
+              </div>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100">
+                  <md-field>
+                    <label for="claimant-address2">Address 2</label>
+                    <md-input
+                      name="claimant-address2"
+                      id="claimant-address2"
+                      v-model="form.claimantAddress2"
+                      :disabled="sending"
+                    />
+                  </md-field>
+                </div>
+              </div>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100">
+                  <md-field :class="getValidationClass('claimantCity')">
+                    <label for="claimant-city">City</label>
+                    <md-input
+                      name="claimant-city"
+                      id="claimant-city"
+                      v-model="form.claimantCity"
+                      :disabled="sending"
+                      required
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.claimantCity.required"
+                    >The claimant city is required</span>
+                  </md-field>
+                </div>
+                <div class="md-layout-item md-size-20">
+                  <md-field :class="getValidationClass('claimantState')">
+                    <label for="claimant-state">State</label>
+                    <md-input
+                      name="claimant-state"
+                      id="claimant-state"
+                      v-model="form.claimantState"
+                      :disabled="sending"
+                      required
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.claimantState.required"
+                    >The claimant state is required</span>
+                  </md-field>
+                </div>
+                <div class="md-layout-item md-size-20">
+                  <md-field :class="getValidationClass('claimantPostalCode')">
+                    <label for="claimant-postal-code">Postal Code</label>
+                    <md-input
+                      name="claimant-postal-code"
+                      id="claimant-postal-code"
+                      v-model="form.claimantPostalCode"
+                      :disabled="sending"
+                      required
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.claimantPostalCode.required"
+                    >The claimant postal code is required</span>
+                  </md-field>
+                </div>
+                <div class="md-layout-item md-size-20">
+                  <md-field :class="getValidationClass('claimantCountry')">
+                    <label for="claimant-country">Country</label>
+                    <md-input
+                      name="claimant-country"
+                      id="claimant-postal-code"
+                      v-model="form.claimantCountry"
+                      :disabled="sending"
+                      required
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.claimantCountry.required"
+                    >The claimant country is required</span>
+                  </md-field>
                 </div>
               </div>
             </md-card-content>
@@ -182,20 +279,21 @@
           <md-card>
             <md-card-header class="md-headline">Correspondence</md-card-header>
             <md-card-content>
+              <md-switch v-model="useClaimantAddress" @change="copyClaimantAddress">Use Claimant Address</md-switch>
               <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <md-autocomplete v-model="form.correspondenceContactPrefix" :md-options="prefixes">
-                    <label>Correspondence Contact Prefix</label>
+                <div class="md-layout-item md-size-10">
+                  <md-autocomplete v-model="form.correspondenceContactPrefix" :md-options="prefixes" :disabled="sending || useClaimantAddress">
+                    <label>Prefix</label>
                   </md-autocomplete>
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('correspondenceContactFirstName')">
-                    <label for="correspondence_contact_first_name">Correspondence Contact First Name</label>
+                    <label for="correspondence_contact_first_name">First Name</label>
                     <md-input
                       name="correspondence_contact_first_name"
                       id="correspondence_contact_first_name"
                       v-model="form.correspondenceContactFirstName"
-                      :disabled="sending"
+                      :disabled="sending || useClaimantAddress"
                       required
                     />
                     <span
@@ -206,12 +304,12 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('correspondenceContactLastName')">
-                    <label for="correspondence_contact_last_name">Correspondence Contact Last Name</label>
+                    <label for="correspondence_contact_last_name">Last Name</label>
                     <md-input
                       name="correspondence_contact_last_name"
                       id="correspondence_contact_last_name"
                       v-model="form.correspondenceContactLastName"
-                      :disabled="sending"
+                      :disabled="sending || useClaimantAddress"
                       required
                     />
                     <span
@@ -220,16 +318,113 @@
                     >The correspondence contact last name is required</span>
                   </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-autocomplete v-model="form.correspondenceContactSuffix" :md-options="suffixes">
-                    <label>Correspondence Contact Suffix</label>
+                <div class="md-layout-item md-size-10">
+                  <md-autocomplete v-model="form.correspondenceContactSuffix" :md-options="suffixes" :disabled="sending || useClaimantAddress">
+                    <label>Suffix</label>
                   </md-autocomplete>
+                </div>
+              </div>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100">
+                  <md-field :class="getValidationClass('correspondenceContactAddress')">
+                    <label for="correspondence-contact-address">Address</label>
+                    <md-input
+                      name="correspondence-contact-address"
+                      id="correspondence-contact-address"
+                      v-model="form.correspondenceContactAddress"
+                      :disabled="sending || useClaimantAddress"
+                      required
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.correspondenceContactAddress.required"
+                    >The correspondence address is required</span>
+                  </md-field>
+                </div>
+              </div>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100">
+                  <md-field>
+                    <label for="correspondence-contact-address2">Address 2</label>
+                    <md-input
+                      name="correspondence-contact-address2"
+                      id="correspondence-contact-address2"
+                      v-model="form.correspondenceContactAddress2"
+                      :disabled="sending || useClaimantAddress"
+                    />
+                  </md-field>
+                </div>
+              </div>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100">
+                  <md-field :class="getValidationClass('correspondenceContactCity')">
+                    <label for="correspondence-contact-city">City</label>
+                    <md-input
+                      name="correspondence-contact-city"
+                      id="correspondence-contact-city"
+                      v-model="form.correspondenceContactCity"
+                      :disabled="sending || useClaimantAddress"
+                      required
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.correspondenceContactCity.required"
+                    >The correspondence city is required</span>
+                  </md-field>
+                </div>
+                <div class="md-layout-item md-size-20">
+                  <md-field :class="getValidationClass('correspondenceContactState')">
+                    <label for="correspondence-contact-state">State</label>
+                    <md-input
+                      name="correspondence-contact-state"
+                      id="correspondence-contact-state"
+                      v-model="form.correspondenceContactState"
+                      :disabled="sending || useClaimantAddress"
+                      required
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.correspondenceContactState.required"
+                    >The correspondence state is required</span>
+                  </md-field>
+                </div>
+                <div class="md-layout-item md-size-20">
+                  <md-field :class="getValidationClass('correspondenceContactPostalCode')">
+                    <label for="correspondence-contact-postal-code">Postal Code</label>
+                    <md-input
+                      name="correspondence-contact-postal-code"
+                      id="correspondence-contact-postal-code"
+                      v-model="form.correspondenceContactPostalCode"
+                      :disabled="sending || useClaimantAddress"
+                      required
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.correspondenceContactPostalCode.required"
+                    >The correspondence postal code is required</span>
+                  </md-field>
+                </div>
+                <div class="md-layout-item md-size-20">
+                  <md-field :class="getValidationClass('correspondenceContactCountry')">
+                    <label for="correspondence-contact-country">Country</label>
+                    <md-input
+                      name="correspondence-contact-country"
+                      id="correspondence-contact-postal-code"
+                      v-model="form.correspondenceContactCountry"
+                      :disabled="sending || useClaimantAddress"
+                      required
+                    />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.correspondenceContactCountry.required"
+                    >The correspondence country is required</span>
+                  </md-field>
                 </div>
               </div>
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-20">
                   <md-field :class="getValidationClass('correspondencePhoneNumber')">
-                    <label for="correspondence-phone-number">Correspondence Phone Number</label>
+                    <label for="correspondence-phone-number">Phone Number</label>
                     <md-input
                       name="correspondence-phone-number"
                       id="correspondence-phone-number"
@@ -263,7 +458,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('correspondenceEmail')">
-                    <label for="correspondence-email">Correspondence Email</label>
+                    <label for="correspondence-email">Email</label>
                     <md-input
                       type="email"
                       name="correspondence-email"
@@ -288,6 +483,7 @@
           <md-button type="submit" class="md-primary" :disabled="sending">Create</md-button>
         </md-card-actions>
       </md-card>
+
       <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
       <md-snackbar
@@ -325,19 +521,32 @@ export default {
       claimantFirstName: null,
       claimantLastName: null,
       claimantSuffix: null,
+      claimantAddress: null,
+      claimantAddress2: null,
+      claimantCity: null,
+      claimantState: null,
+      claimantPostalCode: null,
+      claimantCountry: null,
       correspondenceContactPrefix: null,
       correspondenceContactFirstName: null,
       correspondenceContactLastName: null,
       correspondenceContactSuffix: null,
       correspondenceEmail: null,
       correspondencePhoneNumber: null,
-      correspondencePhoneNumberExtension: null
+      correspondencePhoneNumberExtension: null,
+      correspondenceContactAddress: null,
+      correspondenceContactAddress2: null,
+      correspondenceContactCity: null,
+      correspondenceContactState: null,
+      correspondenceContactPostalCode: null,
+      correspondenceContactCountry: null
     },
     copyrightApplicationSaved: false,
     lastCopyrightApplication: null,
     sending: false,
     prefixes: ['Dr', 'Mr', 'Mrs', 'Ms'],
-    suffixes: ['Jr', 'Sr', 'III', 'Esq', 'MD', 'PhD']
+    suffixes: ['Jr', 'Sr', 'III', 'Esq', 'MD', 'PhD'],
+    useClaimantAddress: false
   }),
   validations: {
     form: {
@@ -364,6 +573,21 @@ export default {
       claimantLastName: {
         required
       },
+      claimantAddress: {
+        required
+      },
+      claimantCity: {
+        required
+      },
+      claimantState: {
+        required
+      },
+      claimantPostalCode: {
+        required
+      },
+      claimantCountry: {
+        required
+      },
       correspondenceContactFirstName: {
         required
       },
@@ -377,6 +601,21 @@ export default {
       correspondencePhoneNumber: {
         required,
         isValidPhoneNumber
+      },
+      correspondenceContactAddress: {
+        required
+      },
+      correspondenceContactCity: {
+        required
+      },
+      correspondenceContactState: {
+        required
+      },
+      correspondenceContactPostalCode: {
+        required
+      },
+      correspondenceContactCountry: {
+        required
       }
     }
   },
@@ -409,6 +648,31 @@ export default {
 
       if (!this.$v.$invalid) {
         await this.createCopyrightApplication()
+      }
+    },
+    copyClaimantAddress () {
+      if (this.useClaimantAddress) {
+        this.form.correspondenceContactPrefix = this.form.claimantPrefix
+        this.form.correspondenceContactFirstName = this.form.claimantFirstName
+        this.form.correspondenceContactLastName = this.form.claimantLastName
+        this.form.correspondenceContactSuffix = this.form.claimantSuffix
+        this.form.correspondenceContactAddress = this.form.claimantAddress
+        this.form.correspondenceContactAddress2 = this.form.claimantAddress2
+        this.form.correspondenceContactCity = this.form.claimantCity
+        this.form.correspondenceContactState = this.form.claimantState
+        this.form.correspondenceContactPostalCode = this.form.claimantPostalCode
+        this.form.correspondenceContactCountry = this.form.claimantCountry
+      } else {
+        this.form.correspondenceContactPrefix = null
+        this.form.correspondenceContactFirstName = null
+        this.form.correspondenceContactLastName = null
+        this.form.correspondenceContactSuffix = null
+        this.form.correspondenceContactAddress = null
+        this.form.correspondenceContactAddress2 = null
+        this.form.correspondenceContactCity = null
+        this.form.correspondenceContactState = null
+        this.form.correspondenceContactPostalCode = null
+        this.form.correspondenceContactCountry = null
       }
     }
   },

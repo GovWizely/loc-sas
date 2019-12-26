@@ -34,17 +34,7 @@ export default class Repository {
         Authorization: 'Bearer ' + token
       },
       data: {
-        ...translatedCopyrightApplication,
-        claimant_address: 'TEST',
-        claimant_city: 'TEST',
-        claimant_country: 'TEST',
-        claimant_postal_code: 'TEST',
-        claimant_state: 'TEST',
-        correspondence_contact_address: 'TEST',
-        correspondence_contact_city: 'TEST',
-        correspondence_contact_country: 'TEST',
-        correspondence_contact_postal_code: 'TEST',
-        correspondence_contact_state: 'TEST'
+        ...translatedCopyrightApplication
       }
     })
   }
