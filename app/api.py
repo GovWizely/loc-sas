@@ -1,4 +1,5 @@
-from flask_appbuilder.api import ModelRestApi
+from flask import session
+from flask_appbuilder.api import BaseApi, expose, ModelRestApi
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 
 from app.models import CopyrightApplication
@@ -64,3 +65,12 @@ class CopyrightApplicationModelApi(ModelRestApi):
 
 
 appbuilder.add_api(CopyrightApplicationModelApi)
+
+
+class CurrentUserApi(BaseApi):
+    @expose('/current-user-id')
+    def greeting(self):
+        return self.response(200, user_id=session["user_id"])
+
+
+appbuilder.add_api(CurrentUserApi)
