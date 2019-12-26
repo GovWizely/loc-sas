@@ -6,7 +6,7 @@ module.exports = {
         target: 'http://localhost:5000',
         changeOrigin: true
       },
-      '/users/api/readvalues': {
+      '/users/api/read': {
         target: 'http://localhost:5000'
       }
     }

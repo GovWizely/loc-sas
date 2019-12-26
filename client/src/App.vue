@@ -13,7 +13,7 @@
       <md-button v-if="!currentUserInfo" @click="login()">Login</md-button>
       <md-menu v-else>
         <md-button class="md-icon-button" md-menu-trigger>
-          <md-icon>menu</md-icon>
+          <initials-avatar :initials="this.currentUserInfo.first_name[0] + this.currentUserInfo.last_name[0]" />
         </md-button>
         <md-menu-content>
           <md-menu-item>
@@ -76,15 +76,19 @@
 </style>
 
 <script>
-import Repository from './repositories/Repository'
+import Repository from '@/repositories/Repository'
+import InitialsAvatar from '@/views/InitialsAvatar'
 
 export default {
+  components: {
+    'initials-avatar': InitialsAvatar
+  },
   data: () => ({
     currentUserInfo: false
   }),
   async created () {
     const repository = new Repository()
-    this.currentUserInfo = await repository._userIsAuthenticated()
+    this.currentUserInfo = await repository._getCurrentUserInfo()
   },
   methods: {
     logout () {

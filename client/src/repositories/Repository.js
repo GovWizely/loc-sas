@@ -66,14 +66,24 @@ export default class Repository {
     return tokenResponse.data.access_token
   }
 
-  async _userIsAuthenticated () {
-    // Using this API to verify a user is logged in...
-    let usersListResponse = await axios({
-      url: '/users/api/readvalues',
+  async _getCurrentUserInfo () {
+    let currentUserId = await axios({
+      url: ' /api/v1/currentuserapi/current-user-id',
       method: 'GET'
     })
 
-    return (usersListResponse !== null)
+    if (currentUserId.data == null) {
+      return false
+    }
+
+    const userId = currentUserId.data.user_id
+    let usersListResponse = await axios({
+      url: '/users/api/read?_flt_0_id=' + userId,
+      method: 'GET'
+    })
+    const usersList = usersListResponse.data
+    const currentUser = usersList.result[0]
+    return currentUser
   }
 
   translateToSnakeCase (obj) {
