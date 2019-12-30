@@ -66,7 +66,8 @@
           <md-card>
             <md-card-header class="md-headline">Author</md-card-header>
             <md-card-content>
-              <div class="md-layout md-gutter">
+              <md-switch v-model="isAuthorAnonymous" @change="toggleAuthorAnonymity">Anonymous</md-switch>
+              <div class="md-layout md-gutter" v-if="!isAuthorAnonymous">
                 <div class="md-layout-item md-size-10">
                   <md-autocomplete v-model="form.authorPrefix" :md-options="prefixes">
                     <label>Prefix</label>
@@ -111,23 +112,36 @@
                     <label>Suffix</label>
                   </md-autocomplete>
                 </div>
-                <div class="md-layout-item md-size-10">
-                  <md-field :class="getValidationClass('authorCitizenship')">
-                    <label for="author-citizenship">Citizenship</label>
-                    <md-input
-                      name="author-citizenship"
-                      id="author-citizenship"
-                      v-model="form.authorCitizenship"
-                      :disabled="sending"
-                      required
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.authorCitizenship.required"
-                    >The author citizenship is required</span>
-                  </md-field>
-                </div>
               </div>
+                <div class="md-layout md-gutter"  v-if="!isAuthorAnonymous">
+                  <div class="md-layout-item md-small-size-100">
+                    <md-field>
+                      <label for="author-pseudonym">Pseudonym</label>
+                      <md-input
+                        name="author-pseudonym"
+                        id="author-pseudonym"
+                        v-model="form.authorPseudonym"
+                        :disabled="sending"
+                      />
+                    </md-field>
+                  </div>
+                  <div class="md-layout-item md-small-size-100">
+                    <md-field :class="getValidationClass('authorCitizenship')">
+                      <label for="author-citizenship">Citizenship</label>
+                      <md-input
+                        name="author-citizenship"
+                        id="author-citizenship"
+                        v-model="form.authorCitizenship"
+                        :disabled="sending"
+                        required
+                      />
+                      <span
+                        class="md-error"
+                        v-if="!$v.form.authorCitizenship.required"
+                      >The author citizenship is required</span>
+                    </md-field>
+                  </div>
+                </div>
             </md-card-content>
           </md-card>
           <md-card>
@@ -516,6 +530,7 @@ export default {
       authorFirstName: null,
       authorLastName: null,
       authorSuffix: null,
+      authorPseudonym: null,
       authorCitizenship: null,
       claimantPrefix: null,
       claimantFirstName: null,
@@ -546,7 +561,8 @@ export default {
     sending: false,
     prefixes: ['Dr', 'Mr', 'Mrs', 'Ms'],
     suffixes: ['Jr', 'Sr', 'III', 'Esq', 'MD', 'PhD'],
-    useClaimantAddress: false
+    useClaimantAddress: false,
+    isAuthorAnonymous: false
   }),
   validations: {
     form: {
@@ -673,6 +689,20 @@ export default {
         this.form.correspondenceContactState = null
         this.form.correspondenceContactPostalCode = null
         this.form.correspondenceContactCountry = null
+      }
+    },
+    toggleAuthorAnonymity () {
+      this.form.authorPrefix = null
+      this.form.authorSuffix = null
+      this.form.authorPseudonym = null
+      if (this.isAuthorAnonymous) {
+        this.form.authorFirstName = 'anonymous'
+        this.form.authorLastName = 'anonymous'
+        this.form.authorCitizenship = 'unk'
+      } else {
+        this.form.authorFirstName = null
+        this.form.authorLastName = null
+        this.form.authorCitizenship = null
       }
     }
   },
