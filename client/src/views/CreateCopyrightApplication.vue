@@ -686,6 +686,7 @@ import {
   maxValue
 } from 'vuelidate/lib/validators'
 import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormatter'
+import { replaceNonIso8895 } from '@/utils/ISO8895-15validator'
 
 export default {
   name: 'CreateCopyrightApplication',
@@ -897,6 +898,9 @@ export default {
   },
   updated () {
     this.form.correspondencePhoneNumber = formatPhoneNumber(this.form.correspondencePhoneNumber)
+    Object.keys(this.form).map(k => {
+      this.form[k] = replaceNonIso8895(this.form[k])
+    })
   }
 }
 </script>
