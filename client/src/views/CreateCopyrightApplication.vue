@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="header-title">Create copyright applicaiton</h2>
+    <h2 class="header-title">Create copyright application</h2>
     <form novalidate class="md-layout" @submit.prevent="validateCopyrightApplication">
       <md-card class="md-layout-item md-size-100">
         <md-card-content>
