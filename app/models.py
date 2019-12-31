@@ -20,7 +20,7 @@ class CopyrightApplication(AuditMixin, Model):
     author_middle_name = Column(String(255), nullable=True)
     author_last_name = Column(String(255), nullable=False)
     author_suffix = Column(String(255), nullable=True)
-    author_pseudonym = Column(String(150), nullable=True)
+    author_pseudonym = Column(String(255), nullable=True)
     author_anonymous = Column(String(150), nullable=True)
     author_citizenship = Column(String(150), nullable=False)
     author_domicile = Column(String(150), nullable=True)
