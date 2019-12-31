@@ -39,6 +39,22 @@ export default class Repository {
     })
   }
 
+  async _getCopyrightApplication (id) {
+    let token = await this._getToken()
+    let copyrightApplicationsResponse = await axios({
+      url: '/api/v1/copyright_application/' + id,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      }
+    })
+
+    let results = copyrightApplicationsResponse.data.result
+
+    return results
+  }
+
   async _getToken () {
     let tokenResponse = await axios({
       url: '/api/v1/security/login',

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Repository from '@/repositories/Repository'
+import CopyrightApplication from '@/views/CopyrightApplication'
 import CopyrightApplications from '@/views/CopyrightApplications'
 import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
 
@@ -19,6 +20,14 @@ const routes = [
     path: '/create',
     name: 'Create',
     component: CreateCopyrightApplication,
+    props: {
+      repository: new Repository()
+    }
+  },
+  {
+    path: '/view',
+    name: 'View',
+    component: CopyrightApplication,
     props: {
       repository: new Repository()
     }
