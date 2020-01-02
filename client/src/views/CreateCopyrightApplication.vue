@@ -17,6 +17,7 @@
                       v-model="form.primaryTitle"
                       :disabled="sending"
                       required
+                      @blur="validateField('primaryTitle')"
                     />
                     <span
                       class="md-error"
@@ -45,6 +46,7 @@
                       v-model="form.yearCompleted"
                       :disabled="sending"
                       required
+                      @blur="validateField('yearCompleted')"
                     />
                     <span
                       class="md-error"
@@ -52,12 +54,8 @@
                     >The year completed is required</span>
                     <span
                       class="md-error"
-                      v-else-if="!$v.form.yearCompleted.minValue"
-                    >The year completed must be between 1894 and 2019</span>
-                    <span
-                      class="md-error"
-                      v-else-if="!$v.form.yearCompleted.maxValue"
-                    >The year completed must be between 1894 and 2019</span>
+                      v-else-if="!$v.form.yearCompleted.minValue || !$v.form.yearCompleted.maxValue"
+                    >The year completed must be between {{minYearCompleted}} and {{maxYearCompleted}}</span>
                   </md-field>
                 </div>
               </div>
@@ -688,11 +686,17 @@ import {
 import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormatter'
 import { replaceNonIso8895 } from '@/utils/ISO8895-15validator'
 
+let d = new Date()
+let maxYearCompleted = d.getFullYear()
+let minYearCompleted = maxYearCompleted - 125
+
 export default {
   name: 'CreateCopyrightApplication',
   props: ['repository'],
   mixins: [validationMixin],
   data: () => ({
+    minYearCompleted,
+    maxYearCompleted,
     form: {
       primaryTitle: null,
       alternateTitle: null,
@@ -743,6 +747,14 @@ export default {
       possibleRightsAndPermissionsPostalCode: null,
       possibleRightsAndPermissionsCountry: null
     },
+    immediateValidationFields: {
+      primaryTitle: {
+        invalid: false
+      },
+      yearCompleted: {
+        invalid: false
+      }
+    },
     copyrightApplicationSaved: false,
     lastCopyrightApplication: null,
     sending: false,
@@ -757,8 +769,8 @@ export default {
       },
       yearCompleted: {
         required,
-        minValue: minValue(1894),
-        maxValue: maxValue(2019)
+        minValue: minValue(minYearCompleted),
+        maxValue: maxValue(maxYearCompleted)
       },
       authorFirstName: {
         required
@@ -825,6 +837,13 @@ export default {
     getValidationClass (fieldName) {
       const field = this.$v.form[fieldName]
 
+      let ivField = this.immediateValidationFields[fieldName]
+      if (ivField && ivField.invalid) {
+        return {
+          'md-invalid': true
+        }
+      }
+
       if (field) {
         return {
           'md-invalid': field.$invalid && field.$dirty
@@ -835,6 +854,9 @@ export default {
       this.$v.$reset()
       Object.keys(this.form).map(k => {
         this.form[k] = null
+      })
+      Object.keys(this.immediateValidationFields).map(k => {
+        this.immediateValidationFields[k].invalid = false
       })
     },
     async createCopyrightApplication () {
@@ -894,6 +916,9 @@ export default {
         this.form.authorLastName = null
         this.form.authorCitizenship = null
       }
+    },
+    validateField (v) {
+      this.immediateValidationFields[v].invalid = this.$v.form[v].$invalid
     }
   },
   updated () {
