@@ -5,7 +5,7 @@ from flask_appbuilder import Model
 from flask_appbuilder.filemanager import get_file_original_name
 from flask_appbuilder.models.mixins import AuditMixin, FileColumn
 from markupsafe import Markup
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String
 
 date_today = datetime.date.today()
 
@@ -21,7 +21,7 @@ class CopyrightApplication(AuditMixin, Model):
     author_last_name = Column(String(255), nullable=False)
     author_suffix = Column(String(255), nullable=True)
     author_pseudonym = Column(String(255), nullable=True)
-    author_anonymous = Column(String(255), nullable=True)
+    author_anonymous = Column(Boolean, nullable=True, default=False)
     author_citizenship = Column(String(255), nullable=False)
     author_domicile = Column(String(255), nullable=True)
     claimant_prefix = Column(String(255), nullable=True)
