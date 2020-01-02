@@ -66,8 +66,8 @@
           <md-card>
             <md-card-header class="md-headline">Author</md-card-header>
             <md-card-content>
-              <md-switch v-model="isAuthorAnonymous" @change="toggleAuthorAnonymity">Anonymous</md-switch>
-              <div class="md-layout md-gutter" v-if="!isAuthorAnonymous">
+              <md-switch v-model="form.authorAnonymous" @change="toggleAuthorAnonymity">Anonymous</md-switch>
+              <div class="md-layout md-gutter" v-if="!form.authorAnonymous">
                 <div class="md-layout-item md-size-10">
                   <md-autocomplete v-model="form.authorPrefix" :md-options="prefixes">
                     <label>Prefix</label>
@@ -125,7 +125,7 @@
                   </md-autocomplete>
                 </div>
               </div>
-                <div class="md-layout md-gutter"  v-if="!isAuthorAnonymous">
+                <div class="md-layout md-gutter"  v-if="!form.authorAnonymous">
                   <div class="md-layout-item md-small-size-100">
                     <md-field>
                       <label for="author-pseudonym">Pseudonym</label>
@@ -697,6 +697,7 @@ export default {
       primaryTitle: null,
       alternateTitle: null,
       yearCompleted: null,
+      authorAnonymous: false,
       authorPrefix: null,
       authorFirstName: null,
       authorMiddleName: null,
@@ -747,8 +748,7 @@ export default {
     sending: false,
     prefixes: ['Dr', 'Mr', 'Mrs', 'Ms'],
     suffixes: ['Jr', 'Sr', 'III', 'Esq', 'MD', 'PhD'],
-    useClaimantAddress: false,
-    isAuthorAnonymous: false
+    useClaimantAddress: false
   }),
   validations: {
     form: {
@@ -885,7 +885,7 @@ export default {
       this.form.authorPseudonym = null
       this.form.authorCitizenship = null
       this.form.authorDomicile = null
-      if (this.isAuthorAnonymous) {
+      if (this.form.authorAnonymous) {
         this.form.authorFirstName = 'anonymous'
         this.form.authorLastName = 'anonymous'
         this.form.authorCitizenship = 'unk'
