@@ -86,6 +86,25 @@ Generate the test results in the Cobertura format that SonarQube requires and se
 make sonarqube
 ```
 
+PyCharm users can integrate the SonarLint plugin and tie it into the LoC's SonarQube server to apply this project's Quality Profiles during development.
+
+First, ensure your LoC VPN is enabled. In PyCharm, download and install the SonarQube Community Intellij Plugin and the SonarLint Plugin. You'll need to restart PyCharm afterwards.
+
+![Download Plugins](screenshots/download_plugins.png)
+
+Create the SonarQube Server connection:
+ 
+![Connect to SonarQube Server](screenshots/configure_sonarqube.png)
+
+Configure the SonarLint plugin for PyCharm:
+![Configure SonarLint General](screenshots/configure_sonarlint_general.png)
+
+Configure the SonarLint plugin for this project:
+![Configure SonarLint Project](screenshots/configure_sonarlint_project.png)
+
+Here is an example of what the integration looks like in PyCharm:
+![Example SonarLint Issue](screenshots/example_sonarlint_issue.png)
+
 ### Features
 
 * "Active admin"-like functionality around a basic copyright application (name, title, date, PDF upload)
