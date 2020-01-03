@@ -8,6 +8,10 @@ export function formatPhoneNumber (phoneNumber) {
     return ''
   }
 
+  if (tmpPhoneNumber.length > 10) {
+    tmpPhoneNumber = tmpPhoneNumber.substring(0, 10)
+  }
+
   if (tmpPhoneNumber.length <= 3) {
     return '(' + tmpPhoneNumber
   } else if (tmpPhoneNumber.length === 3) {
