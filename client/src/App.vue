@@ -28,6 +28,10 @@
       </div>
       <router-view />
     </div>
+    <div class="please-log-in md-title">
+      {{message}}
+    </div>
+    <md-dialog-alert class="error" :md-active.sync="errorOccured" md-title="Error Occured!" :md-content="errorMessage" />
   </div>
 </template>
 
@@ -73,6 +77,12 @@
   margin: 15px;
 }
 
+.please-log-in {
+  display: flex;
+  justify-content: center;
+  margin-top: 124px;
+}
+
 </style>
 
 <script>
@@ -84,11 +94,23 @@ export default {
     'initials-avatar': InitialsAvatar
   },
   data: () => ({
-    currentUserInfo: false
+    currentUserInfo: false,
+    message: null,
+    errorOccured: false,
+    errorMessage: null
   }),
   async created () {
     const repository = new Repository()
-    this.currentUserInfo = await repository._getCurrentUserInfo()
+    let currentUserInfo = await repository._getCurrentUserInfo()
+
+    if (currentUserInfo.loggedIn === false) {
+      this.message = 'Please log in.'
+    } else if (currentUserInfo.loggedIn === true) {
+      this.currentUserInfo = currentUserInfo
+    } else if (currentUserInfo.error) {
+      this.errorOccured = true
+      this.errorMessage = currentUserInfo.error
+    }
   },
   methods: {
     logout () {

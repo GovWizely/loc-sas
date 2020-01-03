@@ -17,6 +17,7 @@
         </md-table-row>
       </md-table>
     </div>
+    <md-dialog-alert class="error" :md-active.sync="errorOccured" md-title="Error Occured!" :md-content="errorMessage" />
   </div>
 </template>
 
@@ -25,10 +26,18 @@ export default {
   name: 'CopyrightApplications',
   props: ['repository'],
   data: () => ({
-    copyrightApplications: null
+    copyrightApplications: null,
+    errorOccured: false,
+    errorMessage: null
   }),
   async created () {
-    this.copyrightApplications = await this.repository._getCopyrightApplications()
+    let response = await this.repository._getCopyrightApplications()
+    if (response.error) {
+      this.errorOccured = true
+      this.errorMessage = response.error
+    } else {
+      this.copyrightApplications = response
+    }
   },
   methods: {
     getId (id) {
