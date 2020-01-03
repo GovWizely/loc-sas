@@ -10,6 +10,10 @@ describe('PhoneNumberFormatter', () => {
     expect(formatPhoneNumber('4435X551X234')).to.eq('(443) 555 1234')
   })
 
+  it('returns a formatted phone number and truncates the remaining digits', () => {
+    expect(formatPhoneNumber('44355512345')).to.eq('(443) 555 1234')
+  })
+
   it('returns a formatted phone number with 1 digit', () => {
     expect(formatPhoneNumber('4')).to.eq('(4')
   })
@@ -52,9 +56,5 @@ describe('PhoneNumberFormatter', () => {
 
   it('returns a formatted phone number with 10 digits', () => {
     expect(formatPhoneNumber('4435551234')).to.eq('(443) 555 1234')
-  })
-
-  it('returns a formatted phone number with 10 digits and trincates the remaining digits', () => {
-    expect(formatPhoneNumber('44355512345')).to.eq('(443) 555 1234')
   })
 })
