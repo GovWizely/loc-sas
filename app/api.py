@@ -69,8 +69,11 @@ appbuilder.add_api(CopyrightApplicationModelApi)
 
 class CurrentUserApi(BaseApi):
     @expose('/current-user-id')
-    def greeting(self):
-        return self.response(200, user_id=session["user_id"])
+    def currentUser(self):
+        try:
+            return self.response(200, user_id=session["user_id"])
+        except KeyError:
+            return self.response(200, user_id=None)
 
 
 appbuilder.add_api(CurrentUserApi)

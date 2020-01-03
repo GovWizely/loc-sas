@@ -764,13 +764,16 @@
           <md-button type="submit" class="md-primary" :disabled="sending || !certification">Create</md-button>
         </md-card-actions>
       </md-card>
-
       <md-progress-bar md-mode="indeterminate" v-if="sending" />
-
-      <md-snackbar
-        :md-active.sync="copyrightApplicationSaved"
-      >{{ lastCopyrightApplication }} was saved with success!</md-snackbar>
+      <md-dialog :md-active.sync="copyrightApplicationSaved">
+        <md-dialog-title>Success!</md-dialog-title>
+        <md-dialog-content>{{lastCopyrightApplication}} was saved!</md-dialog-content>
+        <md-dialog-actions>
+          <md-button class="md-primary" to="/">Close</md-button>
+        </md-dialog-actions>
+      </md-dialog>
     </form>
+    <md-dialog-alert class="error" :md-active.sync="errorOccured" md-title="Error Occured!" :md-content="errorMessage" />
   </div>
 </template>
 
@@ -857,7 +860,9 @@ export default {
     prefixes: ['Dr', 'Mr', 'Mrs', 'Ms'],
     suffixes: ['Jr', 'Sr', 'III', 'Esq', 'MD', 'PhD'],
     useClaimantAddress: false,
-    certification: false
+    certification: false,
+    errorOccured: false,
+    errorMessage: null
   }),
   validations: {
     form: {
@@ -949,20 +954,36 @@ export default {
     },
     clearForm () {
       this.$v.$reset()
+
       Object.keys(this.form).map(k => {
-        this.form[k] = null
+        if (typeof this.form[k] === 'boolean') {
+          this.form[k] = false
+        } else {
+          this.form[k] = null
+        }
       })
+
       Object.keys(this.immediateValidationFields).map(k => {
         this.immediateValidationFields[k].invalid = false
       })
+
+      this.useClaimantAddress = false
+      this.certification = false
     },
     async createCopyrightApplication () {
       this.sending = true
       this.lastCopyrightApplication = this.form.primaryTitle
-      await this.repository._createCopyrightApplication(this.form)
-      this.copyrightApplicationSaved = true
+      let response = await this.repository._createCopyrightApplication(this.form)
+
+      if (response.error) {
+        this.errorOccured = true
+        this.errorMessage = response.error
+      } else {
+        this.copyrightApplicationSaved = true
+        this.clearForm()
+      }
+
       this.sending = false
-      this.clearForm()
     },
     async validateCopyrightApplication () {
       this.$v.$touch()
