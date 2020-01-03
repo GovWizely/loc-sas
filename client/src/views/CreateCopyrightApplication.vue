@@ -17,7 +17,7 @@
                       v-model="form.primaryTitle"
                       :disabled="sending"
                       required
-                      @blur="validateField('primaryTitle')"
+                      maxlength=2000
                     />
                     <span
                       class="md-error"
@@ -33,6 +33,7 @@
                       id="alternate-title"
                       v-model="form.alternateTitle"
                       :disabled="sending"
+                      maxlength=2000
                     />
                   </md-field>
                 </div>
@@ -67,7 +68,12 @@
               <md-switch v-model="form.authorAnonymous" @change="toggleAuthorAnonymity">Anonymous</md-switch>
               <div class="md-layout md-gutter" v-if="!form.authorAnonymous">
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete v-model="form.authorPrefix" :md-options="prefixes">
+                  <md-autocomplete
+                    v-model="form.authorPrefix"
+                    :md-options="prefixes"
+                    md-input-name="author-prefix"
+                    md-input-id="author-prefix"
+                    md-input-maxlength=255>
                     <label>Prefix</label>
                   </md-autocomplete>
                 </div>
@@ -81,6 +87,7 @@
                       v-model="form.authorFirstName"
                       :disabled="sending"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -97,6 +104,7 @@
                       autocomplete="given-name"
                       v-model="form.authorMiddleName"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -110,6 +118,7 @@
                       v-model="form.authorLastName"
                       :disabled="sending"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -118,7 +127,12 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete v-model="form.authorSuffix" :md-options="suffixes">
+                  <md-autocomplete
+                    v-model="form.authorSuffix"
+                    :md-options="suffixes"
+                    md-input-name="author-suffix"
+                    md-input-id="author-suffix"
+                    md-input-maxlength=255>
                     <label>Suffix</label>
                   </md-autocomplete>
                 </div>
@@ -132,6 +146,7 @@
                         id="author-pseudonym"
                         v-model="form.authorPseudonym"
                         :disabled="sending"
+                        maxlength=255
                       />
                     </md-field>
                   </div>
@@ -144,6 +159,7 @@
                         v-model="form.authorCitizenship"
                         :disabled="sending"
                         required
+                        maxlength=255
                       />
                       <span
                         class="md-error"
@@ -159,6 +175,7 @@
                         id="author-domicile"
                         v-model="form.authorDomicile"
                         :disabled="sending"
+                        maxlength=255
                       />
                     </md-field>
                   </div>
@@ -170,7 +187,12 @@
             <md-card-content>
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete v-model="form.claimantPrefix" :md-options="prefixes">
+                  <md-autocomplete
+                    v-model="form.claimantPrefix"
+                    :md-options="prefixes"
+                    md-input-name="claimant-prefix"
+                    md-input-id="claimant-prefix"
+                    md-input-maxlength=255>
                     <label>Prefix</label>
                   </md-autocomplete>
                 </div>
@@ -183,6 +205,7 @@
                       v-model="form.claimantFirstName"
                       :disabled="sending"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -199,6 +222,7 @@
                       autocomplete="given-name"
                       v-model="form.claimantMiddleName"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -211,6 +235,7 @@
                       v-model="form.claimantLastName"
                       :disabled="sending"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -219,7 +244,12 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete v-model="form.claimantSuffix" :md-options="suffixes">
+                  <md-autocomplete
+                    v-model="form.claimantSuffix"
+                    :md-options="suffixes"
+                    md-input-name="claimant-suffix"
+                    md-input-id="claimant-suffix"
+                    md-input-maxlength=255>
                     <label>Suffix</label>
                   </md-autocomplete>
                 </div>
@@ -234,6 +264,7 @@
                       v-model="form.claimantAddress"
                       :disabled="sending"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -251,6 +282,7 @@
                       id="claimant-address2"
                       v-model="form.claimantAddress2"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -265,6 +297,7 @@
                       v-model="form.claimantCity"
                       :disabled="sending"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -281,6 +314,7 @@
                       v-model="form.claimantState"
                       :disabled="sending"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -297,6 +331,7 @@
                       v-model="form.claimantPostalCode"
                       :disabled="sending"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -313,6 +348,7 @@
                       v-model="form.claimantCountry"
                       :disabled="sending"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -329,7 +365,13 @@
               <md-switch v-model="useClaimantAddress" @change="copyClaimantAddress">Use Claimant Address</md-switch>
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete v-model="form.correspondenceContactPrefix" :md-options="prefixes" :disabled="sending || useClaimantAddress">
+                  <md-autocomplete
+                    v-model="form.correspondenceContactPrefix"
+                    :md-options="prefixes"
+                    :disabled="sending || useClaimantAddress"
+                    md-input-name="correspondence-contact-prefix"
+                    md-input-id="correspondence-contact-prefix"
+                    md-input-maxlength=255>
                     <label>Prefix</label>
                   </md-autocomplete>
                 </div>
@@ -342,6 +384,7 @@
                       v-model="form.correspondenceContactFirstName"
                       :disabled="sending || useClaimantAddress"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -358,6 +401,7 @@
                       autocomplete="given-name"
                       v-model="form.correspondenceContactMiddleName"
                       :disabled="sending || useClaimantAddress"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -370,6 +414,7 @@
                       v-model="form.correspondenceContactLastName"
                       :disabled="sending || useClaimantAddress"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -378,7 +423,13 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete v-model="form.correspondenceContactSuffix" :md-options="suffixes" :disabled="sending || useClaimantAddress">
+                  <md-autocomplete
+                    v-model="form.correspondenceContactSuffix"
+                    :md-options="suffixes"
+                    :disabled="sending || useClaimantAddress"
+                    md-input-name="correspondence-contact-suffix"
+                    md-input-id="correspondence-contact-suffix"
+                    md-input-maxlength=255>
                     <label>Suffix</label>
                   </md-autocomplete>
                 </div>
@@ -393,6 +444,7 @@
                       v-model="form.correspondenceContactAddress"
                       :disabled="sending || useClaimantAddress"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -410,6 +462,7 @@
                       id="correspondence-contact-address2"
                       v-model="form.correspondenceContactAddress2"
                       :disabled="sending || useClaimantAddress"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -424,6 +477,7 @@
                       v-model="form.correspondenceContactCity"
                       :disabled="sending || useClaimantAddress"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -440,6 +494,7 @@
                       v-model="form.correspondenceContactState"
                       :disabled="sending || useClaimantAddress"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -456,6 +511,7 @@
                       v-model="form.correspondenceContactPostalCode"
                       :disabled="sending || useClaimantAddress"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -472,6 +528,7 @@
                       v-model="form.correspondenceContactCountry"
                       :disabled="sending || useClaimantAddress"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -526,6 +583,7 @@
                       v-model="form.correspondenceEmail"
                       :disabled="sending"
                       required
+                      maxlength=255
                     />
                     <span
                       class="md-error"
@@ -542,7 +600,13 @@
             <md-card-content>
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete v-model="form.possibleRightsAndPermissionsPrefix" :md-options="prefixes" :disabled="sending">
+                  <md-autocomplete
+                    v-model="form.possibleRightsAndPermissionsPrefix"
+                    :md-options="prefixes"
+                    :disabled="sending"
+                    md-input-name="possible-rights-and-permissions-prefix"
+                    md-input-id="possible-rights-and-permissions-prefix"
+                    md-input-maxlength=255>
                     <label>Prefix</label>
                   </md-autocomplete>
                 </div>
@@ -554,6 +618,7 @@
                       id="possible-rights-and-permissions-first-name"
                       v-model="form.possibleRightsAndPermissionsFirstName"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -566,6 +631,7 @@
                       autocomplete="given-name"
                       v-model="form.possibleRightsAndPermissionsMiddleName"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -577,11 +643,18 @@
                       id="possible-rights-and-permissions-last-name"
                       v-model="form.possibleRightsAndPermissionsLastName"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete v-model="form.possibleRightsAndPermissionsSuffix" :md-options="suffixes" :disabled="sending">
+                  <md-autocomplete
+                    v-model="form.possibleRightsAndPermissionsSuffix"
+                    :md-options="suffixes"
+                    :disabled="sending"
+                    md-input-name="possible-rights-and-permissions-suffix"
+                    md-input-id="possible-rights-and-permissions-suffix"
+                    md-input-maxlength=255>
                     <label>Suffix</label>
                   </md-autocomplete>
                 </div>
@@ -595,6 +668,7 @@
                       id="possible-rights-and-permissions-address"
                       v-model="form.possibleRightsAndPermissionsAddress"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -608,6 +682,7 @@
                       id="possible-rights-and-permissions-address2"
                       v-model="form.possibleRightsAndPermissionsAddress2"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -621,6 +696,7 @@
                       id="possible-rights-and-permissions-city"
                       v-model="form.possibleRightsAndPermissionsCity"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -632,6 +708,7 @@
                       id="possible-rights-and-permissions-state"
                       v-model="form.possibleRightsAndPermissionsState"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -643,6 +720,7 @@
                       id="possible-rights-and-permissions-postal-code"
                       v-model="form.possibleRightsAndPermissionsPostalCode"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -654,6 +732,7 @@
                       id="possible-rights-and-permissions-postal-code"
                       v-model="form.possibleRightsAndPermissionsCountry"
                       :disabled="sending"
+                      maxlength=255
                     />
                   </md-field>
                 </div>
@@ -748,9 +827,6 @@ export default {
       possibleRightsAndPermissionsCountry: null
     },
     immediateValidationFields: {
-      primaryTitle: {
-        invalid: false
-      },
       yearCompleted: {
         invalid: false
       }
