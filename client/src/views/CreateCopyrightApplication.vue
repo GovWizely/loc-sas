@@ -2,7 +2,7 @@
   <div>
     <h2 class="header-title">Create copyright application</h2>
     <form novalidate class="md-layout" @submit.prevent="validateCopyrightApplication">
-      <md-card class="md-layout-item md-size-100">
+      <md-card class="md-layout-item md-size-80 form-card">
         <md-card-content>
           <md-card>
             <md-card-header class="md-headline">Title</md-card-header>
@@ -739,9 +739,29 @@
               </div>
             </md-card-content>
           </md-card>
+          <md-card>
+            <md-card-header  class="md-headline">Certification</md-card-header>
+            <md-card-content>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100">
+                  <p><strong>17 USC 506(e): Any person who knowingly makes a false representation of a material fact in the application
+                  for copyright registration provided by section 409, or in any written statement filed with the application,
+                  shall be fined not more than $2500.</strong></p>
+                </div>
+                <div class="md-layout-item md-size-95">
+                  <p>*<strong>I certify</strong> that I am the author, copyright claimant, or owner of exclusive rights, or the authorized agent of the
+                  author, copyright claimant, or owner of exclusive rights of this work and that the information given in this
+                  application is correct to the best of my knowledge.</p>
+                </div>
+                <div class="md-layout-item md-size-5">
+                  <md-checkbox v-model="certification"></md-checkbox>
+                </div>
+              </div>
+            </md-card-content>
+          </md-card>
         </md-card-content>
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending">Create</md-button>
+          <md-button type="submit" class="md-primary" :disabled="sending || !certification">Create</md-button>
         </md-card-actions>
       </md-card>
 
@@ -836,7 +856,8 @@ export default {
     sending: false,
     prefixes: ['Dr', 'Mr', 'Mrs', 'Ms'],
     suffixes: ['Jr', 'Sr', 'III', 'Esq', 'MD', 'PhD'],
-    useClaimantAddress: false
+    useClaimantAddress: false,
+    certification: false
   }),
   validations: {
     form: {
@@ -1016,5 +1037,9 @@ export default {
 
 .md-card {
   margin: 14px;
+}
+
+.form-card {
+  margin: auto;
 }
 </style>
