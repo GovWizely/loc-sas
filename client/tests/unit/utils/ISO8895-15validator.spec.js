@@ -4,9 +4,6 @@ import { expect } from 'chai'
 describe('ISO8895-15validator', () => {
   it('removes non-ISO8895-15 characters from strings', () => {
     expect(replaceNonIso8895('ABCΔ')).to.eq('ABC')
-  })
-
-  it('removes non-ISO8895-15 characters from strings', () => {
     expect(replaceNonIso8895(true)).to.eq(true)
   })
 })

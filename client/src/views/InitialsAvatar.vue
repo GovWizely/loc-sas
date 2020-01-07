@@ -1,6 +1,6 @@
 <template>
   <div class="avatar-circle-sm">
-    <span class="initials">{{this.initials}}</span>
+    <span class="initials" id="initials" name="initials">{{this.initials}}</span>
   </div>
 </template>
 <script>

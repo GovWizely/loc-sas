@@ -3,14 +3,14 @@
     <md-toolbar class="md-primary" md-elevation="1">
       <img class="logo" src="./assets/copyrightLogo.png" /> |
       <h1 class="md-title" style="flex: 1">Registration System</h1>
-      <div v-if="currentUserInfo">
+      <div v-if="currentUserInfo.loggedIn">
         <div id="nav">
           <md-tabs md-sync-route class="md-primary">
             <md-tab id="tab-home" md-label="Home" to="/" exact></md-tab>
           </md-tabs>
         </div>
       </div>
-      <md-button v-if="!currentUserInfo" @click="login()">Login</md-button>
+      <md-button v-if="!currentUserInfo.loggedIn" @click="login()">Login</md-button>
       <md-menu v-else>
         <md-button class="md-icon-button" md-menu-trigger>
           <initials-avatar :initials="this.currentUserInfo.first_name[0] + this.currentUserInfo.last_name[0]" />
@@ -22,16 +22,22 @@
         </md-menu-content>
       </md-menu>
     </md-toolbar>
-    <div v-if="currentUserInfo">
+    <div v-if="currentUserInfo.loggedIn">
       <div class="current-route md-caption">
         {{this.$route.name}} /
       </div>
       <router-view />
     </div>
     <div class="please-log-in md-title">
-      {{message}}
+      <span id="message" name="message">{{message}}</span>
     </div>
-    <md-dialog-alert class="error" :md-active.sync="errorOccured" md-title="Error Occured!" :md-content="errorMessage" />
+    <md-dialog-alert
+      class="error"
+      id="error"
+      name="error"
+      :md-active.sync="errorOccured"
+      md-title="Error Occured!"
+      :md-content="errorMessage" />
   </div>
 </template>
 
@@ -86,13 +92,13 @@
 </style>
 
 <script>
-import Repository from '@/repositories/Repository'
 import InitialsAvatar from '@/views/InitialsAvatar'
 
 export default {
   components: {
     'initials-avatar': InitialsAvatar
   },
+  props: ['repository'],
   data: () => ({
     currentUserInfo: false,
     message: null,
@@ -100,8 +106,7 @@ export default {
     errorMessage: null
   }),
   async created () {
-    const repository = new Repository()
-    let currentUserInfo = await repository._getCurrentUserInfo()
+    let currentUserInfo = await this.repository._getCurrentUserInfo()
 
     if (currentUserInfo.loggedIn === false) {
       this.message = 'Please log in.'
