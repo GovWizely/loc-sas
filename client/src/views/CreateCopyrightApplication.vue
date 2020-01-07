@@ -65,7 +65,12 @@
           <md-card>
             <md-card-header class="md-headline">Author</md-card-header>
             <md-card-content>
-              <md-switch v-model="form.authorAnonymous" @change="toggleAuthorAnonymity">Anonymous</md-switch>
+              <md-switch
+                v-model="form.authorAnonymous"
+                name="author-anonymous-btn"
+                id="author-anonymous-btn"
+                @change="toggleAuthorAnonymity">Anonymous
+              </md-switch>
               <div class="md-layout md-gutter" v-if="!form.authorAnonymous">
                 <div class="md-layout-item md-size-10">
                   <md-autocomplete
@@ -344,7 +349,7 @@
                     <label for="claimant-country">Country</label>
                     <md-input
                       name="claimant-country"
-                      id="claimant-postal-code"
+                      id="claimant-country"
                       v-model="form.claimantCountry"
                       :disabled="sending"
                       required
@@ -362,7 +367,12 @@
           <md-card>
             <md-card-header class="md-headline">Correspondence</md-card-header>
             <md-card-content>
-              <md-switch v-model="useClaimantAddress" @change="copyClaimantAddress">Use Claimant Address</md-switch>
+              <md-switch
+                v-model="useClaimantAddress"
+                @change="copyClaimantAddress"
+                id="copy-claimant-address-btn"
+                name="copy-claimant-address-btn">Use Claimant Address
+              </md-switch>
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-10">
                   <md-autocomplete
@@ -754,7 +764,7 @@
                   application is correct to the best of my knowledge.</p>
                 </div>
                 <div class="md-layout-item md-size-5">
-                  <md-checkbox v-model="certification"></md-checkbox>
+                  <md-checkbox v-model="certification" id="certification" name="certification"></md-checkbox>
                 </div>
               </div>
             </md-card-content>
@@ -973,8 +983,8 @@ export default {
     async createCopyrightApplication () {
       this.sending = true
       this.lastCopyrightApplication = this.form.primaryTitle
-      let response = await this.repository._createCopyrightApplication(this.form)
 
+      const response = await this.repository._createCopyrightApplication(this.form)
       if (response.error) {
         this.errorOccured = true
         this.errorMessage = response.error

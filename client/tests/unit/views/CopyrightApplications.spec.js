@@ -2,24 +2,34 @@ import { expect } from 'chai'
 import { mount } from '@vue/test-utils'
 import CopyrightApplications from '@/views/CopyrightApplications'
 import Vue from 'vue'
-import VueMaterial from 'vue-material'
 
-Vue.use(VueMaterial)
-
-describe('CopyrightApplications.vue', () => {
+describe('Copyright Applications', () => {
   it('renders copyright applications', async () => {
     let fakeRepository = {
-      _getCopyrightApplications: () => {
-        return [
-          { id: 1, primary_title: 'Title A', created_by: { username: 'Frank' }, created_on: 'some date', application_status: 'New' },
-          { id: 2, primary_title: 'Title B', created_by: { username: 'Ted' }, created_on: 'another date', application_status: 'Old' }
+      _getCopyrightApplications: () => (
+        [
+          {
+            id: 1,
+            primary_title: 'Title A',
+            created_by: { username: 'Frank' },
+            created_on: 'some date',
+            application_status: 'New'
+          },
+          {
+            id: 2,
+            primary_title: 'Title B',
+            created_by: { username: 'Ted' },
+            created_on: 'another date',
+            application_status: 'Old'
+          }
         ]
-      }
+      )
     }
 
     const wrapper = mount(CopyrightApplications, {
       sync: false,
-      propsData: { repository: fakeRepository }
+      propsData: { repository: fakeRepository },
+      stubs: ['router-link']
     })
 
     await Vue.nextTick()
