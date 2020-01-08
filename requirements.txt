@@ -24,7 +24,7 @@ more-itertools==8.0.2
 prison==0.1.2
 PyJWT==1.7.1
 PyMySQL==0.9.3
-pyrsistent==0.15.6
+pyrsistent==0.15.7
 python-dateutil==2.8.1
 python3-openid==3.1.0
 pytz==2019.3
