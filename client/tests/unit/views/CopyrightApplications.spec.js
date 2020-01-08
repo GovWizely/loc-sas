@@ -1,7 +1,6 @@
+import renderComponent from './../TestUtils'
 import { expect } from 'chai'
-import { mount } from '@vue/test-utils'
 import CopyrightApplications from '@/views/CopyrightApplications'
-import Vue from 'vue'
 
 describe('Copyright Applications', () => {
   it('renders copyright applications', async () => {
@@ -26,13 +25,7 @@ describe('Copyright Applications', () => {
       )
     }
 
-    const wrapper = mount(CopyrightApplications, {
-      sync: false,
-      propsData: { repository: fakeRepository },
-      stubs: ['router-link']
-    })
-
-    await Vue.nextTick()
+    const wrapper = await renderComponent(CopyrightApplications, fakeRepository)
 
     const application1 = wrapper.find('#app-id-1').text()
     expect(application1).to.include('Title A')

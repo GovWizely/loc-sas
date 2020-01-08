@@ -771,15 +771,18 @@
           </md-card>
         </md-card-content>
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending || !certification">Create</md-button>
+          <md-button type="submit" class="md-primary" :disabled="!certification">Next</md-button>
         </md-card-actions>
       </md-card>
       <md-progress-bar md-mode="indeterminate" v-if="sending" />
-      <md-dialog :md-active.sync="copyrightApplicationSaved">
-        <md-dialog-title>Success!</md-dialog-title>
-        <md-dialog-content>{{lastCopyrightApplication}} was saved!</md-dialog-content>
+      <md-dialog :md-active.sync="reviewCopyrightApplication">
+        <md-dialog-title>Review</md-dialog-title>
+        <md-dialog-content>
+          <copyright-application-review :application="form" />
+        </md-dialog-content>
         <md-dialog-actions>
-          <md-button class="md-primary" to="/">Close</md-button>
+          <md-button class="md-primary" @click="reviewCopyrightApplication = false">Back</md-button>
+          <md-button class="md-primary" @click="createCopyrightApplication()" id="submit" :disabled="sending">Submit</md-button>
         </md-dialog-actions>
       </md-dialog>
     </form>
@@ -797,6 +800,7 @@ import {
 } from 'vuelidate/lib/validators'
 import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormatter'
 import { replaceNonIso8895 } from '@/utils/ISO8895-15validator'
+import CopyrightApplicationReview from './CopyrightApplicationReview'
 
 let d = new Date()
 let maxYearCompleted = d.getFullYear()
@@ -806,6 +810,9 @@ export default {
   name: 'CreateCopyrightApplication',
   props: ['repository'],
   mixins: [validationMixin],
+  components: {
+    'copyright-application-review': CopyrightApplicationReview
+  },
   data: () => ({
     minYearCompleted,
     maxYearCompleted,
@@ -865,14 +872,15 @@ export default {
       }
     },
     copyrightApplicationSaved: false,
-    lastCopyrightApplication: null,
+    lastCopyrightApplication: '',
     sending: false,
     prefixes: ['Dr', 'Mr', 'Mrs', 'Ms'],
     suffixes: ['Jr', 'Sr', 'III', 'Esq', 'MD', 'PhD'],
     useClaimantAddress: false,
     certification: false,
     errorOccured: false,
-    errorMessage: null
+    errorMessage: null,
+    reviewCopyrightApplication: false
   }),
   validations: {
     form: {
@@ -991,6 +999,7 @@ export default {
       } else {
         this.copyrightApplicationSaved = true
         this.clearForm()
+        this.$router.push({ name: 'Home' }).catch(_ => {})
       }
 
       this.sending = false
@@ -999,7 +1008,7 @@ export default {
       this.$v.$touch()
 
       if (!this.$v.$invalid) {
-        await this.createCopyrightApplication()
+        this.reviewCopyrightApplication = true
       }
     },
     copyClaimantAddress () {

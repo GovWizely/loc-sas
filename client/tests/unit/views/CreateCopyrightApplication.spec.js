@@ -1,25 +1,18 @@
 /* eslint-disable no-unused-expressions */
-import { expect } from 'chai'
-import { mount } from '@vue/test-utils'
-import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
-import Vue from 'vue'
-import VueMaterial from 'vue-material'
+import renderComponent from './../TestUtils'
 import Sinon from 'sinon'
-
-Vue.use(VueMaterial)
+import { expect } from 'chai'
+import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
 
 describe('Create Copyright Application', () => {
   it('user can create a copyright application', async () => {
     let fakeRepository = {
-      _createCopyrightApplication: () => ({ })
+      _createCopyrightApplication: () => ({})
     }
 
     const repositorySpy = Sinon.spy(fakeRepository)
 
-    const wrapper = mount(CreateCopyrightApplication, {
-      sync: false,
-      propsData: { repository: repositorySpy }
-    })
+    const wrapper = await renderComponent(CreateCopyrightApplication, repositorySpy)
 
     wrapper.find('#primary-title').setValue('Zorba')
     wrapper.find('#year-completed').setValue(2020)
@@ -45,6 +38,9 @@ describe('Create Copyright Application', () => {
     await wrapper.vm.$nextTick()
 
     wrapper.find('form').trigger('submit.prevent')
+    await wrapper.vm.$nextTick()
+
+    wrapper.find('#submit').trigger('click')
 
     expect(repositorySpy._createCopyrightApplication.called).to.be.true
     const submittedApplication = repositorySpy._createCopyrightApplication.lastCall.args[0]

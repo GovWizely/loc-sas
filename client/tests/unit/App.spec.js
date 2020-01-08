@@ -1,8 +1,6 @@
+import renderComponent from './TestUtils'
 import { expect } from 'chai'
-import { mount, createLocalVue } from '@vue/test-utils'
-import App from '../../src/App'
-import router from '../../src/router'
-import VueRouter from 'vue-router'
+import App from '@/App'
 
 describe('Home page', () => {
   it('prompts user to log in', async () => {
@@ -14,7 +12,7 @@ describe('Home page', () => {
       )
     }
 
-    const wrapper = await renderApp(fakeRepository)
+    const wrapper = await renderComponent(App, fakeRepository)
 
     expect(wrapper.find('#message').text()).to.equal('Please log in.')
   })
@@ -28,7 +26,7 @@ describe('Home page', () => {
       )
     }
 
-    const wrapper = await renderApp(fakeRepository)
+    const wrapper = await renderComponent(App, fakeRepository)
 
     expect(wrapper.find('.md-dialog-content').text()).to.equal('This is a terrible error')
   })
@@ -44,25 +42,8 @@ describe('Home page', () => {
       )
     }
 
-    const wrapper = await renderApp(fakeRepository)
+    const wrapper = await renderComponent(App, fakeRepository)
 
     expect(wrapper.find('#initials').text()).to.equal('JW')
   })
-
-  async function renderApp (repository) {
-    const localVue = createLocalVue()
-    localVue.use(VueRouter)
-
-    const wrapper = mount(App, {
-      localVue,
-      router: router(repository),
-      sync: false,
-      propsData: { repository },
-      stubs: ['router-view']
-    })
-
-    await wrapper.vm.$nextTick()
-
-    return wrapper
-  }
 })
