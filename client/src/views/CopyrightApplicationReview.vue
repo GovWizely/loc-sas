@@ -93,7 +93,6 @@
     <hr>
     <div>
       <span class="md-headline">Certificate</span>
-      <h2>Certificate</h2>
       <div class="col">
         <div class="col-left">
           <strong>Name:</strong><br />
@@ -109,7 +108,6 @@
     <hr>
     <div>
       <span class="md-headline">Rights and Permissions</span>
-      <h2>Rights and Permissions</h2>
       <div class="col">
         <div class="col-left">
           <strong>Name:</strong><br />
