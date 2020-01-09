@@ -58,7 +58,6 @@ if not users_exist:
         c.correspondence_contact_state = "foo"
         c.correspondence_contact_postal_code = "foo"
         c.correspondence_contact_country = "Canada"
-        c.application_status = "New"
         c.correspondence_email = "foo@bar.baz"
         c.correspondence_phone_number = "800-555-1212"
         month = random.choice(range(1, 12))

@@ -90,4 +90,4 @@ class ApplicationsTest(AppTest):
         rv = self.client.get('/copyrightapplicationmodelview/show/1')
         assert b'Show Copyright Application' in rv.data
         assert b'My Title' in rv.data
-        assert b'New' in rv.data
+        assert b'Under Review' in rv.data
