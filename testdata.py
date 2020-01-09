@@ -51,6 +51,13 @@ if not users_exist:
         c.claimant_state = "foo"
         c.claimant_postal_code = "foo"
         c.claimant_country = "Canada"
+        c.certificate_contact_first_name = name[0]
+        c.certificate_contact_last_name = name[-1]
+        c.certificate_contact_address = "foo"
+        c.certificate_contact_city = "foo"
+        c.certificate_contact_state = "foo"
+        c.certificate_contact_postal_code = "foo"
+        c.certificate_contact_country = "Canada"
         c.correspondence_contact_first_name = name[0]
         c.correspondence_contact_last_name = name[-1]
         c.correspondence_contact_address = "foo"

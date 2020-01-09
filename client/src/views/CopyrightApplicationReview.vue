@@ -92,7 +92,24 @@
     </div>
     <hr>
     <div>
+      <span class="md-headline">Certificate</span>
+      <h2>Certificate</h2>
+      <div class="col">
+        <div class="col-left">
+          <strong>Name:</strong><br />
+          <strong>Address:</strong>
+        </div>
+        <div class="col-right">
+          <span>{{application.certificateContactFirstName}} {{application.certificateContactLastName}}</span><br />
+          <span>{{application.certificateContactAddress}} {{application.certificateContactAddress2}}</span><br />
+          <span>{{application.certificateContactCity}}, {{application.certificateContactState}} {{application.certificateContactPostalCode}} {{application.certificateContactCountry}}</span>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div>
       <span class="md-headline">Rights and Permissions</span>
+      <h2>Rights and Permissions</h2>
       <div class="col">
         <div class="col-left">
           <strong>Name:</strong><br />
