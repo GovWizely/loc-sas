@@ -2,11 +2,12 @@
   <div class="application-review">
     <div>
       <label><strong>Registration #: </strong></label><span>*-APPLICATION-*</span><br />
-      <label><strong>Service Request #: </strong></label><span>1-9019041701</span>
+      <label><strong>Service Request #: </strong></label><span>1-9019041701</span><br />
+      <label><strong>Application Date: </strong></label><span>{{date}}</span>
     </div>
     <hr>
     <div>
-      <h2>Mail Certificate</h2>
+      <span class="md-headline">Mail Certificate</span>
       <p>
         ### ToDo Ln.<br />
         Washington, DC 12345
@@ -14,7 +15,7 @@
     </div>
     <hr>
     <div>
-      <h2>Correspondent</h2>
+      <span class="md-headline">Correspondent</span>
       <div class="col">
         <div class="col-left">
           <strong>Name:</strong><br />
@@ -33,7 +34,7 @@
     </div>
     <hr>
     <div>
-      <h2>Title</h2>
+      <span class="md-headline">Title</span>
       <div class="col">
         <div class="col-left">
           <strong>Title of Work:</strong><br />
@@ -47,7 +48,7 @@
     </div>
     <hr>
     <div>
-      <h2>Completion/Publication</h2>
+      <span class="md-headline">Completion/Publication</span>
       <div class="col">
         <div class="col-left">
           <strong>Year of Completion:</strong>
@@ -59,7 +60,7 @@
     </div>
     <hr>
     <div>
-      <h2>Author</h2>
+      <span class="md-headline">Author</span>
       <div class="col">
         <div class="col-left">
           <strong>Author:</strong><br />
@@ -77,7 +78,7 @@
     </div>
     <hr>
     <div>
-      <h2>Copyright Claimant</h2>
+      <span class="md-headline">Copyright Claimant</span>
       <div class="col">
         <div class="col-left">
           <strong>Copyright Claimant:</strong><br />
@@ -91,7 +92,7 @@
     </div>
     <hr>
     <div>
-      <h2>Rights and Permissions</h2>
+      <span class="md-headline">Rights and Permissions</span>
       <div class="col">
         <div class="col-left">
           <strong>Name:</strong><br />
@@ -105,17 +106,6 @@
       </div>
     </div>
     <hr>
-    <div>
-      <h2>Certification</h2>
-      <div class="col">
-        <div class="col-left">
-          <strong>Date:</strong><br />
-        </div>
-        <div class="col-right">
-          <span>{{this.date}}</span><br />
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -152,6 +142,7 @@ export default {
 .col {
   display: flex;
   justify-content: space-between;
+  margin-top: 12px;
 }
 
 .col-left {

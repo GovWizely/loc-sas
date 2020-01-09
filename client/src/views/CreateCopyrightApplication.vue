@@ -753,29 +753,9 @@
               </div>
             </md-card-content>
           </md-card>
-          <md-card>
-            <md-card-header  class="md-headline">Certification</md-card-header>
-            <md-card-content>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <p><strong>17 USC 506(e): Any person who knowingly makes a false representation of a material fact in the application
-                  for copyright registration provided by section 409, or in any written statement filed with the application,
-                  shall be fined not more than $2500.</strong></p>
-                </div>
-                <div class="md-layout-item md-size-95">
-                  <p>*<strong>I certify</strong> that I am the author, copyright claimant, or owner of exclusive rights, or the authorized agent of the
-                  author, copyright claimant, or owner of exclusive rights of this work and that the information given in this
-                  application is correct to the best of my knowledge.</p>
-                </div>
-                <div class="md-layout-item md-size-5">
-                  <md-checkbox v-model="certification" id="certification" name="certification"></md-checkbox>
-                </div>
-              </div>
-            </md-card-content>
-          </md-card>
         </md-card-content>
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="!certification">Next</md-button>
+          <md-button type="submit" class="md-primary">Next</md-button>
         </md-card-actions>
       </md-card>
       <md-progress-bar md-mode="indeterminate" v-if="sending" />
@@ -783,10 +763,28 @@
         <md-dialog-title>Review</md-dialog-title>
         <md-dialog-content>
           <copyright-application-review :application="form" />
+          <span class="md-headline">Certification</span>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <p><strong>17 USC 506(e): Any person who knowingly makes a false representation of a material fact in the application
+              for copyright registration provided by section 409, or in any written statement filed with the application,
+              shall be fined not more than $2500.</strong></p>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-size-90">
+              <p>*<strong>I certify</strong> that I am the author, copyright claimant, or owner of exclusive rights, or the authorized agent of the
+              author, copyright claimant, or owner of exclusive rights of this work and that the information given in this
+              application is correct to the best of my knowledge.</p>
+            </div>
+            <div class="md-layout-item md-size-10 certification">
+              <md-checkbox v-model="certification" id="certification" name="certification"></md-checkbox>
+            </div>
+          </div>
         </md-dialog-content>
         <md-dialog-actions>
           <md-button class="md-primary" @click="reviewCopyrightApplication = false">Back</md-button>
-          <md-button class="md-primary" @click="createCopyrightApplication()" id="submit" :disabled="sending">Submit</md-button>
+          <md-button class="md-primary" @click="createCopyrightApplication()" id="submit" :disabled="sending || !certification">Submit</md-button>
         </md-dialog-actions>
       </md-dialog>
     </form>
@@ -1085,5 +1083,9 @@ export default {
 
 .form-card {
   margin: auto;
+}
+
+.certification {
+  margin-top: 22px;
 }
 </style>
