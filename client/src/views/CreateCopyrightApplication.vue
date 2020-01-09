@@ -73,14 +73,15 @@
               </md-switch>
               <div class="md-layout md-gutter" v-if="!form.authorAnonymous">
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete
-                    v-model="form.authorPrefix"
-                    :md-options="prefixes"
-                    md-input-name="author-prefix"
-                    md-input-id="author-prefix"
-                    md-input-maxlength=255>
+                  <md-field>
                     <label>Prefix</label>
-                  </md-autocomplete>
+                    <md-select
+                      v-model="form.authorPrefix"
+                      md-input-name="author-prefix"
+                      md-input-id="author-prefix">
+                      <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
+                    </md-select>
+                  </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('authorFirstName')">
@@ -132,14 +133,15 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete
-                    v-model="form.authorSuffix"
-                    :md-options="suffixes"
-                    md-input-name="author-suffix"
-                    md-input-id="author-suffix"
-                    md-input-maxlength=255>
+                  <md-field>
                     <label>Suffix</label>
-                  </md-autocomplete>
+                    <md-select
+                      v-model="form.authorSuffix"
+                      md-input-name="author-suffix"
+                      md-input-id="author-suffix">
+                      <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
+                    </md-select>
+                  </md-field>
                 </div>
               </div>
                 <div class="md-layout md-gutter"  v-if="!form.authorAnonymous">
@@ -192,14 +194,15 @@
             <md-card-content>
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete
-                    v-model="form.claimantPrefix"
-                    :md-options="prefixes"
-                    md-input-name="claimant-prefix"
-                    md-input-id="claimant-prefix"
-                    md-input-maxlength=255>
+                  <md-field>
                     <label>Prefix</label>
-                  </md-autocomplete>
+                    <md-select
+                      v-model="form.claimantPrefix"
+                      md-input-name="claimant-prefix"
+                      md-input-id="claimant-prefix">
+                      <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
+                    </md-select>
+                  </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('claimantFirstName')">
@@ -249,14 +252,15 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete
-                    v-model="form.claimantSuffix"
-                    :md-options="suffixes"
-                    md-input-name="claimant-suffix"
-                    md-input-id="claimant-suffix"
-                    md-input-maxlength=255>
+                  <md-field>
                     <label>Suffix</label>
-                  </md-autocomplete>
+                    <md-select
+                      v-model="form.claimantSuffix"
+                      md-input-name="claimant-suffix"
+                      md-input-id="claimant-suffix">
+                      <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
+                    </md-select>
+                  </md-field>
                 </div>
               </div>
               <div class="md-layout md-gutter">
@@ -375,15 +379,15 @@
               </md-switch>
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete
-                    v-model="form.correspondenceContactPrefix"
-                    :md-options="prefixes"
-                    :disabled="sending || useClaimantAddress"
-                    md-input-name="correspondence-contact-prefix"
-                    md-input-id="correspondence-contact-prefix"
-                    md-input-maxlength=255>
+                  <md-field>
                     <label>Prefix</label>
-                  </md-autocomplete>
+                    <md-select
+                      v-model="form.correspondenceContactPrefix"
+                      md-input-name="correspondence-contact-prefix"
+                      md-input-id="correspondence-contact-prefix">
+                      <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
+                    </md-select>
+                  </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('correspondenceContactFirstName')">
@@ -433,15 +437,15 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete
-                    v-model="form.correspondenceContactSuffix"
-                    :md-options="suffixes"
-                    :disabled="sending || useClaimantAddress"
-                    md-input-name="correspondence-contact-suffix"
-                    md-input-id="correspondence-contact-suffix"
-                    md-input-maxlength=255>
+                  <md-field>
                     <label>Suffix</label>
-                  </md-autocomplete>
+                    <md-select
+                      v-model="form.correspondenceContactSuffix"
+                      md-input-name="correspondence-contact-suffix"
+                      md-input-id="correspondence-contact-suffix">
+                      <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
+                    </md-select>
+                  </md-field>
                 </div>
               </div>
               <div class="md-layout md-gutter">
@@ -610,15 +614,15 @@
             <md-card-content>
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete
-                    v-model="form.possibleRightsAndPermissionsPrefix"
-                    :md-options="prefixes"
-                    :disabled="sending"
-                    md-input-name="possible-rights-and-permissions-prefix"
-                    md-input-id="possible-rights-and-permissions-prefix"
-                    md-input-maxlength=255>
+                  <md-field>
                     <label>Prefix</label>
-                  </md-autocomplete>
+                    <md-select
+                      v-model="form.possibleRightsAndPermissionsPrefix"
+                      md-input-name="possible-rights-and-permissions-prefix"
+                      md-input-id="possible-rights-and-permissions-prefix">
+                      <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
+                    </md-select>
+                  </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field>
@@ -658,15 +662,15 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete
-                    v-model="form.possibleRightsAndPermissionsSuffix"
-                    :md-options="suffixes"
-                    :disabled="sending"
-                    md-input-name="possible-rights-and-permissions-suffix"
-                    md-input-id="possible-rights-and-permissions-suffix"
-                    md-input-maxlength=255>
+                  <md-field>
                     <label>Suffix</label>
-                  </md-autocomplete>
+                    <md-select
+                      v-model="form.possibleRightsAndPermissionsSuffix"
+                      md-input-name="possible-rights-and-permissions-suffix"
+                      md-input-id="possible-rights-and-permissions-suffix">
+                      <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
+                    </md-select>
+                  </md-field>
                 </div>
               </div>
               <div class="md-layout md-gutter">
@@ -872,8 +876,8 @@ export default {
     copyrightApplicationSaved: false,
     lastCopyrightApplication: '',
     sending: false,
-    prefixes: ['Dr', 'Mr', 'Mrs', 'Ms'],
-    suffixes: ['Jr', 'Sr', 'III', 'Esq', 'MD', 'PhD'],
+    prefixes: [null, 'Miss', 'Mr', 'Ms', 'Mrs', 'Dr', 'Prof'],
+    suffixes: [null, 'II', 'III', 'Jr', 'Sr', 'Esq', 'MD', 'PhD'],
     useClaimantAddress: false,
     certification: false,
     errorOccured: false,
