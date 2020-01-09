@@ -34,10 +34,10 @@ describe('Create Copyright Application', () => {
     wrapper.find('#correspondence-email').setValue('tooKool@4skool.io')
     await wrapper.vm.$nextTick()
 
-    wrapper.find('#certification').trigger('click')
+    wrapper.find('form').trigger('submit.prevent')
     await wrapper.vm.$nextTick()
 
-    wrapper.find('form').trigger('submit.prevent')
+    wrapper.find('#certification').trigger('click')
     await wrapper.vm.$nextTick()
 
     wrapper.find('#submit').trigger('click')
