@@ -373,15 +373,15 @@
             <md-card-content>
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete
-                    v-model="form.certificateContactPrefix"
-                    :md-options="prefixes"
-                    :disabled="sending"
-                    md-input-name="certificate-contact-prefix"
-                    md-input-id="certificate-contact-prefix"
-                    md-input-maxlength=255>
+                  <md-field>
                     <label>Prefix</label>
-                  </md-autocomplete>
+                    <md-select
+                      v-model="form.certificateContactPrefix"
+                      md-input-name="certificate-contact-prefix"
+                      md-input-id="certificate-contact-prefix">
+                      <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
+                    </md-select>
+                  </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('certificateContactFirstName')">
@@ -431,15 +431,15 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-10">
-                  <md-autocomplete
-                    v-model="form.certificateContactSuffix"
-                    :md-options="suffixes"
-                    :disabled="sending"
-                    md-input-name="certificate-contact-suffix"
-                    md-input-id="certificate-contact-suffix"
-                    md-input-maxlength=255>
+                  <md-field>
                     <label>Suffix</label>
-                  </md-autocomplete>
+                    <md-select
+                      v-model="form.certificateContactSuffix"
+                      md-input-name="certificate-contact-suffix"
+                      md-input-id="certificate-contact-suffix">
+                      <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
+                    </md-select>
+                  </md-field>
                 </div>
               </div>
               <div class="md-layout md-gutter">
