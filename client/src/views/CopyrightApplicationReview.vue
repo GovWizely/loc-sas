@@ -2,15 +2,15 @@
   <div class="application-review">
     <div>
       <label><strong>Registration #: </strong></label><span>*-APPLICATION-*</span><br />
-      <label><strong>Service Request #: </strong></label><span>1-9019041701</span><br />
-      <label><strong>Application Date: </strong></label><span>{{date}}</span>
+      <label><strong>Service Request #: </strong></label><span>SR-#######</span><br />
     </div>
     <hr>
     <div>
       <span class="md-headline">Mail Certificate</span>
       <p>
-        ### ToDo Ln.<br />
-        Washington, DC 12345
+        <span>{{application.certificateContactFirstName}} {{application.certificateContactLastName}}</span><br />
+        <span>{{application.certificateContactAddress}} {{application.certificateContactAddress2}}</span><br />
+        <span>{{application.certificateContactCity}}, {{application.certificateContactState}} {{application.certificateContactPostalCode}} {{application.certificateContactCountry}}</span>
       </p>
     </div>
     <hr>
@@ -141,10 +141,6 @@ export default {
         return this.application.correspondencePhoneNumber
       }
     }
-  },
-  created () {
-    let d = new Date()
-    this.date = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   }
 }
 </script>
