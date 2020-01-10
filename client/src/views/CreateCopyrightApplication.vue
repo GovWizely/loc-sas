@@ -1,8 +1,16 @@
 <template>
   <div>
-    <h2 class="header-title">Create copyright application</h2>
-    <form novalidate class="md-layout" @submit.prevent="validateCopyrightApplication">
+    <div class="header">
+      <div class="header-row-1">
+        <h1 class="title">Create copyright application</h1>
+      </div>
+    </div>
+    <form novalidate class="md-layout" @submit.prevent="validateCopyrightApplication" @change="saveDraft" v-if="!loading" >
       <md-card class="md-layout-item md-size-80 form-card">
+        <div class="draft-toolbar">
+          <span v-if="savingDraft" class="draft-message">Saving draft...</span>
+          <button v-else class="secondary-button" @click="saveAndClose">Save &amp; close</button>
+        </div>
         <md-card-content>
           <md-card>
             <md-card-header class="md-headline">Title</md-card-header>
@@ -77,8 +85,9 @@
                     <label>Prefix</label>
                     <md-select
                       v-model="form.authorPrefix"
-                      md-input-name="author-prefix"
-                      md-input-id="author-prefix">
+                      name="author-prefix"
+                      id="author-prefix"
+                      :disabled="sending">
                       <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
                     </md-select>
                   </md-field>
@@ -89,7 +98,6 @@
                     <md-input
                       name="author-first-name"
                       id="author-first-name"
-                      autocomplete="given-name"
                       v-model="form.authorFirstName"
                       :disabled="sending"
                       required
@@ -107,7 +115,6 @@
                     <md-input
                       name="author-middle-name"
                       id="author-middle-name"
-                      autocomplete="given-name"
                       v-model="form.authorMiddleName"
                       :disabled="sending"
                       maxlength=255
@@ -120,7 +127,6 @@
                     <md-input
                       name="author-last-name"
                       id="author-last-name"
-                      autocomplete="family-name"
                       v-model="form.authorLastName"
                       :disabled="sending"
                       required
@@ -137,8 +143,9 @@
                     <label>Suffix</label>
                     <md-select
                       v-model="form.authorSuffix"
-                      md-input-name="author-suffix"
-                      md-input-id="author-suffix">
+                      name="author-suffix"
+                      id="author-suffix"
+                      :disabled="sending">
                       <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
                     </md-select>
                   </md-field>
@@ -198,8 +205,9 @@
                     <label>Prefix</label>
                     <md-select
                       v-model="form.claimantPrefix"
-                      md-input-name="claimant-prefix"
-                      md-input-id="claimant-prefix">
+                      name="claimant-prefix"
+                      id="claimant-prefix"
+                      :disabled="sending">
                       <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
                     </md-select>
                   </md-field>
@@ -227,7 +235,6 @@
                     <md-input
                       name="claimant-middle-name"
                       id="claimant-middle-name"
-                      autocomplete="given-name"
                       v-model="form.claimantMiddleName"
                       :disabled="sending"
                       maxlength=255
@@ -256,8 +263,9 @@
                     <label>Suffix</label>
                     <md-select
                       v-model="form.claimantSuffix"
-                      md-input-name="claimant-suffix"
-                      md-input-id="claimant-suffix">
+                      name="claimant-suffix"
+                      id="claimant-suffix"
+                      :disabled="sending">
                       <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
                     </md-select>
                   </md-field>
@@ -377,8 +385,9 @@
                     <label>Prefix</label>
                     <md-select
                       v-model="form.certificateContactPrefix"
-                      md-input-name="certificate-contact-prefix"
-                      md-input-id="certificate-contact-prefix">
+                      name="certificate-contact-prefix"
+                      id="certificate-contact-prefix"
+                      :disabled="sending">
                       <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
                     </md-select>
                   </md-field>
@@ -406,7 +415,6 @@
                     <md-input
                       name="certificate-contact-middle-name"
                       id="certificate-contact-middle-name"
-                      autocomplete="given-name"
                       v-model="form.certificateContactMiddleName"
                       :disabled="sending"
                       maxlength=255
@@ -435,8 +443,9 @@
                     <label>Suffix</label>
                     <md-select
                       v-model="form.certificateContactSuffix"
-                      md-input-name="certificate-contact-suffix"
-                      md-input-id="certificate-contact-suffix">
+                      name="certificate-contact-suffix"
+                      id="certificate-contact-suffix"
+                      :disabled="sending">
                       <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
                     </md-select>
                   </md-field>
@@ -562,8 +571,9 @@
                     <label>Prefix</label>
                     <md-select
                       v-model="form.correspondenceContactPrefix"
-                      md-input-name="correspondence-contact-prefix"
-                      md-input-id="correspondence-contact-prefix">
+                      name="correspondence-contact-prefix"
+                      id="correspondence-contact-prefix"
+                      :disabled="sending">
                       <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
                     </md-select>
                   </md-field>
@@ -591,7 +601,6 @@
                     <md-input
                       name="correspondence-contact-middle-name"
                       id="correspondence-contact-middle-name"
-                      autocomplete="given-name"
                       v-model="form.correspondenceContactMiddleName"
                       :disabled="sending || useClaimantAddress"
                       maxlength=255
@@ -620,8 +629,9 @@
                     <label>Suffix</label>
                     <md-select
                       v-model="form.correspondenceContactSuffix"
-                      md-input-name="correspondence-contact-suffix"
-                      md-input-id="correspondence-contact-suffix">
+                      name="correspondence-contact-suffix"
+                      id="correspondence-contact-suffix"
+                      :disabled="sending">
                       <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
                     </md-select>
                   </md-field>
@@ -797,8 +807,8 @@
                     <label>Prefix</label>
                     <md-select
                       v-model="form.possibleRightsAndPermissionsPrefix"
-                      md-input-name="possible-rights-and-permissions-prefix"
-                      md-input-id="possible-rights-and-permissions-prefix">
+                      name="possible-rights-and-permissions-prefix"
+                      id="possible-rights-and-permissions-prefix">
                       <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
                     </md-select>
                   </md-field>
@@ -821,7 +831,6 @@
                     <md-input
                       name="possible-rights-and-permissions-middle-name"
                       id="possible-rights-and-permissions-middle-name"
-                      autocomplete="given-name"
                       v-model="form.possibleRightsAndPermissionsMiddleName"
                       :disabled="sending"
                       maxlength=255
@@ -845,8 +854,8 @@
                     <label>Suffix</label>
                     <md-select
                       v-model="form.possibleRightsAndPermissionsSuffix"
-                      md-input-name="possible-rights-and-permissions-suffix"
-                      md-input-id="possible-rights-and-permissions-suffix">
+                      name="possible-rights-and-permissions-suffix"
+                      id="possible-rights-and-permissions-suffix">
                       <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
                     </md-select>
                   </md-field>
@@ -934,7 +943,7 @@
           </md-card>
         </md-card-content>
         <md-card-actions>
-          <md-button type="submit" class="md-primary">Next</md-button>
+          <md-button class="md-primary" type="submit">Next</md-button>
         </md-card-actions>
       </md-card>
       <md-progress-bar md-mode="indeterminate" v-if="sending" />
@@ -962,11 +971,12 @@
           </div>
         </md-dialog-content>
         <md-dialog-actions>
-          <md-button class="md-primary" @click="reviewCopyrightApplication = false">Back</md-button>
-          <md-button class="md-primary" @click="createCopyrightApplication()" id="submit" :disabled="sending || !certification">Submit</md-button>
+          <md-button class="md-secondary" @click="reviewCopyrightApplication = false">Back</md-button>
+          <md-button class="md-accent" @click="createCopyrightApplication()" id="submit" :disabled="sending || !certification">Submit</md-button>
         </md-dialog-actions>
       </md-dialog>
     </form>
+    <div v-else class="loading-message"><span class="md-subheading">loading...</span></div>
     <md-dialog-alert class="error" :md-active.sync="errorOccured" md-title="Error Occured!" :md-content="errorMessage" />
   </div>
 </template>
@@ -1066,14 +1076,27 @@ export default {
     copyrightApplicationSaved: false,
     lastCopyrightApplication: '',
     sending: false,
-    prefixes: [null, 'Miss', 'Mr', 'Ms', 'Mrs', 'Dr', 'Prof'],
-    suffixes: [null, 'II', 'III', 'Jr', 'Sr', 'Esq', 'MD', 'PhD'],
+    prefixes: ['', 'Miss', 'Mr', 'Ms', 'Mrs', 'Dr', 'Prof'],
+    suffixes: ['', 'II', 'III', 'Jr', 'Sr', 'Esq', 'MD', 'PhD'],
     useClaimantAddress: false,
     certification: false,
     errorOccured: false,
     errorMessage: null,
-    reviewCopyrightApplication: false
+    reviewCopyrightApplication: false,
+    savingDraft: false,
+    draftId: null,
+    loading: true
   }),
+  async created () {
+    const drafts = await this.repository._getDrafts()
+    if (drafts.length === 0) {
+      this.draftId = await this.repository._saveDraft(JSON.stringify(this.form), null)
+    } else {
+      this.form = { ...JSON.parse(drafts[0].draft) }
+      this.draftId = drafts[0].id
+    }
+    this.loading = false
+  },
   validations: {
     form: {
       primaryTitle: {
@@ -1212,6 +1235,7 @@ export default {
       } else {
         this.copyrightApplicationSaved = true
         this.clearForm()
+        await this.repository._clearDraft(null, this.draftId)
         this.$router.push({ name: 'Home' }).catch(_ => {})
       }
 
@@ -1269,13 +1293,37 @@ export default {
     },
     validateField (v) {
       this.immediateValidationFields[v].invalid = this.$v.form[v].$invalid
+    },
+    async saveDraft () {
+      this.savingDraft = true
+      await this.repository._saveDraft(JSON.stringify(this.form), this.draftId)
+      this.savingDraft = false
+    },
+    saveDraftWatchFn (oldVal, newVal) {
+      if (oldVal !== newVal) this.saveDraft()
+    },
+    async saveAndClose () {
+      await this.saveDraft()
+      this.$router.push({ name: 'Home' }).catch(_ => {})
     }
   },
-  updated () {
+  beforeUpdate () {
     this.form.correspondencePhoneNumber = formatPhoneNumber(this.form.correspondencePhoneNumber)
-    Object.keys(this.form).map(k => {
-      this.form[k] = replaceNonIso8895(this.form[k])
-    })
+    Object.keys(this.form).forEach(k => { this.form[k] = replaceNonIso8895(this.form[k]) })
+  },
+  watch: {
+    'form.authorAnonymous': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    'form.authorPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    'form.authorSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    'form.claimantPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    'form.claimantSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    'form.certificateContactPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    'form.certificateContactSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    'form.correspondenceContactPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    'form.correspondenceContactSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    'form.possibleRightsAndPermissionsPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    'form.possibleRightsAndPermissionsSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
+    useClaimantAddress: function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) }
   }
 }
 </script>
@@ -1299,4 +1347,22 @@ export default {
 .certification {
   margin-top: 22px;
 }
+
+.draft-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 22px 22px 0 0;
+  height: 50px;
+  width: 100%;
+}
+
+.draft-message {
+  padding-top: 12px;
+}
+
+.loading-message {
+  display: flex;
+  justify-content: center;
+}
+
 </style>

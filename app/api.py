@@ -1,14 +1,21 @@
+from flask import g
 from flask import session
 from flask_appbuilder.api import BaseApi, expose, ModelRestApi
+from flask_appbuilder.models.sqla.filters import FilterEqualFunction
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 
-from app.models import CopyrightApplication
+from app.models import CopyrightApplication, CopyrightApplicationDraft
 from . import appbuilder
+
+
+def get_user():
+    return g.user
 
 
 class CopyrightApplicationModelApi(ModelRestApi):
     resource_name = 'copyright_application'
     datamodel = SQLAInterface(CopyrightApplication)
+    base_filters = [['created_by', FilterEqualFunction, get_user]]
     add_columns = [
         'primary_title',
         'author_prefix',
@@ -88,3 +95,16 @@ class CurrentUserApi(BaseApi):
 
 
 appbuilder.add_api(CurrentUserApi)
+
+
+class CopyrightApplicationDraftApi(ModelRestApi):
+    resource_name = 'copyright_application_draft'
+    datamodel = SQLAInterface(CopyrightApplicationDraft)
+    add_columns = [
+        'draft'
+    ]
+    base_filters = [['created_by', FilterEqualFunction, get_user]]
+    base_order = ('id', 'desc')
+
+
+appbuilder.add_api(CopyrightApplicationDraftApi)

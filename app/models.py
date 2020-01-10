@@ -5,7 +5,7 @@ from flask_appbuilder import Model
 from flask_appbuilder.filemanager import get_file_original_name
 from flask_appbuilder.models.mixins import AuditMixin, FileColumn
 from markupsafe import Markup
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String, Text
 
 date_today = datetime.date.today()
 
@@ -94,3 +94,8 @@ class CopyrightApplication(AuditMixin, Model):
 
     def file_name(self):
         return get_file_original_name(str(self.pdf))
+
+
+class CopyrightApplicationDraft(AuditMixin, Model):
+    id = Column(Integer, primary_key=True)
+    draft = Column(Text, nullable=True)

@@ -17,11 +17,7 @@ export default class Repository {
     if (copyrightApplicationsResponse.error) {
       results = copyrightApplicationsResponse
     } else {
-      const ids = copyrightApplicationsResponse.data.ids
-      results = copyrightApplicationsResponse.data.result
-      for (var i = 0; i < ids.length; i++) {
-        results[i].id = ids[i]
-      }
+      results = this.appendIds(copyrightApplicationsResponse)
     }
 
     return results
@@ -43,6 +39,63 @@ export default class Repository {
     }).catch(error => this.handleError(error))
 
     return response
+  }
+
+  async _saveDraft (draft, draftId) {
+    const accessToken = await this._getAccessToken()
+    let response
+    if (draftId === null) {
+      response = await axios({
+        url: '/api/v1/copyright_application_draft/',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken
+        },
+        data: {
+          draft
+        }
+      }).then(response => response.data.id)
+        .catch(error => this.handleError(error))
+    } else {
+      response = await axios({
+        url: '/api/v1/copyright_application_draft/' + draftId,
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken
+        },
+        data: {
+          draft
+        }
+      }).catch(error => this.handleError(error))
+    }
+    return response
+  }
+
+  async _getDrafts () {
+    const accessToken = await this._getAccessToken()
+    const response = await axios({
+      url: '/api/v1/copyright_application_draft/',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken
+      }
+    }).catch(error => this.handleError(error))
+
+    let results
+    if (response.error) {
+      results = response
+    } else {
+      results = this.appendIds(response)
+    }
+
+    return results
+  }
+
+  async _clearDraft (draftId) {
+    await this._saveDraft('{}', draftId)
   }
 
   async _getCopyrightApplication (id) {
@@ -103,6 +156,7 @@ export default class Repository {
           const usersList = usersListResponse.data
           const currentUser = usersList.result[0]
           currentUser.loggedIn = true
+          currentUser.userId = userId
           result = currentUser
         }
       }
@@ -155,5 +209,14 @@ export default class Repository {
     }
 
     return message
+  }
+
+  appendIds (response) {
+    const ids = response.data.ids
+    let results = response.data.result
+    for (var i = 0; i < ids.length; i++) {
+      results[i].id = ids[i]
+    }
+    return results
   }
 }

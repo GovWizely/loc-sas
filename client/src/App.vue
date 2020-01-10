@@ -72,11 +72,19 @@
 }
 
 .header {
+  margin-left: 25px;
+}
+
+.title {
+  flex: 1;
+}
+
+.header-row-1 {
   display: flex;
 }
 
-.header-title {
-  margin-left: 25px;
+.header-row-2 {
+  display: flex;
 }
 
 .current-route {
@@ -87,6 +95,27 @@
   display: flex;
   justify-content: center;
   margin-top: 124px;
+}
+
+.md-theme-default .md-button {
+  text-transform: none;
+  font-weight: bold;
+}
+
+.secondary-button {
+  background: white;
+  display: inline-block;
+  width: 144px;
+  height: 40px;
+  border-radius: 3px;
+  border: solid 3px #4476c1;
+  color: #4476c1;
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.19;
+  cursor: pointer;
 }
 
 </style>

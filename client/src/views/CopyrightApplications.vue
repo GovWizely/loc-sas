@@ -2,8 +2,13 @@
   <div>
     <div v-if="copyrightApplications">
       <div class="header">
-        <h2 class="header-title" style="flex: 1">Copyright applications</h2>
-        <md-button class="md-raised md-accent" to="/create">NEW APPLICATION</md-button>
+        <div class="header-row-1">
+          <h1 class="title">Welcome to the U.S. Copyright Registration System</h1>
+          <md-button class="md-raised md-accent" to="/create">Create new application</md-button>
+        </div>
+        <div class="header-row-2">
+          <h4>To register a work for copyright, please click the "Create new application" button.</h4>
+        </div>
       </div>
       <md-table v-model="copyrightApplications" md-sort="id" md-sort-order="desc">
         <md-table-row slot-scope="{ item }" slot="md-table-row" :id="getId(item.id)">

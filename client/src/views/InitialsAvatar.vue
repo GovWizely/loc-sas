@@ -26,6 +26,7 @@ export default {
     color: #2c47a1;
     font-family: "Courier New", monospace;
     font-weight: bold;
+    text-transform: uppercase;
   }
 }
 

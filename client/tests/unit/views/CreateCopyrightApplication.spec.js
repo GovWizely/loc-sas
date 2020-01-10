@@ -6,13 +6,15 @@ import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
 
 describe('Create Copyright Application', () => {
   it('user can create a copyright application', async () => {
+    let _createCopyrightApplication = Sinon.stub().resolves({ error: null })
     let fakeRepository = {
-      _createCopyrightApplication: () => ({})
+      _createCopyrightApplication,
+      _getDrafts: () => Sinon.stub().resolves([]),
+      _saveDraft: (_) => Sinon.stub().resolves(1),
+      _clearDraft: (_) => Sinon.stub().resolves()
     }
 
-    const repositorySpy = Sinon.spy(fakeRepository)
-
-    const wrapper = await renderComponent(CreateCopyrightApplication, repositorySpy)
+    const wrapper = await renderComponent(CreateCopyrightApplication, fakeRepository)
 
     wrapper.find('#primary-title').setValue('Zorba')
     wrapper.find('#year-completed').setValue(2020)
@@ -50,8 +52,8 @@ describe('Create Copyright Application', () => {
 
     wrapper.find('#submit').trigger('click')
 
-    expect(repositorySpy._createCopyrightApplication.called).to.be.true
-    const submittedApplication = repositorySpy._createCopyrightApplication.lastCall.args[0]
+    expect(_createCopyrightApplication.called).to.be.true
+    const submittedApplication = _createCopyrightApplication.lastCall.args[0]
     expect(submittedApplication.primaryTitle).to.equal('Zorba')
     expect(submittedApplication.yearCompleted).to.equal('2020')
     expect(submittedApplication.authorFirstName).to.equal('anonymous')
