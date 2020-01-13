@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/GovWizely/loc-sas.svg?style=svg)](https://circleci.com/gh/GovWizely/loc-sas)
+
 LoC SAS
 =================================
 
