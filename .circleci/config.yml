@@ -47,6 +47,18 @@ jobs:
           path: /tmp/test-results
       - store_artifacts:
           path: /tmp/test-artifacts
+  ui-unit-tests:
+    docker:
+      - image: circleci/node:10.18.0
+    steps:
+      - checkout 
+      - run:
+          name: Install dependencies
+          command: cd client && npm ci
+      - run:
+          name: Run UI unit tests
+          command: cd client && npm test
+
 
 workflows:
   version: 2.1
@@ -69,3 +81,8 @@ workflows:
           name: test_py38
           build_image: circleci/python:3.8.0
           python_version: python3.8
+
+  ui:
+    jobs:
+      - ui-unit-tests:
+          name: UI Unit Tests
