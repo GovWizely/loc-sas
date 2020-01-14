@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <md-toolbar class="md-primary" md-elevation="1">
-      <img class="logo" src="./assets/copyrightLogo.png" /> |
-      <h1 class="md-title" style="flex: 1">Registration System</h1>
+      |
+      <h1 class="md-title" style="flex: 1">Demo</h1>
       <div v-if="currentUserInfo.loggedIn">
         <div id="nav">
           <md-tabs md-sync-route class="md-primary">
