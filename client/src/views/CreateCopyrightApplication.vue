@@ -26,6 +26,7 @@
                       :disabled="sending"
                       required
                       maxlength=2000
+                      @blur="validateField('primaryTitle')"
                     />
                     <span
                       class="md-error"
@@ -1071,6 +1072,9 @@ export default {
     immediateValidationFields: {
       yearCompleted: {
         invalid: false
+      },
+      primaryTitle: {
+        invalid: false
       }
     },
     copyrightApplicationSaved: false,
@@ -1291,8 +1295,8 @@ export default {
         this.form.authorCitizenship = null
       }
     },
-    validateField (v) {
-      this.immediateValidationFields[v].invalid = this.$v.form[v].$invalid
+    validateField (field) {
+      this.immediateValidationFields[field].invalid = this.$v.form[field].$invalid
     },
     async saveDraft () {
       this.savingDraft = true
