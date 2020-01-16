@@ -3,7 +3,7 @@ import router from '../../src/router'
 import VueRouter from 'vue-router'
 import VueMaterial from 'vue-material'
 
-async function renderComponent (component, repository) {
+export function renderComponent (component, repository) {
   const localVue = createLocalVue()
   localVue.use(VueRouter)
   localVue.use(VueMaterial)
@@ -16,9 +16,13 @@ async function renderComponent (component, repository) {
     stubs: ['router-view', 'router-link']
   })
 
-  await wrapper.vm.$nextTick()
-
   return wrapper
 }
 
-export default renderComponent
+export async function forIt (ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, ms)
+  })
+}

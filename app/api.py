@@ -1,3 +1,5 @@
+import uuid
+
 from flask import g
 from flask import session
 from flask_appbuilder.api import BaseApi, expose, ModelRestApi
@@ -78,7 +80,8 @@ class CopyrightApplicationModelApi(ModelRestApi):
         'correspondence_phone_number',
         'correspondence_phone_number_extension',
         'application_status',
-        'pdf'
+        'pdf',
+        'service_request_id'
     ]
 
 
@@ -108,3 +111,13 @@ class CopyrightApplicationDraftApi(ModelRestApi):
 
 
 appbuilder.add_api(CopyrightApplicationDraftApi)
+
+
+class CopyrightApplicationServiceRequestApi(BaseApi):
+    @expose('/generate-service-request')
+    def generateServiceRequest(self):
+        # TODO: This ID will eventually come from a different system
+        return self.response(200, id=uuid.uuid1())
+
+
+appbuilder.add_api(CopyrightApplicationServiceRequestApi)

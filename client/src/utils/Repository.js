@@ -5,7 +5,7 @@ let accessToken = null
 export default class Repository {
   async _getCopyrightApplications () {
     const accessToken = await this._getAccessToken()
-    const fields = ['primary_title', 'created_on', 'created_by', 'application_status'].join()
+    const fields = ['primary_title', 'created_on', 'created_by', 'application_status', 'service_request_id'].join()
     const copyrightApplicationsResponse = await axios({
       url: '/api/v1/copyright_application/?q=(columns:!(' + fields + '),page:0,page_size:100)',
       method: 'GET',
@@ -97,7 +97,15 @@ export default class Repository {
   }
 
   async _clearDraft (draftId) {
-    await this._saveDraft('{}', draftId)
+    const accessToken = await this._getAccessToken()
+    await axios({
+      url: '/api/v1/copyright_application_draft/' + draftId,
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken
+      }
+    }).catch(error => this.handleError(error))
   }
 
   async _getCopyrightApplication (id) {
@@ -186,6 +194,15 @@ export default class Repository {
       method: 'GET'
     }).catch(error => this.handleError(error))
     return usersListResponse
+  }
+
+  async _generateServiceRequest () {
+    const serviceRequestId = await axios({
+      url: '/api/v1/copyrightapplicationservicerequestapi/generate-service-request',
+      method: 'GET'
+    }).then(response => response.data.id)
+      .catch(error => this.handleError(error))
+    return serviceRequestId
   }
 
   translateToSnakeCase (obj) {

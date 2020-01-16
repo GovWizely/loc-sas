@@ -88,7 +88,8 @@ class ApplicationsTest(AppTest):
             possible_rights_and_permissions_postal_code="20760",
             possible_rights_and_permissions_country="Canada",
             correspondence_email="john@smith.info",
-            correspondence_phone_number="202-555-1212"
+            correspondence_phone_number="202-555-1212",
+            service_request_id="SR12345"
         ), follow_redirects=True)
         assert b'Added Row' in rv.data
         assert b'List Copyright Application' in rv.data

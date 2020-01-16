@@ -1,4 +1,4 @@
-import renderComponent from './../TestUtils'
+import { renderComponent } from './../TestUtils'
 import { expect } from 'chai'
 import CopyrightApplications from '@/views/CopyrightApplications'
 
@@ -25,7 +25,8 @@ describe('Copyright Applications', () => {
       )
     }
 
-    const wrapper = await renderComponent(CopyrightApplications, fakeRepository)
+    const wrapper = renderComponent(CopyrightApplications, fakeRepository)
+    await wrapper.vm.$nextTick()
 
     const application1 = wrapper.find('#app-id-1').text()
     expect(application1).to.include('Title A')

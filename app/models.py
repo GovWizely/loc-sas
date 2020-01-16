@@ -73,6 +73,7 @@ class CopyrightApplication(AuditMixin, Model):
     correspondence_phone_number_extension = Column(Integer, nullable=True)
     application_status = Column(String(25), nullable=False, default="Under Review")
     pdf = Column(FileColumn, nullable=True)
+    service_request_id = Column(String(255), unique=True, nullable=False)
 
     def __repr__(self):
         return self.primary_title

@@ -1,4 +1,4 @@
-import renderComponent from './TestUtils'
+import { renderComponent } from './TestUtils'
 import { expect } from 'chai'
 import App from '@/App'
 
@@ -12,7 +12,8 @@ describe('Home page', () => {
       )
     }
 
-    const wrapper = await renderComponent(App, fakeRepository)
+    const wrapper = renderComponent(App, fakeRepository)
+    await wrapper.vm.$nextTick()
 
     expect(wrapper.find('#message').text()).to.equal('Please log in.')
   })
@@ -26,7 +27,8 @@ describe('Home page', () => {
       )
     }
 
-    const wrapper = await renderComponent(App, fakeRepository)
+    const wrapper = renderComponent(App, fakeRepository)
+    await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.md-dialog-content').text()).to.equal('This is a terrible error')
   })
@@ -42,7 +44,8 @@ describe('Home page', () => {
       )
     }
 
-    const wrapper = await renderComponent(App, fakeRepository)
+    const wrapper = renderComponent(App, fakeRepository)
+    await wrapper.vm.$nextTick()
 
     expect(wrapper.find('#initials').text()).to.equal('JW')
   })

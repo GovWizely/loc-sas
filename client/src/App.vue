@@ -24,7 +24,7 @@
     </md-toolbar>
     <div v-if="currentUserInfo.loggedIn">
       <div class="current-route md-caption">
-        {{this.$route.name}} /
+        {{this.$route.name}} |
       </div>
       <router-view />
     </div>

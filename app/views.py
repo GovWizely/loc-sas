@@ -89,7 +89,8 @@ class CopyrightApplicationModelView(ModelView):
         "possible_rights_and_permissions_country",
         "correspondence_email",
         "correspondence_phone_number",
-        "pdf"
+        "pdf",
+        "service_request_id"
     ]
     show_columns = SHOW_APPLICATION_STATUS
     label_columns = {"download": "Download", "file_name": "File Name"}
