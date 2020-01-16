@@ -2,7 +2,7 @@
   <div class="application-review">
     <div>
       <label><strong>Registration #: </strong></label><span>*-APPLICATION-*</span><br />
-      <label><strong>Service Request #: </strong></label><span>SR-#######</span><br />
+      <label><strong>Service Request #: </strong></label><span>{{application.serviceRequestId}}</span><br />
     </div>
     <hr>
     <div>

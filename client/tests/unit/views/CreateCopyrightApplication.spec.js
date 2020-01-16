@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import renderComponent from './../TestUtils'
+import { renderComponent, forIt } from './../TestUtils'
 import Sinon from 'sinon'
 import { expect } from 'chai'
 import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
@@ -9,12 +9,15 @@ describe('Create Copyright Application', () => {
     let _createCopyrightApplication = Sinon.stub().resolves({ error: null })
     let fakeRepository = {
       _createCopyrightApplication,
-      _getDrafts: () => Sinon.stub().resolves([]),
-      _saveDraft: (_) => Sinon.stub().resolves(1),
-      _clearDraft: (_) => Sinon.stub().resolves()
+      _getDrafts: () => Promise.resolve([]),
+      _saveDraft: (_) => Promise.resolve(1),
+      _clearDraft: (_) => Promise.resolve(),
+      _generateServiceRequest: () => Promise.resolve('abc123')
     }
 
-    const wrapper = await renderComponent(CreateCopyrightApplication, fakeRepository)
+    const wrapper = renderComponent(CreateCopyrightApplication, fakeRepository)
+    await forIt(10)
+    await wrapper.vm.$nextTick()
 
     wrapper.find('#primary-title').setValue('Zorba')
     wrapper.find('#year-completed').setValue(2020)
@@ -86,5 +89,6 @@ describe('Create Copyright Application', () => {
 
     expect(submittedApplication.correspondencePhoneNumber).to.equal('(410) 555 1234')
     expect(submittedApplication.correspondenceEmail).to.equal('tooKool@4skool.io')
+    expect(submittedApplication.serviceRequestId).to.equal('abc123')
   })
 })

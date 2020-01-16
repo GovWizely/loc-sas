@@ -2,7 +2,7 @@
   <div>
     <div class="header">
       <div class="header-row-1">
-        <h1 class="title">Create copyright application</h1>
+        <h1 class="title">New Copyright Application for non-fiction literary work #{{this.form.serviceRequestId}}</h1>
       </div>
     </div>
     <form novalidate class="md-layout" @submit.prevent="validateCopyrightApplication" @change="saveDraft" v-if="!loading" >
@@ -1067,7 +1067,8 @@ export default {
       possibleRightsAndPermissionsCity: null,
       possibleRightsAndPermissionsState: null,
       possibleRightsAndPermissionsPostalCode: null,
-      possibleRightsAndPermissionsCountry: null
+      possibleRightsAndPermissionsCountry: null,
+      serviceRequestId: null
     },
     immediateValidationFields: {
       yearCompleted: {
@@ -1094,11 +1095,13 @@ export default {
   async created () {
     const drafts = await this.repository._getDrafts()
     if (drafts.length === 0) {
+      this.form.serviceRequestId = await this.repository._generateServiceRequest()
       this.draftId = await this.repository._saveDraft(JSON.stringify(this.form), null)
     } else {
       this.form = { ...JSON.parse(drafts[0].draft) }
       this.draftId = drafts[0].id
     }
+
     this.loading = false
   },
   validations: {
@@ -1238,8 +1241,8 @@ export default {
         this.errorMessage = response.error
       } else {
         this.copyrightApplicationSaved = true
+        await this.repository._clearDraft(this.draftId)
         this.clearForm()
-        await this.repository._clearDraft(null, this.draftId)
         this.$router.push({ name: 'Home' }).catch(_ => {})
       }
 

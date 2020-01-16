@@ -1,5 +1,6 @@
 import logging
 import random
+import uuid
 from datetime import datetime
 
 from app import appbuilder, db
@@ -82,6 +83,7 @@ if not users_exist:
             _user = user3
         c.created_by = _user
         c.changed_by = _user
+        c.service_request_id = str(uuid.uuid1())
 
         db.session.add(c)
         try:
