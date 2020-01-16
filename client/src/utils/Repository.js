@@ -1,5 +1,7 @@
 const axios = require('axios')
 
+let accessToken = null
+
 export default class Repository {
   async _getCopyrightApplications () {
     const accessToken = await this._getAccessToken()
@@ -120,6 +122,8 @@ export default class Repository {
   }
 
   async _getAccessToken () {
+    if (accessToken) return accessToken
+
     const tokenResponse = await axios({
       url: '/api/v1/security/login',
       method: 'POST',
@@ -132,7 +136,10 @@ export default class Repository {
         provider: 'db'
       }
     }).catch(error => this.handleError(error))
-    return tokenResponse.data.access_token
+
+    accessToken = tokenResponse.data.access_token
+
+    return accessToken
   }
 
   async _getCurrentUserInfo () {
