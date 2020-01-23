@@ -76,12 +76,21 @@
         </details>
         <details open>
           <summary class="md-title">Author</summary>
-          <md-switch
-            v-model="form.authorAnonymous"
-            name="author-anonymous-btn"
-            id="author-anonymous-btn"
-            @change="toggleAuthorAnonymity">Anonymous
-          </md-switch>
+          <div class="author-name">
+            <label class="field-title">Name *</label>
+            <div class="switches">
+              <md-checkbox v-model="authorPseudonymous"
+                name="author-pseudonymous"
+                id="author-pseudonymous"
+                @change="togglePseudonymity">Pseudonymous
+              </md-checkbox>
+              <md-checkbox v-model="form.authorAnonymous"
+                name="author-anonymous"
+                id="author-anonymous"
+                @change="toggleAnonymity">Anonymous
+              </md-checkbox>
+            </div>
+          </div>
           <div class="md-layout md-gutter" v-if="!form.authorAnonymous">
             <div class="md-layout-item md-size-10">
               <md-field>
@@ -154,17 +163,22 @@
               </md-field>
             </div>
           </div>
-          <div class="md-layout md-gutter" v-if="!form.authorAnonymous">
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="author-pseudonym">Pseudonym</label>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100" v-if="authorPseudonymous">
+              <md-field :class="getValidationClass('authorPseudonym')">
+                <label for="author-pseudonym" ref="authorPseudonym">Pseudonym</label>
                 <md-input
                   name="author-pseudonym"
                   id="author-pseudonym"
                   v-model="form.authorPseudonym"
                   :disabled="sending"
                   maxlength=255
+                  required
                 />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.authorPseudonym.required"
+                >The author pseudonym is required</span>
               </md-field>
             </div>
           </div>
@@ -182,7 +196,6 @@
                     v-model="form.authorCitizenship"
                     :disabled="sending"
                     maxlength=255
-                    @blur="validateField('authorCitizenship')"
                   />
                   <span
                     class="md-error"
@@ -199,7 +212,6 @@
                     v-model="form.authorDomicile"
                     :disabled="sending"
                     maxlength=255
-                    @blur="validateField('authorDomicile')"
                   />
                   <span
                     class="md-error"
@@ -999,6 +1011,7 @@ import {
 } from 'vuelidate/lib/validators'
 import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormatter'
 import { replaceNonIso8895 } from '@/utils/ISO8895-15validator'
+import { empty } from '@/utils/ValidationHelpers'
 import CopyrightApplicationReview from './CopyrightApplicationReview'
 
 let d = new Date()
@@ -1025,7 +1038,7 @@ export default {
       authorMiddleName: null,
       authorLastName: null,
       authorSuffix: null,
-      authorPseudonym: null,
+      authorPseudonym: 'n/a',
       authorCitizenship: null,
       authorDomicile: null,
       claimantPrefix: null,
@@ -1106,7 +1119,8 @@ export default {
     reviewCopyrightApplication: false,
     savingDraft: false,
     draftId: null,
-    loading: true
+    loading: true,
+    authorPseudonymous: false
   }),
   async created () {
     const drafts = await this.repository._getDrafts()
@@ -1138,6 +1152,9 @@ export default {
         required
       },
       authorLastName: {
+        required
+      },
+      authorPseudonym: {
         required
       },
       claimantFirstName: {
@@ -1299,16 +1316,22 @@ export default {
         this.form.correspondenceContactCountry = null
       }
     },
-    toggleAuthorAnonymity () {
+    toggleAnonymity () {
       this.form.authorPrefix = null
       this.form.authorSuffix = null
-      this.form.authorPseudonym = null
       if (this.form.authorAnonymous) {
         this.form.authorFirstName = 'anonymous'
         this.form.authorLastName = 'anonymous'
       } else {
         this.form.authorFirstName = null
         this.form.authorLastName = null
+      }
+    },
+    togglePseudonymity () {
+      if (this.authorPseudonymous) {
+        this.form.authorPseudonym = null
+      } else {
+        this.form.authorPseudonym = 'n/a'
       }
     },
     validateField (field) {
@@ -1347,7 +1370,7 @@ export default {
       this.certification = false
     },
     updateCustomValidations () {
-      if (!this.form.authorCitizenship && !this.form.authorDomicile) {
+      if (empty(this.form.authorCitizenship) && empty(this.form.authorDomicile)) {
         this.customValidationFields.authorCitizenship.invalid = true
         this.customValidationFields.authorDomicile.invalid = true
       } else {
@@ -1441,5 +1464,22 @@ summary::-webkit-details-marker {
 .field-title {
   font-weight: bold;
   font-size: 16px;
+}
+
+.switches {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 32px;
+}
+
+.author-name {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.author-name .field-title {
+  padding-top: 12px;
+  width: 100px;
 }
 </style>

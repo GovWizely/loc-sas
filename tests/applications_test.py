@@ -51,6 +51,7 @@ class ApplicationsTest(AppTest):
             author_last_name="Smith",
             author_suffix="Jr",
             author_citizenship="Canada",
+            author_anonymous=False,
             claimant_prefix="Mrs",
             claimant_first_name="John",
             claimant_last_name="Smith",
