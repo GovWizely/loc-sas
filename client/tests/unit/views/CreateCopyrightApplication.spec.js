@@ -22,7 +22,8 @@ describe('Create Copyright Application', () => {
     wrapper.find('#primary-title').setValue('Zorba')
     wrapper.find('#year-completed').setValue(2020)
 
-    wrapper.find('#author-anonymous-btn').trigger('click')
+    wrapper.find('#author-first-name').setValue('Ray')
+    wrapper.find('#author-last-name').setValue('Donovan')
     wrapper.find('#author-citizenship').setValue('Greece')
 
     wrapper.find('#claimant-first-name').setValue('George')
@@ -61,8 +62,8 @@ describe('Create Copyright Application', () => {
     const submittedApplication = _createCopyrightApplication.lastCall.args[0]
     expect(submittedApplication.primaryTitle).to.equal('Zorba')
     expect(submittedApplication.yearCompleted).to.equal('2020')
-    expect(submittedApplication.authorFirstName).to.equal('anonymous')
-    expect(submittedApplication.authorLastName).to.equal('anonymous')
+    expect(submittedApplication.authorFirstName).to.equal('Ray')
+    expect(submittedApplication.authorLastName).to.equal('Donovan')
     expect(submittedApplication.authorCitizenship).to.equal('Greece')
 
     expect(submittedApplication.claimantFirstName).to.equal('George')
