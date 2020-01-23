@@ -18,7 +18,7 @@
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('primaryTitle')">
-                    <label for="primary-title">Primary Title</label>
+                    <label for="primary-title" ref="primaryTitle">Primary Title</label>
                     <md-input
                       name="primary-title"
                       id="primary-title"
@@ -48,7 +48,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('yearCompleted')">
-                    <label for="year-completed">Year Completed</label>
+                    <label for="year-completed" ref="yearCompleted">Year Completed</label>
                     <md-input
                       name="year-completed"
                       id="year-completed"
@@ -95,7 +95,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('authorFirstName')">
-                    <label for="author-first-name">First Name</label>
+                    <label for="author-first-name" ref="authorFirstName">First Name</label>
                     <md-input
                       name="author-first-name"
                       id="author-first-name"
@@ -124,7 +124,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('authorLastName')">
-                    <label for="author-last-name">Last Name</label>
+                    <label for="author-last-name" ref="authorLastName">Last Name</label>
                     <md-input
                       name="author-last-name"
                       id="author-last-name"
@@ -167,7 +167,7 @@
                   </div>
                   <div class="md-layout-item md-small-size-100">
                     <md-field :class="getValidationClass('authorCitizenship')">
-                      <label for="author-citizenship">Citizenship</label>
+                      <label for="author-citizenship" ref="authorCitizenship">Citizenship</label>
                       <md-input
                         name="author-citizenship"
                         id="author-citizenship"
@@ -215,7 +215,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('claimantFirstName')">
-                    <label for="claimant-first-name">First Name</label>
+                    <label for="claimant-first-name" ref="claimantFirstName">First Name</label>
                     <md-input
                       name="claimant-first-name"
                       id="claimant-first-name"
@@ -244,7 +244,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('claimantLastName')">
-                    <label for="claimant-first-name">Last Name</label>
+                    <label for="claimant-first-name" ref="claimantLastName">Last Name</label>
                     <md-input
                       name="claimant-last-name"
                       id="claimant-last-name"
@@ -275,7 +275,7 @@
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('claimantAddress')">
-                    <label for="claimant-address">Address</label>
+                    <label for="claimant-address" ref="claimantAddress">Address</label>
                     <md-input
                       name="claimant-address"
                       id="claimant-address"
@@ -308,7 +308,7 @@
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-30">
                   <md-field :class="getValidationClass('claimantCity')">
-                    <label for="claimant-city">City</label>
+                    <label for="claimant-city" ref="claimantCity">City</label>
                     <md-input
                       name="claimant-city"
                       id="claimant-city"
@@ -325,7 +325,7 @@
                 </div>
                 <div class="md-layout-item md-size-30">
                   <md-field :class="getValidationClass('claimantState')">
-                    <label for="claimant-state">State</label>
+                    <label for="claimant-state" ref="claimantState">State</label>
                     <md-input
                       name="claimant-state"
                       id="claimant-state"
@@ -342,7 +342,7 @@
                 </div>
                 <div class="md-layout-item md-size-40">
                   <md-field :class="getValidationClass('claimantPostalCode')">
-                    <label for="claimant-postal-code">Postal Code</label>
+                    <label for="claimant-postal-code" ref="claimantPostalCode">Postal Code</label>
                     <md-input
                       name="claimant-postal-code"
                       id="claimant-postal-code"
@@ -359,7 +359,7 @@
                 </div>
                 <div class="md-layout-item md-size-100">
                   <md-field :class="getValidationClass('claimantCountry')">
-                    <label for="claimant-country">Country</label>
+                    <label for="claimant-country" ref="claimantCountry">Country</label>
                     <md-input
                       name="claimant-country"
                       id="claimant-country"
@@ -395,7 +395,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('certificateContactFirstName')">
-                    <label for="certificate-contact-first-name">First Name</label>
+                    <label for="certificate-contact-first-name" ref="certificateContactFirstName">First Name</label>
                     <md-input
                       name="certificate-contact-first-name"
                       id="certificate-contact-first-name"
@@ -424,7 +424,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('certificateContactLastName')">
-                    <label for="certificate-contact-last-name">Last Name</label>
+                    <label for="certificate-contact-last-name" ref="certificateContactLastName">Last Name</label>
                     <md-input
                       name="certificate-contact-last-name"
                       id="certificate-contact-last-name"
@@ -455,7 +455,7 @@
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('certificateContactAddress')">
-                    <label for="certificate-contact-address">Address</label>
+                    <label for="certificate-contact-address" ref="certificateContactAddress">Address</label>
                     <md-input
                       name="certificate-contact-address"
                       id="certificate-contact-address"
@@ -488,7 +488,7 @@
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-30">
                   <md-field :class="getValidationClass('certificateContactCity')">
-                    <label for="certificate-contact-city">City</label>
+                    <label for="certificate-contact-city" ref="certificateContactCity">City</label>
                     <md-input
                       name="certificate-contact-city"
                       id="certificate-contact-city"
@@ -505,7 +505,7 @@
                 </div>
                 <div class="md-layout-item md-size-30">
                   <md-field :class="getValidationClass('certificateContactState')">
-                    <label for="certificate-contact-state">State</label>
+                    <label for="certificate-contact-state" ref="certificateContactState">State</label>
                     <md-input
                       name="certificate-contact-state"
                       id="certificate-contact-state"
@@ -522,7 +522,7 @@
                 </div>
                 <div class="md-layout-item md-size-40">
                   <md-field :class="getValidationClass('certificateContactPostalCode')">
-                    <label for="certificate-contact-postal-code">Postal Code</label>
+                    <label for="certificate-contact-postal-code" ref="certificateContactPostalCode">Postal Code</label>
                     <md-input
                       name="certificate-contact-postal-code"
                       id="certificate-contact-postal-code"
@@ -539,7 +539,7 @@
                 </div>
                 <div class="md-layout-item md-size-100">
                   <md-field :class="getValidationClass('certificateContactCountry')">
-                    <label for="certificate-contact-country">Country</label>
+                    <label for="certificate-contact-country" ref="certificateContactCountry">Country</label>
                     <md-input
                       name="certificate-contact-country"
                       id="certificate-contact-country"
@@ -581,7 +581,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('correspondenceContactFirstName')">
-                    <label for="correspondence-contact-first-name">First Name</label>
+                    <label for="correspondence-contact-first-name" ref="correspondenceContactFirstName">First Name</label>
                     <md-input
                       name="correspondence-contact-first-name"
                       id="correspondence-contact-first-name"
@@ -610,7 +610,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('correspondenceContactLastName')">
-                    <label for="correspondence-contact-last-name">Last Name</label>
+                    <label for="correspondence-contact-last-name" ref="correspondenceContactLastName">Last Name</label>
                     <md-input
                       name="correspondence-contact-last-name"
                       id="correspondence-contact-last-name"
@@ -641,7 +641,7 @@
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('correspondenceContactAddress')">
-                    <label for="correspondence-contact-address">Address</label>
+                    <label for="correspondence-contact-address" ref="correspondenceContactAddress">Address</label>
                     <md-input
                       name="correspondence-contact-address"
                       id="correspondence-contact-address"
@@ -674,7 +674,7 @@
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-30">
                   <md-field :class="getValidationClass('correspondenceContactCity')">
-                    <label for="correspondence-contact-city">City</label>
+                    <label for="correspondence-contact-city" ref="correspondenceContactCity">City</label>
                     <md-input
                       name="correspondence-contact-city"
                       id="correspondence-contact-city"
@@ -691,7 +691,7 @@
                 </div>
                 <div class="md-layout-item md-size-30">
                   <md-field :class="getValidationClass('correspondenceContactState')">
-                    <label for="correspondence-contact-state">State</label>
+                    <label for="correspondence-contact-state" ref="correspondenceContactState">State</label>
                     <md-input
                       name="correspondence-contact-state"
                       id="correspondence-contact-state"
@@ -708,7 +708,7 @@
                 </div>
                 <div class="md-layout-item md-size-40">
                   <md-field :class="getValidationClass('correspondenceContactPostalCode')">
-                    <label for="correspondence-contact-postal-code">Postal Code</label>
+                    <label for="correspondence-contact-postal-code" ref="correspondenceContactPostalCode">Postal Code</label>
                     <md-input
                       name="correspondence-contact-postal-code"
                       id="correspondence-contact-postal-code"
@@ -725,7 +725,7 @@
                 </div>
                 <div class="md-layout-item md-size-100">
                   <md-field :class="getValidationClass('correspondenceContactCountry')">
-                    <label for="correspondence-contact-country">Country</label>
+                    <label for="correspondence-contact-country" ref="correspondenceContactCountry">Country</label>
                     <md-input
                       name="correspondence-contact-country"
                       id="correspondence-contact-country"
@@ -744,7 +744,7 @@
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-size-60">
                   <md-field :class="getValidationClass('correspondencePhoneNumber')">
-                    <label for="correspondence-phone-number">Phone Number</label>
+                    <label for="correspondence-phone-number" ref="correspondencePhoneNumber">Phone Number</label>
                     <md-input
                       name="correspondence-phone-number"
                       id="correspondence-phone-number"
@@ -778,7 +778,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100">
                   <md-field :class="getValidationClass('correspondenceEmail')">
-                    <label for="correspondence-email">Email</label>
+                    <label for="correspondence-email" ref="correspondenceEmail">Email</label>
                     <md-input
                       type="email"
                       name="correspondence-email"
@@ -1253,6 +1253,15 @@ export default {
 
       if (!this.$v.$invalid) {
         this.reviewCopyrightApplication = true
+      } else {
+        const fields = Object.keys(this.form)
+        for (let i = 0; i < fields.length; i++) {
+          let field = fields[i]
+          if (this.$v.form[field] && this.$v.form[field].$invalid) {
+            this.goToField(field)
+            break
+          }
+        }
       }
     },
     copyClaimantAddress () {
@@ -1312,6 +1321,10 @@ export default {
     async saveAndClose () {
       await this.saveDraft()
       this.$router.push({ name: 'Home' }).catch(_ => {})
+    },
+    goToField (refName) {
+      let element = this.$refs[refName]
+      element.scrollIntoView()
     }
   },
   beforeUpdate () {
