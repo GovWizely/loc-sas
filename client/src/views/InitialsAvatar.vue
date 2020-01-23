@@ -33,10 +33,5 @@ export default {
 .avatar-circle-sm {
   @include avatar(30px);
 }
-.avatar-circle {
-  @include avatar(100px);
-}
-.avatar-circle-lg {
-  @include avatar(250px);
-}
+
 </style>

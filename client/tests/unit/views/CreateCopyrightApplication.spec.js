@@ -21,7 +21,9 @@ describe('Create Copyright Application', () => {
 
     wrapper.find('#primary-title').setValue('Zorba')
     wrapper.find('#year-completed').setValue(2020)
+
     wrapper.find('#author-anonymous-btn').trigger('click')
+    wrapper.find('#author-citizenship').setValue('Greece')
 
     wrapper.find('#claimant-first-name').setValue('George')
     wrapper.find('#claimant-last-name').setValue('Washington')
@@ -61,7 +63,7 @@ describe('Create Copyright Application', () => {
     expect(submittedApplication.yearCompleted).to.equal('2020')
     expect(submittedApplication.authorFirstName).to.equal('anonymous')
     expect(submittedApplication.authorLastName).to.equal('anonymous')
-    expect(submittedApplication.authorCitizenship).to.equal('unk')
+    expect(submittedApplication.authorCitizenship).to.equal('Greece')
 
     expect(submittedApplication.claimantFirstName).to.equal('George')
     expect(submittedApplication.claimantLastName).to.equal('Washington')

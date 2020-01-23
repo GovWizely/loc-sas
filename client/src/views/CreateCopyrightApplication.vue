@@ -154,7 +154,7 @@
               </md-field>
             </div>
           </div>
-          <div class="md-layout md-gutter"  v-if="!form.authorAnonymous">
+          <div class="md-layout md-gutter" v-if="!form.authorAnonymous">
             <div class="md-layout-item md-small-size-100">
               <md-field>
                 <label for="author-pseudonym">Pseudonym</label>
@@ -167,34 +167,46 @@
                 />
               </md-field>
             </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('authorCitizenship')">
-                <label for="author-citizenship" ref="authorCitizenship">Citizenship</label>
-                <md-input
-                  name="author-citizenship"
-                  id="author-citizenship"
-                  v-model="form.authorCitizenship"
-                  :disabled="sending"
-                  required
-                  maxlength=255
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.authorCitizenship.required"
-                >The author citizenship is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="author-domicile">Domicile</label>
-                <md-input
-                  name="author-domicile"
-                  id="author-domicile"
-                  v-model="form.authorDomicile"
-                  :disabled="sending"
-                  maxlength=255
-                />
-              </md-field>
+          </div>
+          <div>
+            <span class="field-title">Citizenship/Domicile *
+              <md-tooltip md-direction="right">Citizenship and/or domicile is required</md-tooltip>
+            </span>
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('authorCitizenship')">
+                  <label for="author-citizenship" ref="authorCitizenship">Citizenship</label>
+                  <md-input
+                    name="author-citizenship"
+                    id="author-citizenship"
+                    v-model="form.authorCitizenship"
+                    :disabled="sending"
+                    maxlength=255
+                    @blur="validateField('authorCitizenship')"
+                  />
+                  <span
+                    class="md-error"
+                    v-if="customValidationFields.authorCitizenship.invalid"
+                  >The author citizenship and/or domicile is required</span>
+                </md-field>
+              </div>
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('authorDomicile')">
+                  <label for="author-domicile" ref="authorDomicile">Domicile</label>
+                  <md-input
+                    name="author-domicile"
+                    id="author-domicile"
+                    v-model="form.authorDomicile"
+                    :disabled="sending"
+                    maxlength=255
+                    @blur="validateField('authorDomicile')"
+                  />
+                  <span
+                    class="md-error"
+                    v-if="customValidationFields.authorDomicile.invalid"
+                  >The author citizenship and/or domicile is required</span>
+                </md-field>
+              </div>
             </div>
           </div>
         </details>
@@ -1065,7 +1077,7 @@ export default {
       possibleRightsAndPermissionsCountry: null,
       serviceRequestId: null
     },
-    immediateValidationFields: {
+    customValidationFields: {
       primaryTitle: {
         invalid: false
       },
@@ -1073,6 +1085,12 @@ export default {
         invalid: false
       },
       yearCompleted: {
+        invalid: false
+      },
+      authorCitizenship: {
+        invalid: false
+      },
+      authorDomicile: {
         invalid: false
       }
     },
@@ -1120,9 +1138,6 @@ export default {
         required
       },
       authorLastName: {
-        required
-      },
-      authorCitizenship: {
         required
       },
       claimantFirstName: {
@@ -1200,18 +1215,19 @@ export default {
   },
   methods: {
     getValidationClass (fieldName) {
-      const field = this.$v.form[fieldName]
+      let field
 
-      let ivField = this.immediateValidationFields[fieldName]
-      if (ivField && ivField.invalid) {
+      field = this.customValidationFields[fieldName]
+      if (field && field.invalid) {
         return {
           'md-invalid': true
         }
       }
 
-      if (field) {
+      field = this.$v.form[fieldName]
+      if (field && field.$invalid && field.$dirty) {
         return {
-          'md-invalid': field.$invalid && field.$dirty
+          'md-invalid': true
         }
       }
     },
@@ -1219,15 +1235,11 @@ export default {
       this.$v.$reset()
 
       Object.keys(this.form).map(k => {
-        if (typeof this.form[k] === 'boolean') {
-          this.form[k] = false
-        } else {
-          this.form[k] = null
-        }
+        typeof this.form[k] === 'boolean' ? this.form[k] = false : this.form[k] = null
       })
 
-      Object.keys(this.immediateValidationFields).map(k => {
-        this.immediateValidationFields[k].invalid = false
+      Object.keys(this.customValidationFields).map(k => {
+        this.customValidationFields[k].invalid = false
       })
 
       this.useClaimantAddress = false
@@ -1252,18 +1264,12 @@ export default {
     },
     async validateCopyrightApplication () {
       this.$v.$touch()
+      this.updateCustomValidations()
 
-      if (!this.$v.$invalid) {
+      if (!this.$v.$invalid && !this.invalidcustomValidationFields()) {
         this.reviewCopyrightApplication = true
       } else {
-        const fields = Object.keys(this.form)
-        for (let i = 0; i < fields.length; i++) {
-          let field = fields[i]
-          if (this.$v.form[field] && this.$v.form[field].$invalid) {
-            this.goToField(field)
-            break
-          }
-        }
+        this.scrollToInvalidField()
       }
     },
     copyClaimantAddress () {
@@ -1297,20 +1303,20 @@ export default {
       this.form.authorPrefix = null
       this.form.authorSuffix = null
       this.form.authorPseudonym = null
-      this.form.authorCitizenship = null
-      this.form.authorDomicile = null
       if (this.form.authorAnonymous) {
         this.form.authorFirstName = 'anonymous'
         this.form.authorLastName = 'anonymous'
-        this.form.authorCitizenship = 'unk'
       } else {
         this.form.authorFirstName = null
         this.form.authorLastName = null
-        this.form.authorCitizenship = null
       }
     },
     validateField (field) {
-      this.immediateValidationFields[field].invalid = this.$v.form[field].$invalid
+      if (!this.$v.form[field]) {
+        this.updateCustomValidations()
+      } else {
+        this.customValidationFields[field].invalid = this.$v.form[field].$invalid
+      }
     },
     async saveDraft () {
       this.savingDraft = true
@@ -1324,13 +1330,39 @@ export default {
       await this.saveDraft()
       this.$router.push({ name: 'Home' }).catch(_ => {})
     },
-    goToField (refName) {
-      let element = this.$refs[refName]
-      element.scrollIntoView()
+    scrollToInvalidField () {
+      const fields = Object.keys(this.form)
+      for (let i = 0; i < fields.length; i++) {
+        let field = fields[i]
+        if ((this.$v.form[field] && this.$v.form[field].$invalid) ||
+            (this.customValidationFields[field] && this.customValidationFields[field].invalid)) {
+          let element = this.$refs[field]
+          element.scrollIntoView()
+          break
+        }
+      }
     },
     closeFormReview () {
       this.reviewCopyrightApplication = false
       this.certification = false
+    },
+    updateCustomValidations () {
+      if (!this.form.authorCitizenship && !this.form.authorDomicile) {
+        this.customValidationFields.authorCitizenship.invalid = true
+        this.customValidationFields.authorDomicile.invalid = true
+      } else {
+        this.customValidationFields.authorCitizenship.invalid = false
+        this.customValidationFields.authorDomicile.invalid = false
+      }
+    },
+    invalidcustomValidationFields () {
+      const fields = Object.keys(this.customValidationFields)
+      for (let i = 0; i < fields.length; i++) {
+        if (this.customValidationFields[fields[i]].invalid) {
+          return true
+        }
+      }
+      return false
     }
   },
   updated () {
@@ -1404,5 +1436,10 @@ summary::-webkit-details-marker {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.field-title {
+  font-weight: bold;
+  font-size: 16px;
 }
 </style>
