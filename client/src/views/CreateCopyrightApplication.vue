@@ -25,7 +25,6 @@
                       v-model="form.primaryTitle"
                       :disabled="sending"
                       required
-                      maxlength=2000
                       @blur="validateField('primaryTitle')"
                     />
                     <span
@@ -42,7 +41,6 @@
                       id="alternate-title"
                       v-model="form.alternateTitle"
                       :disabled="sending"
-                      maxlength=2000
                     />
                   </md-field>
                 </div>
