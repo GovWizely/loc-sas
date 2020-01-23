@@ -970,7 +970,7 @@
           </div>
         </md-dialog-content>
         <md-dialog-actions>
-          <md-button class="md-secondary" @click="reviewCopyrightApplication = false">Back</md-button>
+          <md-button class="md-secondary" @click="closeFormReview()">Back</md-button>
           <md-button class="md-accent" @click="createCopyrightApplication()" id="submit" :disabled="sending || !certification">Submit</md-button>
         </md-dialog-actions>
       </md-dialog>
@@ -1323,6 +1323,10 @@ export default {
     goToField (refName) {
       let element = this.$refs[refName]
       element.scrollIntoView()
+    },
+    closeFormReview () {
+      this.reviewCopyrightApplication = false
+      this.certification = false
     }
   },
   beforeUpdate () {
