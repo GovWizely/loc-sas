@@ -1,13 +1,19 @@
 <template>
   <div id="app">
     <md-toolbar class="md-primary" md-elevation="1">
-      |
-      <h1 class="md-title" style="flex: 1">Demo</h1>
+      <div class="title-container">
+        <!-- TODO: Conditional rendering for demo; need to remove for Prod deployment -->
+        <img id="logo" src="./assets/copyrightLogo.png" v-if="currentUserInfo.loggedIn"/>
+        <h1 class="md-title" v-if="currentUserInfo.loggedIn">U.S. Copyright Office Registration System</h1>
+      </div>
       <div v-if="currentUserInfo.loggedIn">
         <div id="nav">
-          <md-tabs md-sync-route class="md-primary">
-            <md-tab id="tab-home" md-label="Home" to="/" exact></md-tab>
-          </md-tabs>
+          <router-link to="/">
+            <button :class="getClasses('Home')">Home</button>
+          </router-link>
+           <router-link to="/account">
+            <button :class="getClasses('Account')">Account</button>
+          </router-link>
         </div>
       </div>
       <md-button v-if="!currentUserInfo.loggedIn" @click="login()">Login</md-button>
@@ -40,31 +46,48 @@
       :md-content="errorMessage" />
   </div>
 </template>
-
 <style lang="scss">
 @import "~vue-material/dist/theme/engine";
-
+@import "@/style/copyright-palette.scss";
 @include md-register-theme("default", (
-  primary: md-get-palette-color(blue, 900),
-  accent: md-get-palette-color(blue, 700)
+  primary: get-copyright-color('dark-blue'),
+  accent: get-copyright-color('light-blue')
 ));
-
 @import "~vue-material/dist/theme/all";
+@import "@/style/material-overrides.scss";
 
-.logo {
-  margin: 0 10px 0 0;
+.title-container {
+  display: flex;
+  flex: 1;
+  height: 60px;
+  padding-top: 15px;
 }
 
-#app .md-toolbar {
-  min-height: 0;
+#logo {
+  margin: -4px 4px 0 0;
+  height: 38px;
 }
 
-#app .md-title {
+.nav-btn {
+  text-decoration: none;
+  height: 60px;
+  border: none;
+  background-color: get-copyright-color('dark-blue');
+  font-size: 16px;
   font-weight: bold;
+  color: white;
+  padding: 8px 20px 0 20px;
+  border-bottom: get-copyright-color('dark-blue') 5px solid;
+  cursor: pointer;
 }
 
-#nav .md-button-content {
-  font-weight: bold;
+.nav-btn.active {
+  border-bottom: white 5px solid;
+}
+
+.nav-btn:hover {
+  background-color: get-copyright-color('light-blue');
+  border-bottom: get-copyright-color('lighter-blue') 5px solid;
 }
 
 #nav {
@@ -73,6 +96,7 @@
 
 .header {
   margin-left: 25px;
+  padding-right: 24px;
 }
 
 .title {
@@ -97,27 +121,19 @@
   margin-top: 124px;
 }
 
-.md-theme-default .md-button {
-  text-transform: none;
-  font-weight: bold;
-}
-
 .secondary-button {
   background: white;
   display: inline-block;
-  width: 144px;
+  padding: 0 20px 0 20px;
   height: 40px;
   border-radius: 3px;
-  border: solid 3px #4476c1;
-  color: #4476c1;
+  border: solid 3px get-copyright-color('light-blue');
+  color: get-copyright-color('light-blue');
   font-size: 16px;
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
   line-height: 1.19;
   cursor: pointer;
 }
-
 </style>
 
 <script>
@@ -152,6 +168,9 @@ export default {
     },
     login () {
       window.location = '/login'
+    },
+    getClasses (route) {
+      return (this.$route.name === route) ? 'nav-btn active' : 'nav-btn'
     }
   }
 }

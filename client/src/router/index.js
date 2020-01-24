@@ -1,4 +1,5 @@
 import VueRouter from 'vue-router'
+import Account from '@/views/Account'
 import CopyrightApplication from '@/views/CopyrightApplication'
 import CopyrightApplications from '@/views/CopyrightApplications'
 import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
@@ -25,6 +26,14 @@ function routes (repository) {
       path: '/view',
       name: 'View',
       component: CopyrightApplication,
+      props: {
+        repository
+      }
+    },
+    {
+      path: '/account',
+      name: 'Account',
+      component: Account,
       props: {
         repository
       }

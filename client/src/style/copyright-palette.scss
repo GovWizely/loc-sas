@@ -1,0 +1,29 @@
+$copyright-palette: (
+  dark-blue: #004b90,
+  light-blue: #4476c1,
+  lighter-blue: #7aa4f4
+  // color: #9ddfeb,
+  // color: #00bde3,
+  // color: #949494,
+  // color: #4f5b6f,
+  // color: #525252,
+  // color: #f39268,
+  // color: #ffbe2e,
+  // color: #fee685,
+  // color: #faf3d1,
+  // color: #d63e04,
+  // color: #0ca900,
+  // color: #70e17b,
+  // color: #e7f6f8,
+  // color: #ecf3ec,
+  // color: #f4e3db,
+  // color: #c9c9c9,
+  // color: #d9e8f6,
+  // color: #f2f2f2,
+  // color: #e6e6e6,
+  // color: #fafafa
+);
+
+@function get-copyright-color($colorName) {
+  @return map-get($copyright-palette, $colorName)
+}
