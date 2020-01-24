@@ -31,6 +31,10 @@
                       class="md-error"
                       v-if="!$v.form.primaryTitle.required"
                     >The primary title is required</span>
+                    <span
+                      class="md-error"
+                      v-else-if="!$v.form.primaryTitle.maxLength"
+                    >The primary title max length is 2000 characters; currently {{form.primaryTitle.length}}</span>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100">
@@ -41,7 +45,12 @@
                       id="alternate-title"
                       v-model="form.alternateTitle"
                       :disabled="sending"
+                      @blur="validateField('alternateTitle')"
                     />
+                    <span
+                      class="md-error"
+                      v-if="!$v.form.alternateTitle.maxLength"
+                    >The alternate title max length is 2000 characters; currently {{form.alternateTitle.length}}</span>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100">
@@ -986,7 +995,8 @@ import {
   required,
   email,
   minValue,
-  maxValue
+  maxValue,
+  maxLength
 } from 'vuelidate/lib/validators'
 import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormatter'
 import { replaceNonIso8895 } from '@/utils/ISO8895-15validator'
@@ -1069,10 +1079,13 @@ export default {
       serviceRequestId: null
     },
     immediateValidationFields: {
-      yearCompleted: {
+      primaryTitle: {
         invalid: false
       },
-      primaryTitle: {
+      alternateTitle: {
+        invalid: false
+      },
+      yearCompleted: {
         invalid: false
       }
     },
@@ -1105,7 +1118,11 @@ export default {
   validations: {
     form: {
       primaryTitle: {
-        required
+        required,
+        maxLength: maxLength(2000)
+      },
+      alternateTitle: {
+        maxLength: maxLength(2000)
       },
       yearCompleted: {
         required,
@@ -1329,7 +1346,7 @@ export default {
       this.certification = false
     }
   },
-  beforeUpdate () {
+  updated () {
     this.form.correspondencePhoneNumber = formatPhoneNumber(this.form.correspondencePhoneNumber)
     Object.keys(this.form).forEach(k => { this.form[k] = replaceNonIso8895(this.form[k]) })
   },
