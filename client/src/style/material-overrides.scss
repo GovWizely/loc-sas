@@ -1,0 +1,26 @@
+html.md-theme-default {
+  background-color: white;
+}
+
+#app .md-toolbar {
+  min-height: 0;
+}
+
+#app .md-title {
+  font-weight: bold;
+}
+
+.md-button-content {
+  font-weight: bold;
+  font-size: 16px;
+  padding: 0 20px 0 20px;
+}
+
+.md-theme-default .md-button {
+  text-transform: none;
+}
+
+.md-theme-default .md-field {
+  //putting md-field inside a details element caused this weird spacing
+  min-height: 0px
+}

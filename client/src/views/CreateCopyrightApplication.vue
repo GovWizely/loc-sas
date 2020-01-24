@@ -3,963 +3,950 @@
     <div class="header">
       <div class="header-row-1">
         <h1 class="title">New Copyright Application for non-fiction literary work #{{this.form.serviceRequestId}}</h1>
+        <span v-if="savingDraft" class="draft-message">Saving draft...</span>
+        <button v-else class="secondary-button" @click="saveAndClose">Save &amp; return to home page</button>
       </div>
     </div>
     <form novalidate class="md-layout" @submit.prevent="validateCopyrightApplication" @change="saveDraft" v-if="!loading" >
-      <md-card class="md-layout-item md-size-80 form-card">
-        <div class="draft-toolbar">
-          <span v-if="savingDraft" class="draft-message">Saving draft...</span>
-          <button v-else class="secondary-button" @click="saveAndClose">Save &amp; close</button>
-        </div>
-        <md-card-content>
-          <md-card>
-            <md-card-header class="md-headline">Title</md-card-header>
-            <md-card-content>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('primaryTitle')">
-                    <label for="primary-title" ref="primaryTitle">Primary Title</label>
-                    <md-input
-                      name="primary-title"
-                      id="primary-title"
-                      v-model="form.primaryTitle"
-                      :disabled="sending"
-                      required
-                      @blur="validateField('primaryTitle')"
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.primaryTitle.required"
-                    >The primary title is required</span>
-                    <span
-                      class="md-error"
-                      v-else-if="!$v.form.primaryTitle.maxLength"
-                    >The primary title max length is 2000 characters; currently {{form.primaryTitle.length}}</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('alternateTitle')">
-                    <label for="alternate-title">Alternate Title</label>
-                    <md-input
-                      name="alternate-title"
-                      id="alternate-title"
-                      v-model="form.alternateTitle"
-                      :disabled="sending"
-                      @blur="validateField('alternateTitle')"
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.alternateTitle.maxLength"
-                    >The alternate title max length is 2000 characters; currently {{form.alternateTitle.length}}</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('yearCompleted')">
-                    <label for="year-completed" ref="yearCompleted">Year Completed</label>
-                    <md-input
-                      name="year-completed"
-                      id="year-completed"
-                      type="number"
-                      v-model="form.yearCompleted"
-                      :disabled="sending"
-                      required
-                      @blur="validateField('yearCompleted')"
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.yearCompleted.required"
-                    >The year completed is required</span>
-                    <span
-                      class="md-error"
-                      v-else-if="!$v.form.yearCompleted.minValue || !$v.form.yearCompleted.maxValue"
-                    >The year completed must be between {{minYearCompleted}} and {{maxYearCompleted}}</span>
-                  </md-field>
-                </div>
-              </div>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-header class="md-headline">Author</md-card-header>
-            <md-card-content>
-              <md-switch
-                v-model="form.authorAnonymous"
-                name="author-anonymous-btn"
-                id="author-anonymous-btn"
-                @change="toggleAuthorAnonymity">Anonymous
-              </md-switch>
-              <div class="md-layout md-gutter" v-if="!form.authorAnonymous">
-                <div class="md-layout-item md-size-10">
-                  <md-field>
-                    <label>Prefix</label>
-                    <md-select
-                      v-model="form.authorPrefix"
-                      name="author-prefix"
-                      id="author-prefix"
-                      :disabled="sending">
-                      <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('authorFirstName')">
-                    <label for="author-first-name" ref="authorFirstName">First Name</label>
-                    <md-input
-                      name="author-first-name"
-                      id="author-first-name"
-                      v-model="form.authorFirstName"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.authorFirstName.required"
-                    >The author first name is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="author-middle-name">Middle Name</label>
-                    <md-input
-                      name="author-middle-name"
-                      id="author-middle-name"
-                      v-model="form.authorMiddleName"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('authorLastName')">
-                    <label for="author-last-name" ref="authorLastName">Last Name</label>
-                    <md-input
-                      name="author-last-name"
-                      id="author-last-name"
-                      v-model="form.authorLastName"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.authorLastName.required"
-                    >The author last name is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-10">
-                  <md-field>
-                    <label>Suffix</label>
-                    <md-select
-                      v-model="form.authorSuffix"
-                      name="author-suffix"
-                      id="author-suffix"
-                      :disabled="sending">
-                      <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-              </div>
-                <div class="md-layout md-gutter"  v-if="!form.authorAnonymous">
-                  <div class="md-layout-item md-small-size-100">
-                    <md-field>
-                      <label for="author-pseudonym">Pseudonym</label>
-                      <md-input
-                        name="author-pseudonym"
-                        id="author-pseudonym"
-                        v-model="form.authorPseudonym"
-                        :disabled="sending"
-                        maxlength=255
-                      />
-                    </md-field>
-                  </div>
-                  <div class="md-layout-item md-small-size-100">
-                    <md-field :class="getValidationClass('authorCitizenship')">
-                      <label for="author-citizenship" ref="authorCitizenship">Citizenship</label>
-                      <md-input
-                        name="author-citizenship"
-                        id="author-citizenship"
-                        v-model="form.authorCitizenship"
-                        :disabled="sending"
-                        required
-                        maxlength=255
-                      />
-                      <span
-                        class="md-error"
-                        v-if="!$v.form.authorCitizenship.required"
-                      >The author citizenship is required</span>
-                    </md-field>
-                  </div>
-                  <div class="md-layout-item md-small-size-100">
-                    <md-field>
-                      <label for="author-domicile">Domicile</label>
-                      <md-input
-                        name="author-domicile"
-                        id="author-domicile"
-                        v-model="form.authorDomicile"
-                        :disabled="sending"
-                        maxlength=255
-                      />
-                    </md-field>
-                  </div>
-                </div>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-header class="md-headline">Claimant</md-card-header>
-            <md-card-content>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-size-10">
-                  <md-field>
-                    <label>Prefix</label>
-                    <md-select
-                      v-model="form.claimantPrefix"
-                      name="claimant-prefix"
-                      id="claimant-prefix"
-                      :disabled="sending">
-                      <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('claimantFirstName')">
-                    <label for="claimant-first-name" ref="claimantFirstName">First Name</label>
-                    <md-input
-                      name="claimant-first-name"
-                      id="claimant-first-name"
-                      v-model="form.claimantFirstName"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.claimantFirstName.required"
-                    >The claimant first name is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="claimant-middle-name">Middle Name</label>
-                    <md-input
-                      name="claimant-middle-name"
-                      id="claimant-middle-name"
-                      v-model="form.claimantMiddleName"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('claimantLastName')">
-                    <label for="claimant-first-name" ref="claimantLastName">Last Name</label>
-                    <md-input
-                      name="claimant-last-name"
-                      id="claimant-last-name"
-                      v-model="form.claimantLastName"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.claimantLastName.required"
-                    >The claimant last name is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-10">
-                  <md-field>
-                    <label>Suffix</label>
-                    <md-select
-                      v-model="form.claimantSuffix"
-                      name="claimant-suffix"
-                      id="claimant-suffix"
-                      :disabled="sending">
-                      <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('claimantAddress')">
-                    <label for="claimant-address" ref="claimantAddress">Address</label>
-                    <md-input
-                      name="claimant-address"
-                      id="claimant-address"
-                      v-model="form.claimantAddress"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.claimantAddress.required"
-                    >The claimant address is required</span>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="claimant-address2">Address 2</label>
-                    <md-input
-                      name="claimant-address2"
-                      id="claimant-address2"
-                      v-model="form.claimantAddress2"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-30">
-                  <md-field :class="getValidationClass('claimantCity')">
-                    <label for="claimant-city" ref="claimantCity">City</label>
-                    <md-input
-                      name="claimant-city"
-                      id="claimant-city"
-                      v-model="form.claimantCity"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.claimantCity.required"
-                    >The claimant city is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-30">
-                  <md-field :class="getValidationClass('claimantState')">
-                    <label for="claimant-state" ref="claimantState">State</label>
-                    <md-input
-                      name="claimant-state"
-                      id="claimant-state"
-                      v-model="form.claimantState"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.claimantState.required"
-                    >The claimant state is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-40">
-                  <md-field :class="getValidationClass('claimantPostalCode')">
-                    <label for="claimant-postal-code" ref="claimantPostalCode">Postal Code</label>
-                    <md-input
-                      name="claimant-postal-code"
-                      id="claimant-postal-code"
-                      v-model="form.claimantPostalCode"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.claimantPostalCode.required"
-                    >The claimant postal code is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                  <md-field :class="getValidationClass('claimantCountry')">
-                    <label for="claimant-country" ref="claimantCountry">Country</label>
-                    <md-input
-                      name="claimant-country"
-                      id="claimant-country"
-                      v-model="form.claimantCountry"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.claimantCountry.required"
-                    >The claimant country is required</span>
-                  </md-field>
-                </div>
-              </div>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-header class="md-headline">Certificate</md-card-header>
-            <md-card-content>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-size-10">
-                  <md-field>
-                    <label>Prefix</label>
-                    <md-select
-                      v-model="form.certificateContactPrefix"
-                      name="certificate-contact-prefix"
-                      id="certificate-contact-prefix"
-                      :disabled="sending">
-                      <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('certificateContactFirstName')">
-                    <label for="certificate-contact-first-name" ref="certificateContactFirstName">First Name</label>
-                    <md-input
-                      name="certificate-contact-first-name"
-                      id="certificate-contact-first-name"
-                      v-model="form.certificateContactFirstName"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.certificateContactFirstName.required"
-                    >The certificate contact first name is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="certificate-contact-middle-name">Middle Name</label>
-                    <md-input
-                      name="certificate-contact-middle-name"
-                      id="certificate-contact-middle-name"
-                      v-model="form.certificateContactMiddleName"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('certificateContactLastName')">
-                    <label for="certificate-contact-last-name" ref="certificateContactLastName">Last Name</label>
-                    <md-input
-                      name="certificate-contact-last-name"
-                      id="certificate-contact-last-name"
-                      v-model="form.certificateContactLastName"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.certificateContactLastName.required"
-                    >The certificate contact last name is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-10">
-                  <md-field>
-                    <label>Suffix</label>
-                    <md-select
-                      v-model="form.certificateContactSuffix"
-                      name="certificate-contact-suffix"
-                      id="certificate-contact-suffix"
-                      :disabled="sending">
-                      <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('certificateContactAddress')">
-                    <label for="certificate-contact-address" ref="certificateContactAddress">Address</label>
-                    <md-input
-                      name="certificate-contact-address"
-                      id="certificate-contact-address"
-                      v-model="form.certificateContactAddress"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.certificateContactAddress.required"
-                    >The certificate address is required</span>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="certificate-contact-address2">Address 2</label>
-                    <md-input
-                      name="certificate-contact-address2"
-                      id="certificate-contact-address2"
-                      v-model="form.certificateContactAddress2"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-30">
-                  <md-field :class="getValidationClass('certificateContactCity')">
-                    <label for="certificate-contact-city" ref="certificateContactCity">City</label>
-                    <md-input
-                      name="certificate-contact-city"
-                      id="certificate-contact-city"
-                      v-model="form.certificateContactCity"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.certificateContactCity.required"
-                    >The certificate city is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-30">
-                  <md-field :class="getValidationClass('certificateContactState')">
-                    <label for="certificate-contact-state" ref="certificateContactState">State</label>
-                    <md-input
-                      name="certificate-contact-state"
-                      id="certificate-contact-state"
-                      v-model="form.certificateContactState"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.certificateContactState.required"
-                    >The certificate state is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-40">
-                  <md-field :class="getValidationClass('certificateContactPostalCode')">
-                    <label for="certificate-contact-postal-code" ref="certificateContactPostalCode">Postal Code</label>
-                    <md-input
-                      name="certificate-contact-postal-code"
-                      id="certificate-contact-postal-code"
-                      v-model="form.certificateContactPostalCode"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.certificateContactPostalCode.required"
-                    >The certificate postal code is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                  <md-field :class="getValidationClass('certificateContactCountry')">
-                    <label for="certificate-contact-country" ref="certificateContactCountry">Country</label>
-                    <md-input
-                      name="certificate-contact-country"
-                      id="certificate-contact-country"
-                      v-model="form.certificateContactCountry"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.certificateContactCountry.required"
-                    >The certificate country is required</span>
-                  </md-field>
-                </div>
-              </div>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-header class="md-headline">Correspondence</md-card-header>
-            <md-card-content>
-              <md-switch
-                v-model="useClaimantAddress"
-                @change="copyClaimantAddress"
-                id="copy-claimant-address-btn"
-                name="copy-claimant-address-btn">Use Claimant Address
-              </md-switch>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-size-10">
-                  <md-field>
-                    <label>Prefix</label>
-                    <md-select
-                      v-model="form.correspondenceContactPrefix"
-                      name="correspondence-contact-prefix"
-                      id="correspondence-contact-prefix"
-                      :disabled="sending">
-                      <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('correspondenceContactFirstName')">
-                    <label for="correspondence-contact-first-name" ref="correspondenceContactFirstName">First Name</label>
-                    <md-input
-                      name="correspondence-contact-first-name"
-                      id="correspondence-contact-first-name"
-                      v-model="form.correspondenceContactFirstName"
-                      :disabled="sending || useClaimantAddress"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.correspondenceContactFirstName.required"
-                    >The correspondence contact first name is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="correspondence-contact-middle-name">Middle Name</label>
-                    <md-input
-                      name="correspondence-contact-middle-name"
-                      id="correspondence-contact-middle-name"
-                      v-model="form.correspondenceContactMiddleName"
-                      :disabled="sending || useClaimantAddress"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('correspondenceContactLastName')">
-                    <label for="correspondence-contact-last-name" ref="correspondenceContactLastName">Last Name</label>
-                    <md-input
-                      name="correspondence-contact-last-name"
-                      id="correspondence-contact-last-name"
-                      v-model="form.correspondenceContactLastName"
-                      :disabled="sending || useClaimantAddress"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.correspondenceContactLastName.required"
-                    >The correspondence contact last name is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-10">
-                  <md-field>
-                    <label>Suffix</label>
-                    <md-select
-                      v-model="form.correspondenceContactSuffix"
-                      name="correspondence-contact-suffix"
-                      id="correspondence-contact-suffix"
-                      :disabled="sending">
-                      <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('correspondenceContactAddress')">
-                    <label for="correspondence-contact-address" ref="correspondenceContactAddress">Address</label>
-                    <md-input
-                      name="correspondence-contact-address"
-                      id="correspondence-contact-address"
-                      v-model="form.correspondenceContactAddress"
-                      :disabled="sending || useClaimantAddress"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.correspondenceContactAddress.required"
-                    >The correspondence address is required</span>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="correspondence-contact-address2">Address 2</label>
-                    <md-input
-                      name="correspondence-contact-address2"
-                      id="correspondence-contact-address2"
-                      v-model="form.correspondenceContactAddress2"
-                      :disabled="sending || useClaimantAddress"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-30">
-                  <md-field :class="getValidationClass('correspondenceContactCity')">
-                    <label for="correspondence-contact-city" ref="correspondenceContactCity">City</label>
-                    <md-input
-                      name="correspondence-contact-city"
-                      id="correspondence-contact-city"
-                      v-model="form.correspondenceContactCity"
-                      :disabled="sending || useClaimantAddress"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.correspondenceContactCity.required"
-                    >The correspondence city is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-30">
-                  <md-field :class="getValidationClass('correspondenceContactState')">
-                    <label for="correspondence-contact-state" ref="correspondenceContactState">State</label>
-                    <md-input
-                      name="correspondence-contact-state"
-                      id="correspondence-contact-state"
-                      v-model="form.correspondenceContactState"
-                      :disabled="sending || useClaimantAddress"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.correspondenceContactState.required"
-                    >The correspondence state is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-40">
-                  <md-field :class="getValidationClass('correspondenceContactPostalCode')">
-                    <label for="correspondence-contact-postal-code" ref="correspondenceContactPostalCode">Postal Code</label>
-                    <md-input
-                      name="correspondence-contact-postal-code"
-                      id="correspondence-contact-postal-code"
-                      v-model="form.correspondenceContactPostalCode"
-                      :disabled="sending || useClaimantAddress"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.correspondenceContactPostalCode.required"
-                    >The correspondence postal code is required</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                  <md-field :class="getValidationClass('correspondenceContactCountry')">
-                    <label for="correspondence-contact-country" ref="correspondenceContactCountry">Country</label>
-                    <md-input
-                      name="correspondence-contact-country"
-                      id="correspondence-contact-country"
-                      v-model="form.correspondenceContactCountry"
-                      :disabled="sending || useClaimantAddress"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.correspondenceContactCountry.required"
-                    >The correspondence country is required</span>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-size-60">
-                  <md-field :class="getValidationClass('correspondencePhoneNumber')">
-                    <label for="correspondence-phone-number" ref="correspondencePhoneNumber">Phone Number</label>
-                    <md-input
-                      name="correspondence-phone-number"
-                      id="correspondence-phone-number"
-                      autocomplete="tel"
-                      v-model="form.correspondencePhoneNumber"
-                      :disabled="sending"
-                      required
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.correspondencePhoneNumber.required"
-                    >The correspondence phone number is required</span>
-                    <span
-                      class="md-error"
-                      v-else-if="!$v.form.correspondencePhoneNumber.isValidPhoneNumber"
-                    >The correspondence phone number must be 10 digits</span>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-40">
-                  <md-field>
-                    <label for="correspondence-phone-number-extension">Ext.</label>
-                    <md-input
-                      name="correspondence-phone-number-extension"
-                      id="correspondence-phone-number-extension"
-                      autocomplete="tel"
-                      type="number"
-                      v-model="form.correspondencePhoneNumberExtension"
-                      :disabled="sending"
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field :class="getValidationClass('correspondenceEmail')">
-                    <label for="correspondence-email" ref="correspondenceEmail">Email</label>
-                    <md-input
-                      type="email"
-                      name="correspondence-email"
-                      id="correspondence-email"
-                      autocomplete="email"
-                      v-model="form.correspondenceEmail"
-                      :disabled="sending"
-                      required
-                      maxlength=255
-                    />
-                    <span
-                      class="md-error"
-                      v-if="!$v.form.correspondenceEmail.required"
-                    >The correspondence email is required</span>
-                    <span class="md-error" v-else-if="$v.form.correspondenceEmail.email">Invalid email</span>
-                  </md-field>
-                </div>
-              </div>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-header class="md-headline">Rights &amp; Permissions</md-card-header>
-            <md-card-content>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-size-10">
-                  <md-field>
-                    <label>Prefix</label>
-                    <md-select
-                      v-model="form.possibleRightsAndPermissionsPrefix"
-                      name="possible-rights-and-permissions-prefix"
-                      id="possible-rights-and-permissions-prefix">
-                      <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="possible-rights-and-permissions-first-name">First Name</label>
-                    <md-input
-                      name="possible-rights-and-permissions-first-name"
-                      id="possible-rights-and-permissions-first-name"
-                      v-model="form.possibleRightsAndPermissionsFirstName"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-               <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="possible-rights-and-permissions-middle-name">Middle Name</label>
-                    <md-input
-                      name="possible-rights-and-permissions-middle-name"
-                      id="possible-rights-and-permissions-middle-name"
-                      v-model="form.possibleRightsAndPermissionsMiddleName"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="possible-rights-and-permissions-last-name">Last Name</label>
-                    <md-input
-                      name="possible-rights-and-permissions-last-name"
-                      id="possible-rights-and-permissions-last-name"
-                      v-model="form.possibleRightsAndPermissionsLastName"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-10">
-                  <md-field>
-                    <label>Suffix</label>
-                    <md-select
-                      v-model="form.possibleRightsAndPermissionsSuffix"
-                      name="possible-rights-and-permissions-suffix"
-                      id="possible-rights-and-permissions-suffix">
-                      <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="possible-rights-and-permissions-address">Address</label>
-                    <md-input
-                      name="possible-rights-and-permissions-address"
-                      id="possible-rights-and-permissions-address"
-                      v-model="form.possibleRightsAndPermissionsAddress"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100">
-                  <md-field>
-                    <label for="possible-rights-and-permissions-address2">Address 2</label>
-                    <md-input
-                      name="possible-rights-and-permissions-address2"
-                      id="possible-rights-and-permissions-address2"
-                      v-model="form.possibleRightsAndPermissionsAddress2"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-30">
-                  <md-field>
-                    <label for="possible-rights-and-permissions-city">City</label>
-                    <md-input
-                      name="possible-rights-and-permissions-city"
-                      id="possible-rights-and-permissions-city"
-                      v-model="form.possibleRightsAndPermissionsCity"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-30">
-                  <md-field>
-                    <label for="possible-rights-and-permissions-state">State</label>
-                    <md-input
-                      name="possible-rights-and-permissions-state"
-                      id="possible-rights-and-permissions-state"
-                      v-model="form.possibleRightsAndPermissionsState"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-40">
-                  <md-field>
-                    <label for="possible-rights-and-permissions-postal-code">Postal Code</label>
-                    <md-input
-                      name="possible-rights-and-permissions-postal-code"
-                      id="possible-rights-and-permissions-postal-code"
-                      v-model="form.possibleRightsAndPermissionsPostalCode"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                  <md-field>
-                    <label for="possible-rights-and-permissions-country">Country</label>
-                    <md-input
-                      name="possible-rights-and-permissions-country"
-                      id="possible-rights-and-permissions-country"
-                      v-model="form.possibleRightsAndPermissionsCountry"
-                      :disabled="sending"
-                      maxlength=255
-                    />
-                  </md-field>
-                </div>
-              </div>
-            </md-card-content>
-          </md-card>
-        </md-card-content>
-        <md-card-actions>
+      <div class="md-layout-item md-size-80 form">
+        <span class="md-subheader">* Required fields</span>
+        <details open>
+          <summary class="md-title">Title</summary>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('primaryTitle')">
+                <label for="primary-title" ref="primaryTitle">Primary Title</label>
+                <md-input
+                  name="primary-title"
+                  id="primary-title"
+                  v-model="form.primaryTitle"
+                  :disabled="sending"
+                  required
+                  @blur="validateField('primaryTitle')"
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.primaryTitle.required"
+                >The primary title is required</span>
+                <span
+                  class="md-error"
+                  v-else-if="!$v.form.primaryTitle.maxLength"
+                >The primary title max length is 2000 characters; currently {{form.primaryTitle.length}}</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('alternateTitle')">
+                <label for="alternate-title">Alternate Title</label>
+                <md-input
+                  name="alternate-title"
+                  id="alternate-title"
+                  v-model="form.alternateTitle"
+                  :disabled="sending"
+                  @blur="validateField('alternateTitle')"
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.alternateTitle.maxLength"
+                >The alternate title max length is 2000 characters; currently {{form.alternateTitle.length}}</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('yearCompleted')">
+                <label for="year-completed" ref="yearCompleted">Year Completed</label>
+                <md-input
+                  name="year-completed"
+                  id="year-completed"
+                  type="number"
+                  v-model="form.yearCompleted"
+                  :disabled="sending"
+                  required
+                  @blur="validateField('yearCompleted')"
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.yearCompleted.required"
+                >The year completed is required</span>
+                <span
+                  class="md-error"
+                  v-else-if="!$v.form.yearCompleted.minValue || !$v.form.yearCompleted.maxValue"
+                >The year completed must be between {{minYearCompleted}} and {{maxYearCompleted}}</span>
+              </md-field>
+            </div>
+          </div>
+        </details>
+        <details open>
+          <summary class="md-title">Author</summary>
+          <md-switch
+            v-model="form.authorAnonymous"
+            name="author-anonymous-btn"
+            id="author-anonymous-btn"
+            @change="toggleAuthorAnonymity">Anonymous
+          </md-switch>
+          <div class="md-layout md-gutter" v-if="!form.authorAnonymous">
+            <div class="md-layout-item md-size-10">
+              <md-field>
+                <label>Prefix</label>
+                <md-select
+                  v-model="form.authorPrefix"
+                  name="author-prefix"
+                  id="author-prefix"
+                  :disabled="sending">
+                  <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('authorFirstName')">
+                <label for="author-first-name" ref="authorFirstName">First Name</label>
+                <md-input
+                  name="author-first-name"
+                  id="author-first-name"
+                  v-model="form.authorFirstName"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.authorFirstName.required"
+                >The author first name is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="author-middle-name">Middle Name</label>
+                <md-input
+                  name="author-middle-name"
+                  id="author-middle-name"
+                  v-model="form.authorMiddleName"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('authorLastName')">
+                <label for="author-last-name" ref="authorLastName">Last Name</label>
+                <md-input
+                  name="author-last-name"
+                  id="author-last-name"
+                  v-model="form.authorLastName"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.authorLastName.required"
+                >The author last name is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-10">
+              <md-field>
+                <label>Suffix</label>
+                <md-select
+                  v-model="form.authorSuffix"
+                  name="author-suffix"
+                  id="author-suffix"
+                  :disabled="sending">
+                  <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter"  v-if="!form.authorAnonymous">
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="author-pseudonym">Pseudonym</label>
+                <md-input
+                  name="author-pseudonym"
+                  id="author-pseudonym"
+                  v-model="form.authorPseudonym"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('authorCitizenship')">
+                <label for="author-citizenship" ref="authorCitizenship">Citizenship</label>
+                <md-input
+                  name="author-citizenship"
+                  id="author-citizenship"
+                  v-model="form.authorCitizenship"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.authorCitizenship.required"
+                >The author citizenship is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="author-domicile">Domicile</label>
+                <md-input
+                  name="author-domicile"
+                  id="author-domicile"
+                  v-model="form.authorDomicile"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+          </div>
+        </details>
+        <details open>
+          <summary class="md-title">Claimant</summary>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-size-10">
+              <md-field>
+                <label>Prefix</label>
+                <md-select
+                  v-model="form.claimantPrefix"
+                  name="claimant-prefix"
+                  id="claimant-prefix"
+                  :disabled="sending">
+                  <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('claimantFirstName')">
+                <label for="claimant-first-name" ref="claimantFirstName">First Name</label>
+                <md-input
+                  name="claimant-first-name"
+                  id="claimant-first-name"
+                  v-model="form.claimantFirstName"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.claimantFirstName.required"
+                >The claimant first name is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="claimant-middle-name">Middle Name</label>
+                <md-input
+                  name="claimant-middle-name"
+                  id="claimant-middle-name"
+                  v-model="form.claimantMiddleName"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('claimantLastName')">
+                <label for="claimant-first-name" ref="claimantLastName">Last Name</label>
+                <md-input
+                  name="claimant-last-name"
+                  id="claimant-last-name"
+                  v-model="form.claimantLastName"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.claimantLastName.required"
+                >The claimant last name is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-10">
+              <md-field>
+                <label>Suffix</label>
+                <md-select
+                  v-model="form.claimantSuffix"
+                  name="claimant-suffix"
+                  id="claimant-suffix"
+                  :disabled="sending">
+                  <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('claimantAddress')">
+                <label for="claimant-address" ref="claimantAddress">Address</label>
+                <md-input
+                  name="claimant-address"
+                  id="claimant-address"
+                  v-model="form.claimantAddress"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.claimantAddress.required"
+                >The claimant address is required</span>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="claimant-address2">Address 2</label>
+                <md-input
+                  name="claimant-address2"
+                  id="claimant-address2"
+                  v-model="form.claimantAddress2"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-30">
+              <md-field :class="getValidationClass('claimantCity')">
+                <label for="claimant-city" ref="claimantCity">City</label>
+                <md-input
+                  name="claimant-city"
+                  id="claimant-city"
+                  v-model="form.claimantCity"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.claimantCity.required"
+                >The claimant city is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-30">
+              <md-field :class="getValidationClass('claimantState')">
+                <label for="claimant-state" ref="claimantState">State</label>
+                <md-input
+                  name="claimant-state"
+                  id="claimant-state"
+                  v-model="form.claimantState"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.claimantState.required"
+                >The claimant state is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-40">
+              <md-field :class="getValidationClass('claimantPostalCode')">
+                <label for="claimant-postal-code" ref="claimantPostalCode">Postal Code</label>
+                <md-input
+                  name="claimant-postal-code"
+                  id="claimant-postal-code"
+                  v-model="form.claimantPostalCode"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.claimantPostalCode.required"
+                >The claimant postal code is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('claimantCountry')">
+                <label for="claimant-country" ref="claimantCountry">Country</label>
+                <md-input
+                  name="claimant-country"
+                  id="claimant-country"
+                  v-model="form.claimantCountry"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.claimantCountry.required"
+                >The claimant country is required</span>
+              </md-field>
+            </div>
+          </div>
+        </details>
+        <details open>
+          <summary class="md-title">Certificate</summary>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-size-10">
+              <md-field>
+                <label>Prefix</label>
+                <md-select
+                  v-model="form.certificateContactPrefix"
+                  name="certificate-contact-prefix"
+                  id="certificate-contact-prefix"
+                  :disabled="sending">
+                  <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('certificateContactFirstName')">
+                <label for="certificate-contact-first-name" ref="certificateContactFirstName">First Name</label>
+                <md-input
+                  name="certificate-contact-first-name"
+                  id="certificate-contact-first-name"
+                  v-model="form.certificateContactFirstName"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.certificateContactFirstName.required"
+                >The certificate contact first name is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="certificate-contact-middle-name">Middle Name</label>
+                <md-input
+                  name="certificate-contact-middle-name"
+                  id="certificate-contact-middle-name"
+                  v-model="form.certificateContactMiddleName"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('certificateContactLastName')">
+                <label for="certificate-contact-last-name" ref="certificateContactLastName">Last Name</label>
+                <md-input
+                  name="certificate-contact-last-name"
+                  id="certificate-contact-last-name"
+                  v-model="form.certificateContactLastName"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.certificateContactLastName.required"
+                >The certificate contact last name is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-10">
+              <md-field>
+                <label>Suffix</label>
+                <md-select
+                  v-model="form.certificateContactSuffix"
+                  name="certificate-contact-suffix"
+                  id="certificate-contact-suffix"
+                  :disabled="sending">
+                  <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('certificateContactAddress')">
+                <label for="certificate-contact-address" ref="certificateContactAddress">Address</label>
+                <md-input
+                  name="certificate-contact-address"
+                  id="certificate-contact-address"
+                  v-model="form.certificateContactAddress"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.certificateContactAddress.required"
+                >The certificate address is required</span>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="certificate-contact-address2">Address 2</label>
+                <md-input
+                  name="certificate-contact-address2"
+                  id="certificate-contact-address2"
+                  v-model="form.certificateContactAddress2"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-30">
+              <md-field :class="getValidationClass('certificateContactCity')">
+                <label for="certificate-contact-city" ref="certificateContactCity">City</label>
+                <md-input
+                  name="certificate-contact-city"
+                  id="certificate-contact-city"
+                  v-model="form.certificateContactCity"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.certificateContactCity.required"
+                >The certificate city is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-30">
+              <md-field :class="getValidationClass('certificateContactState')">
+                <label for="certificate-contact-state" ref="certificateContactState">State</label>
+                <md-input
+                  name="certificate-contact-state"
+                  id="certificate-contact-state"
+                  v-model="form.certificateContactState"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.certificateContactState.required"
+                >The certificate state is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-40">
+              <md-field :class="getValidationClass('certificateContactPostalCode')">
+                <label for="certificate-contact-postal-code" ref="certificateContactPostalCode">Postal Code</label>
+                <md-input
+                  name="certificate-contact-postal-code"
+                  id="certificate-contact-postal-code"
+                  v-model="form.certificateContactPostalCode"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.certificateContactPostalCode.required"
+                >The certificate postal code is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('certificateContactCountry')">
+                <label for="certificate-contact-country" ref="certificateContactCountry">Country</label>
+                <md-input
+                  name="certificate-contact-country"
+                  id="certificate-contact-country"
+                  v-model="form.certificateContactCountry"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.certificateContactCountry.required"
+                >The certificate country is required</span>
+              </md-field>
+            </div>
+          </div>
+        </details>
+        <details open>
+          <summary class="md-title">Correspondence</summary>
+          <md-switch
+            v-model="useClaimantAddress"
+            @change="copyClaimantAddress"
+            id="copy-claimant-address-btn"
+            name="copy-claimant-address-btn">Use Claimant Address
+          </md-switch>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-size-10">
+              <md-field>
+                <label>Prefix</label>
+                <md-select
+                  v-model="form.correspondenceContactPrefix"
+                  name="correspondence-contact-prefix"
+                  id="correspondence-contact-prefix"
+                  :disabled="sending">
+                  <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('correspondenceContactFirstName')">
+                <label for="correspondence-contact-first-name" ref="correspondenceContactFirstName">First Name</label>
+                <md-input
+                  name="correspondence-contact-first-name"
+                  id="correspondence-contact-first-name"
+                  v-model="form.correspondenceContactFirstName"
+                  :disabled="sending || useClaimantAddress"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.correspondenceContactFirstName.required"
+                >The correspondence contact first name is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="correspondence-contact-middle-name">Middle Name</label>
+                <md-input
+                  name="correspondence-contact-middle-name"
+                  id="correspondence-contact-middle-name"
+                  v-model="form.correspondenceContactMiddleName"
+                  :disabled="sending || useClaimantAddress"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('correspondenceContactLastName')">
+                <label for="correspondence-contact-last-name" ref="correspondenceContactLastName">Last Name</label>
+                <md-input
+                  name="correspondence-contact-last-name"
+                  id="correspondence-contact-last-name"
+                  v-model="form.correspondenceContactLastName"
+                  :disabled="sending || useClaimantAddress"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.correspondenceContactLastName.required"
+                >The correspondence contact last name is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-10">
+              <md-field>
+                <label>Suffix</label>
+                <md-select
+                  v-model="form.correspondenceContactSuffix"
+                  name="correspondence-contact-suffix"
+                  id="correspondence-contact-suffix"
+                  :disabled="sending">
+                  <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('correspondenceContactAddress')">
+                <label for="correspondence-contact-address" ref="correspondenceContactAddress">Address</label>
+                <md-input
+                  name="correspondence-contact-address"
+                  id="correspondence-contact-address"
+                  v-model="form.correspondenceContactAddress"
+                  :disabled="sending || useClaimantAddress"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.correspondenceContactAddress.required"
+                >The correspondence address is required</span>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="correspondence-contact-address2">Address 2</label>
+                <md-input
+                  name="correspondence-contact-address2"
+                  id="correspondence-contact-address2"
+                  v-model="form.correspondenceContactAddress2"
+                  :disabled="sending || useClaimantAddress"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-30">
+              <md-field :class="getValidationClass('correspondenceContactCity')">
+                <label for="correspondence-contact-city" ref="correspondenceContactCity">City</label>
+                <md-input
+                  name="correspondence-contact-city"
+                  id="correspondence-contact-city"
+                  v-model="form.correspondenceContactCity"
+                  :disabled="sending || useClaimantAddress"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.correspondenceContactCity.required"
+                >The correspondence city is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-30">
+              <md-field :class="getValidationClass('correspondenceContactState')">
+                <label for="correspondence-contact-state" ref="correspondenceContactState">State</label>
+                <md-input
+                  name="correspondence-contact-state"
+                  id="correspondence-contact-state"
+                  v-model="form.correspondenceContactState"
+                  :disabled="sending || useClaimantAddress"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.correspondenceContactState.required"
+                >The correspondence state is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-40">
+              <md-field :class="getValidationClass('correspondenceContactPostalCode')">
+                <label for="correspondence-contact-postal-code" ref="correspondenceContactPostalCode">Postal Code</label>
+                <md-input
+                  name="correspondence-contact-postal-code"
+                  id="correspondence-contact-postal-code"
+                  v-model="form.correspondenceContactPostalCode"
+                  :disabled="sending || useClaimantAddress"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.correspondenceContactPostalCode.required"
+                >The correspondence postal code is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('correspondenceContactCountry')">
+                <label for="correspondence-contact-country" ref="correspondenceContactCountry">Country</label>
+                <md-input
+                  name="correspondence-contact-country"
+                  id="correspondence-contact-country"
+                  v-model="form.correspondenceContactCountry"
+                  :disabled="sending || useClaimantAddress"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.correspondenceContactCountry.required"
+                >The correspondence country is required</span>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-60">
+              <md-field :class="getValidationClass('correspondencePhoneNumber')">
+                <label for="correspondence-phone-number" ref="correspondencePhoneNumber">Phone Number</label>
+                <md-input
+                  name="correspondence-phone-number"
+                  id="correspondence-phone-number"
+                  autocomplete="tel"
+                  v-model="form.correspondencePhoneNumber"
+                  :disabled="sending"
+                  required
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.correspondencePhoneNumber.required"
+                >The correspondence phone number is required</span>
+                <span
+                  class="md-error"
+                  v-else-if="!$v.form.correspondencePhoneNumber.isValidPhoneNumber"
+                >The correspondence phone number must be 10 digits</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-30">
+              <md-field>
+                <label for="correspondence-phone-number-extension">Ext.</label>
+                <md-input
+                  name="correspondence-phone-number-extension"
+                  id="correspondence-phone-number-extension"
+                  autocomplete="tel"
+                  type="number"
+                  v-model="form.correspondencePhoneNumberExtension"
+                  :disabled="sending"
+                />
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('correspondenceEmail')">
+                <label for="correspondence-email" ref="correspondenceEmail">Email</label>
+                <md-input
+                  type="email"
+                  name="correspondence-email"
+                  id="correspondence-email"
+                  autocomplete="email"
+                  v-model="form.correspondenceEmail"
+                  :disabled="sending"
+                  required
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.correspondenceEmail.required"
+                >The correspondence email is required</span>
+                <span class="md-error" v-else-if="$v.form.correspondenceEmail.email">Invalid email</span>
+              </md-field>
+            </div>
+          </div>
+        </details>
+        <details open>
+          <summary class="md-title">Rights &amp; Permissions</summary>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-size-10">
+              <md-field>
+                <label>Prefix</label>
+                <md-select
+                  v-model="form.possibleRightsAndPermissionsPrefix"
+                  name="possible-rights-and-permissions-prefix"
+                  id="possible-rights-and-permissions-prefix">
+                  <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="possible-rights-and-permissions-first-name">First Name</label>
+                <md-input
+                  name="possible-rights-and-permissions-first-name"
+                  id="possible-rights-and-permissions-first-name"
+                  v-model="form.possibleRightsAndPermissionsFirstName"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="possible-rights-and-permissions-middle-name">Middle Name</label>
+                <md-input
+                  name="possible-rights-and-permissions-middle-name"
+                  id="possible-rights-and-permissions-middle-name"
+                  v-model="form.possibleRightsAndPermissionsMiddleName"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="possible-rights-and-permissions-last-name">Last Name</label>
+                <md-input
+                  name="possible-rights-and-permissions-last-name"
+                  id="possible-rights-and-permissions-last-name"
+                  v-model="form.possibleRightsAndPermissionsLastName"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-10">
+              <md-field>
+                <label>Suffix</label>
+                <md-select
+                  v-model="form.possibleRightsAndPermissionsSuffix"
+                  name="possible-rights-and-permissions-suffix"
+                  id="possible-rights-and-permissions-suffix">
+                  <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="possible-rights-and-permissions-address">Address</label>
+                <md-input
+                  name="possible-rights-and-permissions-address"
+                  id="possible-rights-and-permissions-address"
+                  v-model="form.possibleRightsAndPermissionsAddress"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="possible-rights-and-permissions-address2">Address 2</label>
+                <md-input
+                  name="possible-rights-and-permissions-address2"
+                  id="possible-rights-and-permissions-address2"
+                  v-model="form.possibleRightsAndPermissionsAddress2"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-30">
+              <md-field>
+                <label for="possible-rights-and-permissions-city">City</label>
+                <md-input
+                  name="possible-rights-and-permissions-city"
+                  id="possible-rights-and-permissions-city"
+                  v-model="form.possibleRightsAndPermissionsCity"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-30">
+              <md-field>
+                <label for="possible-rights-and-permissions-state">State</label>
+                <md-input
+                  name="possible-rights-and-permissions-state"
+                  id="possible-rights-and-permissions-state"
+                  v-model="form.possibleRightsAndPermissionsState"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-40">
+              <md-field>
+                <label for="possible-rights-and-permissions-postal-code">Postal Code</label>
+                <md-input
+                  name="possible-rights-and-permissions-postal-code"
+                  id="possible-rights-and-permissions-postal-code"
+                  v-model="form.possibleRightsAndPermissionsPostalCode"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <label for="possible-rights-and-permissions-country">Country</label>
+                <md-input
+                  name="possible-rights-and-permissions-country"
+                  id="possible-rights-and-permissions-country"
+                  v-model="form.possibleRightsAndPermissionsCountry"
+                  :disabled="sending"
+                  maxlength=255
+                />
+              </md-field>
+            </div>
+          </div>
+        </details>
+        <div class="form-actions">
           <md-button class="md-primary" type="submit">Next</md-button>
-        </md-card-actions>
-      </md-card>
+        </div>
+      </div>
       <md-progress-bar md-mode="indeterminate" v-if="sending" />
       <md-dialog :md-active.sync="reviewCopyrightApplication">
         <md-dialog-title>Review</md-dialog-title>
         <md-dialog-content>
           <copyright-application-review :application="form" />
-          <span class="md-headline">Certification</span>
+          <span class="md-title">Certification</span>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
               <p><strong>17 USC 506(e): Any person who knowingly makes a false representation of a material fact in the application
@@ -1375,24 +1362,12 @@ export default {
   left: 0;
 }
 
-.md-card {
-  margin: 14px;
-}
-
-.form-card {
+.form {
   margin: auto;
 }
 
 .certification {
   margin-top: 22px;
-}
-
-.draft-toolbar {
-  display: flex;
-  justify-content: flex-end;
-  padding: 22px 22px 0 0;
-  height: 50px;
-  width: 100%;
 }
 
 .draft-message {
@@ -1404,4 +1379,30 @@ export default {
   justify-content: center;
 }
 
+details {
+  padding: 16px;
+  margin: 0 0 28px 0;
+  border: lightgrey 1px solid;
+}
+
+details > summary:before {
+    content: "+ ";
+}
+
+details[open] > summary:before {
+    content: "- ";
+}
+
+summary {
+  cursor: pointer;
+}
+
+summary::-webkit-details-marker {
+    display: none
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
 </style>
