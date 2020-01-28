@@ -111,16 +111,20 @@
       <div class="col">
         <div class="col-left">
           <strong>Name:</strong><br />
+          <strong>Email:</strong><br />
+          <strong>Telephone:</strong><br />
           <strong>Address:</strong>
         </div>
         <div class="col-right">
           <span>{{application.possibleRightsAndPermissionsFirstName}} {{application.possibleRightsAndPermissionsLastName}}</span><br />
+          <span>{{application.possibleRightsAndPermissionsEmail}}</span><br />
+          <span>{{possibleRightsAndPermissionsPhoneNumber()}}</span><br />
           <span>{{application.possibleRightsAndPermissionsAddress}} {{application.possibleRightsAndPermissionsAddress2}}</span><br />
-          <span>{{application.possibleRightsAndPermissionsCity}}, {{application.possibleRightsAndPermissionsState}} {{application.possibleRightsAndPermissionsPostalCode}} {{application.possibleRightsAndPermissionsCountry}}</span>
-        </div>
+          <span>{{application.possibleRightsAndPermissionsCity}}, {{application.possibleRightsAndPermissionsState}} {{application.possibleRightsAndPermissionsPostalCode}} {{application.possibleRightsAndPermissionsCountry}}</span><br />
       </div>
     </div>
     <hr>
+    </div>
   </div>
 </template>
 <script>
@@ -139,6 +143,13 @@ export default {
         return this.application.correspondencePhoneNumber + ' X' + this.application.correspondencePhoneNumberExtension
       } else {
         return this.application.correspondencePhoneNumber
+      }
+    },
+    possibleRightsAndPermissionsPhoneNumber (phoneNumber, extension) {
+      if (this.application.possibleRightsAndPermissionsPhoneNumberExtension) {
+        return this.application.possibleRightsAndPermissionsPhoneNumber + ' X' + this.application.possibleRightsAndPermissionsPhoneNumberExtension
+      } else {
+        return this.application.possibleRightsAndPermissionsPhoneNumber
       }
     }
   }
