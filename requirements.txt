@@ -14,7 +14,7 @@ Flask-SQLAlchemy==2.4.1
 Flask-WTF==0.14.2
 importlib-metadata==1.4.0
 itsdangerous==1.1.0
-Jinja2==2.10.3
+Jinja2==2.11.0
 jsonschema==3.2.0
 MarkupSafe==1.1.1
 marshmallow<2.20,>=2.18.0
