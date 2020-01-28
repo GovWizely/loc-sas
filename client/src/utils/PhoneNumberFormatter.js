@@ -24,9 +24,9 @@ export function formatPhoneNumber (phoneNumber) {
 }
 
 export function isValidPhoneNumber (value) {
-  if (value) {
-    return value.replace(/\D/g, '').length === 10
+  if (!value) {
+    return true
   } else {
-    return false
+    return value.replace(/\D/g, '').length === 10
   }
 }

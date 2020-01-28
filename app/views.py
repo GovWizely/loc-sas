@@ -76,6 +76,9 @@ class CopyrightApplicationModelView(ModelView):
         "correspondence_contact_state",
         "correspondence_contact_postal_code",
         "correspondence_contact_country",
+        "correspondence_email",
+        "correspondence_phone_number",
+        'correspondence_phone_number_extension',
         "possible_rights_and_permissions_prefix",
         "possible_rights_and_permissions_first_name",
         "possible_rights_and_permissions_middle_name",
@@ -87,8 +90,9 @@ class CopyrightApplicationModelView(ModelView):
         "possible_rights_and_permissions_state",
         "possible_rights_and_permissions_postal_code",
         "possible_rights_and_permissions_country",
-        "correspondence_email",
-        "correspondence_phone_number",
+        'possible_rights_and_permissions_email',
+        'possible_rights_and_permissions_phone_number',
+        'possible_rights_and_permissions_phone_number_extension',
         "pdf",
         "service_request_id"
     ]

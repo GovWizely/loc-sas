@@ -814,8 +814,8 @@
                 <span
                   class="md-error"
                   v-if="!$v.form.correspondenceEmail.required"
-                >The correspondence email is required</span>
-                <span class="md-error" v-else-if="$v.form.correspondenceEmail.email">Invalid email</span>
+                >The Correspondence email is required</span>
+                <span class="md-error" v-else-if="!$v.form.correspondenceEmail.email">Invalid email</span>
               </md-field>
             </div>
           </div>
@@ -960,6 +960,54 @@
               </md-field>
             </div>
           </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-60">
+              <md-field :class="getValidationClass('possibleRightsAndPermissionsPhoneNumber')">
+                <label for="possible-rights-and-permissions--phone-number" ref="possibleRightsAndPermissionsPhoneNumber">Phone Number</label>
+                <md-input
+                  name="possible-rights-and-permissions-phone-number"
+                  id="possible-rights-and-permissions-phone-number"
+                  autocomplete="tel"
+                  v-model="form.possibleRightsAndPermissionsPhoneNumber"
+                  :disabled="sending"
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.possibleRightsAndPermissionsPhoneNumber.isValidPhoneNumber"
+                >The Possible Rights and Permissions phone number must be 10 digits</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-30">
+              <md-field>
+                <label for="possible-rights-and-permissions-phone-number-extension">Ext.</label>
+                <md-input
+                  name="possible-rights-and-permissions-phone-number-extension"
+                  id="possible-rights-and-permissions-phone-number-extension"
+                  autocomplete="tel"
+                  type="number"
+                  v-model="form.possibleRightsAndPermissionsPhoneNumberExtension"
+                  :disabled="sending"
+                />
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('possibleRightsAndPermissionsEmail')">
+                <label for="possible-rights-and-permissions-email" ref="possibleRightsAndPermissionsEmail">Email</label>
+                <md-input
+                  type="email"
+                  name="possible-rights-and-permissions-email"
+                  id="possible-rights-and-permissions-email"
+                  autocomplete="email"
+                  v-model="form.possibleRightsAndPermissionsEmail"
+                  :disabled="sending"
+                  maxlength=255
+                />
+                <span class="md-error" v-if="!$v.form.possibleRightsAndPermissionsEmail.email">Invalid email</span>
+              </md-field>
+            </div>
+          </div>
         </details>
         <div class="form-actions">
           <md-button class="md-primary" type="submit">Next</md-button>
@@ -1088,6 +1136,9 @@ export default {
       possibleRightsAndPermissionsState: null,
       possibleRightsAndPermissionsPostalCode: null,
       possibleRightsAndPermissionsCountry: null,
+      possibleRightsAndPermissionsPhoneNumber: null,
+      possibleRightsAndPermissionsPhoneNumberExtension: null,
+      possibleRightsAndPermissionsEmail: null,
       serviceRequestId: null
     },
     customValidationFields: {
@@ -1227,6 +1278,12 @@ export default {
       },
       correspondenceContactCountry: {
         required
+      },
+      possibleRightsAndPermissionsEmail: {
+        email
+      },
+      possibleRightsAndPermissionsPhoneNumber: {
+        isValidPhoneNumber
       }
     }
   },
@@ -1390,6 +1447,7 @@ export default {
   },
   updated () {
     this.form.correspondencePhoneNumber = formatPhoneNumber(this.form.correspondencePhoneNumber)
+    this.form.possibleRightsAndPermissionsPhoneNumber = formatPhoneNumber(this.form.possibleRightsAndPermissionsPhoneNumber)
     Object.keys(this.form).forEach(k => { this.form[k] = replaceNonIso8895(this.form[k]) })
   },
   watch: {
