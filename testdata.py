@@ -84,7 +84,7 @@ if not users_exist:
         c.created_by = _user
         c.changed_by = _user
         c.service_request_id = str(uuid.uuid1())
-
+        c.application_status = random.choice(["draft", "under_review", "approved"])
         db.session.add(c)
         try:
             db.session.commit()

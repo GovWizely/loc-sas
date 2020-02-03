@@ -54,85 +54,9 @@
   accent: get-copyright-color('light-blue')
 ));
 @import "~vue-material/dist/theme/all";
+@import "@/style/variables.scss";
 @import "@/style/material-overrides.scss";
-
-.title-container {
-  display: flex;
-  flex: 1;
-  height: 60px;
-  padding-top: 15px;
-}
-
-#logo {
-  height: 28px;
-}
-
-.nav-btn {
-  text-decoration: none;
-  height: 60px;
-  border: none;
-  background-color: get-copyright-color('dark-blue');
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  padding: 8px 20px 0 20px;
-  border-bottom: get-copyright-color('dark-blue') 5px solid;
-  cursor: pointer;
-}
-
-.nav-btn.active {
-  border-bottom: white 5px solid;
-}
-
-.nav-btn:hover {
-  background-color: get-copyright-color('light-blue');
-  border-bottom: get-copyright-color('lighter-blue') 5px solid;
-}
-
-#nav {
-  margin: 0 40px 0 0;
-}
-
-.header {
-  margin-left: 25px;
-  padding-right: 24px;
-}
-
-.title {
-  flex: 1;
-}
-
-.header-row-1 {
-  display: flex;
-}
-
-.header-row-2 {
-  display: flex;
-}
-
-.current-route {
-  margin: 15px;
-}
-
-.please-log-in {
-  display: flex;
-  justify-content: center;
-  margin-top: 124px;
-}
-
-.secondary-button {
-  background: white;
-  display: inline-block;
-  padding: 0 20px 0 20px;
-  height: 40px;
-  border-radius: 3px;
-  border: solid 3px get-copyright-color('light-blue');
-  color: get-copyright-color('light-blue');
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 1.19;
-  cursor: pointer;
-}
+@import "@/style/general.scss";
 </style>
 
 <script>

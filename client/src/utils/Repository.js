@@ -1,13 +1,18 @@
+import { keysToCamel, keysToSnake } from './FieldTranslators'
 const axios = require('axios')
 
 let accessToken = null
 
 export default class Repository {
-  async _getCopyrightApplications () {
+  async _getCopyrightApplications (pageSize, page, applicationStatus) {
     const accessToken = await this._getAccessToken()
     const fields = ['primary_title', 'created_on', 'created_by', 'application_status', 'service_request_id'].join()
+    let filter = ''
+    if (applicationStatus !== 'all') { filter = ',filters:!((col:application_status,opr:eq,value:' + applicationStatus + '))' }
+    let url = '/api/v1/copyright_application/?q=(columns:!(' + fields + '),page:' + page + ',page_size:' + pageSize + '' + filter + ')'
+
     const copyrightApplicationsResponse = await axios({
-      url: '/api/v1/copyright_application/?q=(columns:!(' + fields + '),page:0,page_size:100)',
+      url,
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -22,15 +27,19 @@ export default class Repository {
       results = this.appendIds(copyrightApplicationsResponse)
     }
 
-    return results.map(obj => this.keysToCamel(obj))
+    return keysToCamel(results)
   }
 
-  async _createCopyrightApplication (copyrightApplication) {
+  async _saveCopyrightApplication (copyrightApplication) {
+    const baseUrl = '/api/v1/copyright_application/'
+    const id = copyrightApplication.id
+    const url = (id) ? baseUrl + id : baseUrl
+    const method = (id) ? 'PUT' : 'POST'
     const accessToken = await this._getAccessToken()
-    const translatedCopyrightApplication = this.keysToSnake(copyrightApplication)
+    const translatedCopyrightApplication = keysToSnake(copyrightApplication)
     const response = await axios({
-      url: '/api/v1/copyright_application/',
-      method: 'POST',
+      url,
+      method,
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + accessToken
@@ -40,72 +49,7 @@ export default class Repository {
       }
     }).catch(error => this.handleError(error))
 
-    return response
-  }
-
-  async _saveDraft (draft, draftId) {
-    const accessToken = await this._getAccessToken()
-    let response
-    if (draftId === null) {
-      response = await axios({
-        url: '/api/v1/copyright_application_draft/',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + accessToken
-        },
-        data: {
-          draft
-        }
-      }).then(response => response.data.id)
-        .catch(error => this.handleError(error))
-    } else {
-      response = await axios({
-        url: '/api/v1/copyright_application_draft/' + draftId,
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + accessToken
-        },
-        data: {
-          draft
-        }
-      }).catch(error => this.handleError(error))
-    }
-    return response
-  }
-
-  async _getDrafts () {
-    const accessToken = await this._getAccessToken()
-    const response = await axios({
-      url: '/api/v1/copyright_application_draft/',
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + accessToken
-      }
-    }).catch(error => this.handleError(error))
-
-    let results
-    if (response.error) {
-      results = response
-    } else {
-      results = this.appendIds(response)
-    }
-
-    return results
-  }
-
-  async _clearDraft (draftId) {
-    const accessToken = await this._getAccessToken()
-    await axios({
-      url: '/api/v1/copyright_application_draft/' + draftId,
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + accessToken
-      }
-    }).catch(error => this.handleError(error))
+    return keysToCamel(response.data)
   }
 
   async _getCopyrightApplication (id) {
@@ -125,7 +69,7 @@ export default class Repository {
     } else {
       result = copyrightApplicationResponse.data.result
     }
-    return this.keysToCamel(result)
+    return keysToCamel(result)
   }
 
   async _getAccessToken () {
@@ -176,7 +120,7 @@ export default class Repository {
       }
     }
 
-    return this.keysToCamel(result)
+    return keysToCamel(result)
   }
 
   async getCurrentUser () {
@@ -204,60 +148,6 @@ export default class Repository {
     return serviceRequestId
   }
 
-  keysToSnake (o) {
-    if (this.isObject(o)) {
-      const n = {}
-
-      Object.keys(o)
-        .forEach((k) => {
-          n[this.toSnake(k)] = this.keysToSnake(o[k])
-        })
-
-      return n
-    } else if (this.isArray(o)) {
-      return o.map((i) => {
-        return this.keysToSnake(i)
-      })
-    }
-
-    return o
-  }
-
-  keysToCamel (o) {
-    if (this.isObject(o)) {
-      const n = {}
-
-      Object.keys(o)
-        .forEach((k) => {
-          n[this.toCamel(k)] = this.keysToCamel(o[k])
-        })
-
-      return n
-    } else if (this.isArray(o)) {
-      return o.map((i) => {
-        return this.keysToCamel(i)
-      })
-    }
-
-    return o
-  }
-
-  toCamel = (str) => {
-    return str.replace(/([-_][a-z])/ig, ($1) => $1.toUpperCase().replace('-', '').replace('_', ''))
-  }
-
-  toSnake = (string) => {
-    return string.replace(/[\w]([A-Z])/g, (m) => m[0] + '_' + m[1]).toLowerCase()
-  }
-
-  isArray = function (a) {
-    return Array.isArray(a)
-  };
-
-  isObject = function (o) {
-    return o === Object(o) && !this.isArray(o) && typeof o !== 'function'
-  };
-
   handleError = (err) => {
     console.log(err)
     let message
@@ -280,6 +170,9 @@ export default class Repository {
     for (var i = 0; i < ids.length; i++) {
       results[i].id = ids[i]
     }
-    return results
+    return {
+      data: results,
+      count: response.data.count
+    }
   }
 }

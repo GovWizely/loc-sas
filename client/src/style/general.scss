@@ -1,0 +1,129 @@
+.title-container {
+  display: flex;
+  flex: 1;
+  height: 60px;
+  padding-top: 15px;
+}
+
+#logo {
+  margin: 0px 4px 0 0;
+  height: 28px;
+}
+
+.nav-btn {
+  text-decoration: none;
+  height: 60px;
+  border: none;
+  background-color: get-copyright-color('dark-blue');
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  padding: 8px 20px 0 20px;
+  border-bottom: get-copyright-color('dark-blue') 5px solid;
+  cursor: pointer;
+}
+
+.nav-btn.active {
+  border-bottom: white 5px solid;
+}
+
+.nav-btn:hover {
+  background-color: get-copyright-color('light-blue');
+  border-bottom: get-copyright-color('lighter-blue') 5px solid;
+}
+
+#nav {
+  margin: 0 40px 0 0;
+}
+
+.header {
+  margin-left: 25px;
+  padding-right: 24px;
+}
+
+.title {
+  flex: 1;
+}
+
+.header-row-1 {
+  display: flex;
+}
+
+.header-row-2 {
+  display: flex;
+}
+
+.current-route {
+  margin: 15px;
+}
+
+.please-log-in {
+  display: flex;
+  justify-content: center;
+  margin-top: 124px;
+}
+
+.secondary-button {
+  background: white;
+  display: inline-block;
+  padding: 0 20px 0 20px;
+  height: 40px;
+  border-radius: 3px;
+  border: solid 3px get-copyright-color('light-blue');
+  color: get-copyright-color('light-blue');
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.19;
+  cursor: pointer;
+}
+
+.field-label {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.accent-border {
+  border: 1px solid get-copyright-color('light');
+}
+
+.accent-border-left {
+  border-left: 1px solid get-copyright-color('light');
+}
+
+.accent-border-right {
+  border-right: 1px solid get-copyright-color('light');
+}
+
+.accent-border-bottom {
+  border-bottom: 1px solid get-copyright-color('light');
+}
+
+.accent-bg {
+  background: get-copyright-color('lightest');
+}
+
+select {
+  background-color: get-copyright-color('lighter');
+  border: none;
+  border-radius: 4px;
+  font: inherit;
+  line-height: 1.5em;
+  padding: 0.5em 3em 0.5em 1em;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+select.copyright-select {
+  background-image: url("assets/down-sm-caret.png");
+  background-repeat: no-repeat;
+  background-position: 92.5% 50%;
+  background-size: $sm-icon-px $sm-icon-px;
+}
+
+.sm-icon {
+  height: $sm-icon-px;
+  width: $sm-icon-px;
+}

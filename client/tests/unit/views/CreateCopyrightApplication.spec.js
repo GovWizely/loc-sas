@@ -6,12 +6,9 @@ import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
 
 describe('Create Copyright Application', () => {
   it('user can create a copyright application', async () => {
-    let _createCopyrightApplication = Sinon.stub().resolves({ error: null })
+    let _saveCopyrightApplication = Sinon.stub().resolves({ id: 1 })
     let fakeRepository = {
-      _createCopyrightApplication,
-      _getDrafts: () => Promise.resolve([]),
-      _saveDraft: (_) => Promise.resolve(1),
-      _clearDraft: (_) => Promise.resolve(),
+      _saveCopyrightApplication,
       _generateServiceRequest: () => Promise.resolve('abc123')
     }
 
@@ -58,8 +55,8 @@ describe('Create Copyright Application', () => {
 
     wrapper.find('#submit').trigger('click')
 
-    expect(_createCopyrightApplication.called).to.be.true
-    const submittedApplication = _createCopyrightApplication.lastCall.args[0]
+    expect(_saveCopyrightApplication.called).to.be.true
+    const submittedApplication = _saveCopyrightApplication.lastCall.args[0]
     expect(submittedApplication.primaryTitle).to.equal('Zorba')
     expect(submittedApplication.yearCompleted).to.equal('2020')
     expect(submittedApplication.authorFirstName).to.equal('Ray')

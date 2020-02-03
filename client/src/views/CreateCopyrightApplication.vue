@@ -79,7 +79,7 @@
         <details open>
           <summary class="md-title">Author</summary>
           <div class="author-name">
-            <label class="field-title">Name *</label>
+            <label class="field-label">Name *</label>
             <div class="switches">
               <md-checkbox v-model="authorPseudonymous"
                 name="author-pseudonymous"
@@ -185,9 +185,9 @@
             </div>
           </div>
           <div>
-            <span class="field-title">Citizenship/Domicile *
+            <label class="field-label">Citizenship/Domicile *
               <md-tooltip md-direction="right">Citizenship and/or domicile is required</md-tooltip>
-            </span>
+            </label>
             <div class="md-layout md-gutter">
               <div class="md-layout-item md-small-size-100">
                 <md-field :class="getValidationClass('authorCitizenship')">
@@ -1074,7 +1074,6 @@ import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormat
 import { replaceNonIso8895 } from '@/utils/ISO8895-15validator'
 import { empty } from '@/utils/ValidationHelpers'
 import CopyrightApplicationReview from './CopyrightApplicationReview'
-
 let d = new Date()
 let maxYearCompleted = d.getFullYear()
 let minYearCompleted = maxYearCompleted - 125
@@ -1090,6 +1089,7 @@ export default {
     minYearCompleted,
     maxYearCompleted,
     form: {
+      id: null,
       primaryTitle: null,
       alternateTitle: null,
       yearCompleted: null,
@@ -1153,7 +1153,8 @@ export default {
       possibleRightsAndPermissionsPhoneNumberExtension: null,
       possibleRightsAndPermissionsEmail: null,
       notesToUsco: null,
-      serviceRequestId: null
+      serviceRequestId: null,
+      applicationStatus: 'draft'
     },
     customValidationFields: {
       primaryTitle: {
@@ -1183,20 +1184,19 @@ export default {
     errorMessage: null,
     reviewCopyrightApplication: false,
     savingDraft: false,
-    draftId: null,
     loading: true,
     authorPseudonymous: false
   }),
   async created () {
-    const drafts = await this.repository._getDrafts()
-    if (drafts.length === 0) {
-      this.form.serviceRequestId = await this.repository._generateServiceRequest()
-      this.draftId = await this.repository._saveDraft(JSON.stringify(this.form), null)
+    const applicationId = parseInt(this.$route.query['id'])
+    if (applicationId) {
+      const draft = await this.repository._getCopyrightApplication(applicationId)
+      Object.keys(this.form).forEach(k => { this.form[k] = draft[k] })
+      this.form.id = applicationId
     } else {
-      this.form = { ...JSON.parse(drafts[0].draft) }
-      this.draftId = drafts[0].id
+      this.form.serviceRequestId = await this.repository._generateServiceRequest()
+      this.saveDraft()
     }
-
     this.loading = false
   },
   validations: {
@@ -1339,14 +1339,13 @@ export default {
     async createCopyrightApplication () {
       this.sending = true
       this.lastCopyrightApplication = this.form.primaryTitle
-
-      const response = await this.repository._createCopyrightApplication(this.form)
+      this.form.applicationStatus = 'under_review'
+      const response = await this.repository._saveCopyrightApplication(this.form)
       if (response.error) {
         this.errorOccured = true
         this.errorMessage = response.error
       } else {
         this.copyrightApplicationSaved = true
-        await this.repository._clearDraft(this.draftId)
         this.clearForm()
         this.$router.push({ name: 'Home' }).catch(_ => {})
       }
@@ -1417,7 +1416,8 @@ export default {
     },
     async saveDraft () {
       this.savingDraft = true
-      await this.repository._saveDraft(JSON.stringify(this.form), this.draftId)
+      const application = await this.repository._saveCopyrightApplication(this.form)
+      if (application.id) { this.form.id = application.id }
       this.savingDraft = false
     },
     saveDraftWatchFn (oldVal, newVal) {
@@ -1484,7 +1484,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .md-progress-bar {
   position: absolute;
   top: 0;
@@ -1536,11 +1536,6 @@ summary::-webkit-details-marker {
   justify-content: flex-end;
 }
 
-.field-title {
-  font-weight: bold;
-  font-size: 16px;
-}
-
 .switches {
   display: flex;
   justify-content: flex-end;
@@ -1553,7 +1548,7 @@ summary::-webkit-details-marker {
   margin-bottom: 12px;
 }
 
-.author-name .field-title {
+.author-name .field-label {
   padding-top: 12px;
   width: 100px;
 }

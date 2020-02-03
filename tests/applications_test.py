@@ -90,7 +90,8 @@ class ApplicationsTest(AppTest):
             possible_rights_and_permissions_country="Canada",
             correspondence_email="john@smith.info",
             correspondence_phone_number="202-555-1212",
-            service_request_id="SR12345"
+            service_request_id="SR12345",
+            application_status="draft"
         ), follow_redirects=True)
         assert b'Added Row' in rv.data
         assert b'List Copyright Application' in rv.data
@@ -101,4 +102,4 @@ class ApplicationsTest(AppTest):
         rv = self.client.get('/copyrightapplicationmodelview/show/1')
         assert b'Show Copyright Application' in rv.data
         assert b'My Title' in rv.data
-        assert b'Under Review' in rv.data
+        assert b'draft' in rv.data
