@@ -25,6 +25,7 @@ pip-install:  ## Pip install `requirements-test.txt`, which also installs `requi
 
 test-local: ensure-venv clean  ## Run lint and tests
 	flake8
+	rm -f app.db
 	python -m pytest -s --disable-pytest-warnings tests --cov=app --cov-report=html:/tmp/test-artifacts/coverage --cov-fail-under=90 --junitxml=/tmp/test-results/pytest.xml
 
 sonarqube: test-local

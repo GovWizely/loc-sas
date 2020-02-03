@@ -167,7 +167,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 .application-review {
   width: 800px;
   padding: 12px;
