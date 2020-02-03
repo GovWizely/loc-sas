@@ -3,8 +3,8 @@
     <md-toolbar class="md-primary" md-elevation="1">
       <div class="title-container">
         <!-- TODO: Conditional rendering for demo; need to remove for Prod deployment -->
-        <img id="logo" src="./assets/copyrightLogo.png" v-if="currentUserInfo.loggedIn"/>
-        <h1 class="md-title" v-if="currentUserInfo.loggedIn">U.S. Copyright Office Registration System</h1>
+        <img id="logo" height="20px" src="./assets/copyrightLogo.png" v-if="currentUserInfo.loggedIn"/>
+        <h1 class="md-title" v-if="currentUserInfo.loggedIn">| U.S. Copyright Office Registration System</h1>
       </div>
       <div v-if="currentUserInfo.loggedIn">
         <div id="nav">
@@ -64,8 +64,7 @@
 }
 
 #logo {
-  margin: -4px 4px 0 0;
-  height: 38px;
+  height: 28px;
 }
 
 .nav-btn {
