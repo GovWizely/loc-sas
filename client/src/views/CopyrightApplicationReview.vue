@@ -121,9 +121,21 @@
           <span>{{possibleRightsAndPermissionsPhoneNumber()}}</span><br />
           <span>{{application.possibleRightsAndPermissionsAddress}} {{application.possibleRightsAndPermissionsAddress2}}</span><br />
           <span>{{application.possibleRightsAndPermissionsCity}}, {{application.possibleRightsAndPermissionsState}} {{application.possibleRightsAndPermissionsPostalCode}} {{application.possibleRightsAndPermissionsCountry}}</span><br />
+        </div>
       </div>
     </div>
     <hr>
+    <div v-if="application.notesToUsco">
+      <span class="md-headline">Notes to USCO</span>
+      <div class="col">
+        <div class="col-left">
+          <strong>Notes:</strong>
+        </div>
+        <div class="col-right">
+          <span>{{application.notesToUsco}}</span>
+        </div>
+      </div>
+      <hr>
     </div>
   </div>
 </template>

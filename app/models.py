@@ -75,6 +75,7 @@ class CopyrightApplication(AuditMixin, Model):
     possible_rights_and_permissions_phone_number = Column(String(255), nullable=True)
     possible_rights_and_permissions_phone_number_extension = Column(Integer, nullable=True)
     application_status = Column(String(25), nullable=False, default="Under Review")
+    notes_to_usco = Column(String(2000))
     pdf = Column(FileColumn, nullable=True)
     service_request_id = Column(String(255), unique=True, nullable=False)
 
