@@ -23,6 +23,7 @@
                   :disabled="sending"
                   required
                   @blur="validateField('primaryTitle')"
+                  md-counter="2000"
                 />
                 <span
                   class="md-error"
@@ -31,7 +32,7 @@
                 <span
                   class="md-error"
                   v-else-if="!$v.form.primaryTitle.maxLength"
-                >The primary title max length is 2000 characters; currently {{form.primaryTitle.length}}</span>
+                >The primary title max length is 2000 characters</span>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -43,11 +44,12 @@
                   v-model="form.alternateTitle"
                   :disabled="sending"
                   @blur="validateField('alternateTitle')"
+                  md-counter="2000"
                 />
                 <span
                   class="md-error"
                   v-if="!$v.form.alternateTitle.maxLength"
-                >The alternate title max length is 2000 characters; currently {{form.alternateTitle.length}}</span>
+                >The alternate title max length is 2000 characters</span>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -1009,6 +1011,17 @@
             </div>
           </div>
         </details>
+        <details open>
+          <summary class="md-title">Notes to USCO</summary>
+          <md-field :class="getValidationClass('notesToUsco')">
+            <label>Notes</label>
+            <md-textarea v-model="form.notesToUsco" ref="notesToUsco" md-counter="2000" />
+            <span
+              class="md-error"
+              v-if="!$v.form.notesToUsco.maxLength"
+            >The USCO notes max length is 2000 characters; currently {{form.notesToUsco.length}}</span>
+          </md-field>
+        </details>
         <div class="form-actions">
           <md-button class="md-primary" type="submit">Next</md-button>
         </div>
@@ -1139,6 +1152,7 @@ export default {
       possibleRightsAndPermissionsPhoneNumber: null,
       possibleRightsAndPermissionsPhoneNumberExtension: null,
       possibleRightsAndPermissionsEmail: null,
+      notesToUsco: null,
       serviceRequestId: null
     },
     customValidationFields: {
@@ -1284,6 +1298,9 @@ export default {
       },
       possibleRightsAndPermissionsPhoneNumber: {
         isValidPhoneNumber
+      },
+      notesToUsco: {
+        maxLength: maxLength(2000)
       }
     }
   },

@@ -84,7 +84,8 @@ class CopyrightApplicationModelApi(ModelRestApi):
         'possible_rights_and_permissions_phone_number_extension',
         'application_status',
         'pdf',
-        'service_request_id'
+        'service_request_id',
+        'notes_to_usco'
     ]
 
 
