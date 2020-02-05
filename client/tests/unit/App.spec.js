@@ -38,8 +38,8 @@ describe('Home page', () => {
       _getCurrentUserInfo: () => (
         {
           loggedIn: true,
-          first_name: 'John',
-          last_name: 'Wick'
+          firstName: 'John',
+          lastName: 'Wick'
         }
       )
     }

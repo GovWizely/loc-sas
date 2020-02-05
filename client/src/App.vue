@@ -19,7 +19,7 @@
       <md-button v-if="!currentUserInfo.loggedIn" @click="login()">Login</md-button>
       <md-menu v-else>
         <md-button class="md-icon-button" md-menu-trigger>
-          <initials-avatar :initials="this.currentUserInfo.first_name[0] + this.currentUserInfo.last_name[0]" />
+          <initials-avatar :initials="this.currentUserInfo.firstName[0] + this.currentUserInfo.lastName[0]" />
         </md-button>
         <md-menu-content>
           <md-menu-item>

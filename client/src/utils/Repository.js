@@ -22,12 +22,12 @@ export default class Repository {
       results = this.appendIds(copyrightApplicationsResponse)
     }
 
-    return results
+    return results.map(obj => this.keysToCamel(obj))
   }
 
   async _createCopyrightApplication (copyrightApplication) {
     const accessToken = await this._getAccessToken()
-    const translatedCopyrightApplication = this.translateToSnakeCase(copyrightApplication)
+    const translatedCopyrightApplication = this.keysToSnake(copyrightApplication)
     const response = await axios({
       url: '/api/v1/copyright_application/',
       method: 'POST',
@@ -125,8 +125,7 @@ export default class Repository {
     } else {
       result = copyrightApplicationResponse.data.result
     }
-
-    return result
+    return this.keysToCamel(result)
   }
 
   async _getAccessToken () {
@@ -177,7 +176,7 @@ export default class Repository {
       }
     }
 
-    return result
+    return this.keysToCamel(result)
   }
 
   async getCurrentUser () {
@@ -205,19 +204,59 @@ export default class Repository {
     return serviceRequestId
   }
 
-  translateToSnakeCase (obj) {
-    let objClone = { ...obj }
-    Object.keys(objClone).map(key => {
-      let snakeCaseField = this.camelToSnake(key)
-      objClone[snakeCaseField] = objClone[key]
-      delete objClone[key]
-    })
-    return objClone
+  keysToSnake (o) {
+    if (this.isObject(o)) {
+      const n = {}
+
+      Object.keys(o)
+        .forEach((k) => {
+          n[this.toSnake(k)] = this.keysToSnake(o[k])
+        })
+
+      return n
+    } else if (this.isArray(o)) {
+      return o.map((i) => {
+        return this.keysToSnake(i)
+      })
+    }
+
+    return o
   }
 
-  camelToSnake = (string) => {
+  keysToCamel (o) {
+    if (this.isObject(o)) {
+      const n = {}
+
+      Object.keys(o)
+        .forEach((k) => {
+          n[this.toCamel(k)] = this.keysToCamel(o[k])
+        })
+
+      return n
+    } else if (this.isArray(o)) {
+      return o.map((i) => {
+        return this.keysToCamel(i)
+      })
+    }
+
+    return o
+  }
+
+  toCamel = (str) => {
+    return str.replace(/([-_][a-z])/ig, ($1) => $1.toUpperCase().replace('-', '').replace('_', ''))
+  }
+
+  toSnake = (string) => {
     return string.replace(/[\w]([A-Z])/g, (m) => m[0] + '_' + m[1]).toLowerCase()
   }
+
+  isArray = function (a) {
+    return Array.isArray(a)
+  };
+
+  isObject = function (o) {
+    return o === Object(o) && !this.isArray(o) && typeof o !== 'function'
+  };
 
   handleError = (err) => {
     console.log(err)

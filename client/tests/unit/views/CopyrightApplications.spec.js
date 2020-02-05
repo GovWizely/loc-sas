@@ -9,17 +9,17 @@ describe('Copyright Applications', () => {
         [
           {
             id: 1,
-            primary_title: 'Title A',
-            created_by: { username: 'Frank' },
-            created_on: 'some date',
-            application_status: 'New'
+            primaryTitle: 'Title A',
+            createdBy: { username: 'Frank' },
+            createdOn: 'some date',
+            applicationStatus: 'New'
           },
           {
             id: 2,
-            primary_title: 'Title B',
-            created_by: { username: 'Ted' },
-            created_on: 'another date',
-            application_status: 'Old'
+            primaryTitle: 'Title B',
+            createdBy: { username: 'Ted' },
+            createdOn: 'another date',
+            applicationStatus: 'Old'
           }
         ]
       )
