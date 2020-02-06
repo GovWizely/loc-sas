@@ -148,6 +148,17 @@ export default class Repository {
     return serviceRequestId
   }
 
+  async _uploadFile (formData, serviceRequestId) {
+    const response = await axios({
+      url: '/api/v1/copyrightapplicationfileapi/file-upload?service_request_id=' + serviceRequestId,
+      method: 'POST',
+      data: formData
+    }).then(response => response.data.file_url)
+      .catch(error => this.handleError(error))
+
+    return response
+  }
+
   handleError = (err) => {
     console.log(err)
     let message

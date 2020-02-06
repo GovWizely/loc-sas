@@ -20,7 +20,12 @@ html.md-theme-default {
   text-transform: none;
 }
 
-.md-theme-default .md-field {
+details .md-field {
   //putting md-field inside a details element caused this weird spacing
   min-height: 0px;
+}
+
+details .md-button-content {
+  //putting md-button inside a details element caused this weird spacing
+  padding: 0 20px 0 5px;
 }

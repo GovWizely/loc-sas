@@ -1,11 +1,14 @@
+import os
 import uuid
 
 from flask import g
-from flask import session
+from flask import request, send_from_directory, session
 from flask_appbuilder.api import BaseApi, expose, ModelRestApi
 from flask_appbuilder.models.sqla.filters import FilterEqualFunction
 from flask_appbuilder.models.sqla.interface import SQLAInterface
+from werkzeug.utils import secure_filename
 
+from app import app
 from app.models import CopyrightApplication
 from . import appbuilder
 
@@ -84,7 +87,8 @@ class CopyrightApplicationModelApi(ModelRestApi):
         'possible_rights_and_permissions_phone_number',
         'possible_rights_and_permissions_phone_number_extension',
         'application_status',
-        'pdf',
+        'work_deposit_name',
+        'work_deposit_url',
         'service_request_id',
         'notes_to_usco'
     ]
@@ -113,3 +117,22 @@ class CopyrightApplicationServiceRequestApi(BaseApi):
 
 
 appbuilder.add_api(CopyrightApplicationServiceRequestApi)
+
+
+class CopyrightApplicationFileApi(BaseApi):
+    @expose('/file-upload', methods=['POST'])
+    def upload_file(self):
+        service_request_id = request.args.get('service_request_id')
+        file = request.files['file']
+        filename = secure_filename(service_request_id + '_' + file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return self.response(
+            201,
+            file_url='/api/v1/copyrightapplicationfileapi/file-download/' + filename)
+
+    @expose("/file-download/<filename>")
+    def get_file(self, filename):
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+
+
+appbuilder.add_api(CopyrightApplicationFileApi)

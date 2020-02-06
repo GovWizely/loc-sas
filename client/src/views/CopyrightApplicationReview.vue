@@ -137,6 +137,18 @@
       </div>
       <hr>
     </div>
+    <div>
+      <span class="md-headline">Work Deposit</span>
+      <div class="col">
+        <div class="col-left">
+          <strong>File:</strong>
+        </div>
+        <div class="col-right">
+          <span>{{application.workDepositName}}</span>
+        </div>
+      </div>
+      <hr>
+    </div>
   </div>
 </template>
 <script>
