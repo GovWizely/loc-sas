@@ -1,10 +1,7 @@
 import datetime
 
-from flask import url_for
 from flask_appbuilder import Model
-from flask_appbuilder.filemanager import get_file_original_name
-from flask_appbuilder.models.mixins import AuditMixin, FileColumn
-from markupsafe import Markup
+from flask_appbuilder.models.mixins import AuditMixin
 from sqlalchemy import Boolean, Column, Integer, String
 
 date_today = datetime.date.today()
@@ -76,7 +73,8 @@ class CopyrightApplication(AuditMixin, Model):
     possible_rights_and_permissions_phone_number_extension = Column(Integer)
     application_status = Column(String(25), nullable=False, default="draft")
     notes_to_usco = Column(String(2000))
-    pdf = Column(FileColumn)
+    work_deposit_name = Column(String(255))
+    work_deposit_url = Column(String(255))
     service_request_id = Column(String(255), nullable=False, unique=True)
 
     def __repr__(self):
@@ -89,13 +87,3 @@ class CopyrightApplication(AuditMixin, Model):
     def year(self):
         date = self.created_on
         return datetime.datetime(date.year, 1, 1)
-
-    def download(self):
-        return Markup(
-            '<a href="'
-            + url_for("CopyrightApplicationModelView.download", filename=str(self.pdf))
-            + '">Download</a>'
-        )
-
-    def file_name(self):
-        return get_file_original_name(str(self.pdf))

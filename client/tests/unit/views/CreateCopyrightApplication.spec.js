@@ -47,6 +47,9 @@ describe('Create Copyright Application', () => {
     wrapper.find('#correspondence-email').setValue('tooKool@4skool.io')
     await wrapper.vm.$nextTick()
 
+    wrapper.vm.form.workDepositUrl = 'some-work-deposit.pdf'
+    await wrapper.vm.$nextTick()
+
     wrapper.find('form').trigger('submit.prevent')
     await wrapper.vm.$nextTick()
 

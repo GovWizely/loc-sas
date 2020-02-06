@@ -42,7 +42,7 @@ jobs:
           command: |
             . venv/bin/activate
             flake8
-            python -m pytest --disable-pytest-warnings tests --cov=app --cov-report=html:/tmp/test-artifacts/coverage --cov-fail-under=90 --junitxml=/tmp/test-results/pytest.xml
+            python -m pytest --disable-pytest-warnings tests --cov=app --cov-report=html:/tmp/test-artifacts/coverage --cov-fail-under=75 --junitxml=/tmp/test-results/pytest.xml
       - store_test_results:
           path: /tmp/test-results
       - store_artifacts:

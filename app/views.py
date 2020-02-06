@@ -93,7 +93,8 @@ class CopyrightApplicationModelView(ModelView):
         'possible_rights_and_permissions_email',
         'possible_rights_and_permissions_phone_number',
         'possible_rights_and_permissions_phone_number_extension',
-        "pdf",
+        "work_deposit_name",
+        "work_deposit_url",
         "service_request_id",
         "notes_to_usco"
     ]

@@ -1014,16 +1014,46 @@
         <details open>
           <summary class="md-title">Notes to USCO</summary>
           <md-field :class="getValidationClass('notesToUsco')">
-            <label>Notes</label>
-            <md-textarea v-model="form.notesToUsco" ref="notesToUsco" md-counter="2000" />
+            <label ref="notesToUsco">Notes</label>
+            <md-textarea v-model="form.notesToUsco" md-counter="2000" />
             <span
               class="md-error"
               v-if="!$v.form.notesToUsco.maxLength"
-            >The USCO notes max length is 2000 characters; currently {{form.notesToUsco.length}}</span>
+            >The USCO notes max length is 2000 characters</span>
           </md-field>
         </details>
+        <details open>
+          <summary class="md-title">Work Deposit</summary>
+          <div class="md-layout md-gutter">
+          <div class="md-layout-item md-size-85">
+            <md-field :class="getValidationClass('workDepositUrl')">
+              <label ref="workDepositUrl">Work Deposit (.pdf)</label>
+              <md-file required accept="application/pdf" @change="onWorkDepositsSelection($event.target.files)" />
+              <span
+                class="md-error"
+                v-if="!$v.form.workDepositUrl.required"
+              >The work deposit is required</span>
+            </md-field>
+          </div>
+          <div class="md-layout-item md-size-5">
+            <md-button :disabled="uploadingWorkDeposit" class="md-primary" @click="uploadWorkDeposits()">Upload</md-button>
+          </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-progress-bar v-if="uploadingWorkDeposit" md-mode="indeterminate"></md-progress-bar>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <div v-if="form.workDepositUrl" class="uploaded-work-deposits">
+                <a class="field-label" :href="form.workDepositUrl">{{form.workDepositName}}</a>
+              </div>
+            </div>
+          </div>
+        </details>
         <div class="form-actions">
-          <md-button class="md-primary" type="submit">Next</md-button>
+          <md-button class="md-raised md-accent" type="submit">Next</md-button>
         </div>
       </div>
       <md-progress-bar md-mode="indeterminate" v-if="sending" />
@@ -1154,7 +1184,9 @@ export default {
       possibleRightsAndPermissionsEmail: null,
       notesToUsco: null,
       serviceRequestId: null,
-      applicationStatus: 'draft'
+      applicationStatus: 'draft',
+      workDepositName: null,
+      workDepositUrl: null
     },
     customValidationFields: {
       primaryTitle: {
@@ -1185,7 +1217,9 @@ export default {
     reviewCopyrightApplication: false,
     savingDraft: false,
     loading: true,
-    authorPseudonymous: false
+    authorPseudonymous: false,
+    workDepositsFormData: null,
+    uploadingWorkDeposit: false
   }),
   async created () {
     const applicationId = parseInt(this.$route.query['id'])
@@ -1301,6 +1335,9 @@ export default {
       },
       notesToUsco: {
         maxLength: maxLength(2000)
+      },
+      workDepositUrl: {
+        required
       }
     }
   },
@@ -1356,7 +1393,7 @@ export default {
       this.$v.$touch()
       this.updateCustomValidations()
 
-      if (!this.$v.$invalid && !this.invalidcustomValidationFields()) {
+      if (!this.$v.$invalid && !this.invalidCustomValidationFields()) {
         this.reviewCopyrightApplication = true
       } else {
         this.scrollToInvalidField()
@@ -1452,7 +1489,7 @@ export default {
         this.customValidationFields.authorDomicile.invalid = false
       }
     },
-    invalidcustomValidationFields () {
+    invalidCustomValidationFields () {
       const fields = Object.keys(this.customValidationFields)
       for (let i = 0; i < fields.length; i++) {
         if (this.customValidationFields[fields[i]].invalid) {
@@ -1460,6 +1497,25 @@ export default {
         }
       }
       return false
+    },
+    onWorkDepositsSelection (files) {
+      const formData = new FormData()
+      if (!files.length) return
+      Array
+        .from(Array(files.length).keys())
+        .map(x => {
+          this.form.workDepositName = files[x].name
+          formData.append('file', files[x])
+        })
+
+      this.workDepositsFormData = formData
+    },
+    async uploadWorkDeposits () {
+      this.uploadingWorkDeposit = true
+      const fileUrl = await this.repository._uploadFile(this.workDepositsFormData, this.form.serviceRequestId)
+      this.form.workDepositUrl = fileUrl
+      this.uploadingWorkDeposit = false
+      this.saveDraft()
     }
   },
   updated () {
@@ -1552,4 +1608,15 @@ summary::-webkit-details-marker {
   padding-top: 12px;
   width: 100px;
 }
+
+.md-progress-bar {
+  position: relative;
+  margin: 24px;
+}
+
+.uploaded-work-deposits {
+  display: flex;
+  justify-content: center;
+}
+
 </style>
