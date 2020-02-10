@@ -43,7 +43,18 @@
               <option value=100>Rows per page: 100</option>
             </select>
           </div>
-          <div class="pagination-center">Showing {{copyrightApplications.length}} of {{this.recordCount}}</div>
+          <div class="pagination-center" v-if="loading">
+           loading...
+          </div>
+          <div class="pagination-center" v-else-if="page === 1">
+            Showing 1 - {{pageSize}}
+          </div>
+          <div class="pagination-center" v-else-if="page === pages">
+            Showing {{recordCount - copyrightApplications.length + 1}} - {{recordCount}}
+          </div>
+          <div class="pagination-center" v-else>
+            Showing {{(pageSize * (page - 1)) + 1}} - {{(pageSize * (page - 1)) + pageSize}}
+          </div>
           <div class="pagination-pages">
             <md-button class="md-icon-button" @click="page--" :disabled="page === 1">
               <md-icon>
@@ -88,7 +99,8 @@ export default {
     recordCount: null,
     pages: null,
     pageSize: 10,
-    page: 1
+    page: 1,
+    loading: false
   }),
   async created () {
     await this.getApplications()
@@ -98,6 +110,7 @@ export default {
       return 'app-id-' + id
     },
     async getApplications () {
+      this.loading = true
       let response = await this.repository._getCopyrightApplications(this.pageSize, this.page - 1, this.applicationStatus)
       if (response.error) {
         this.errorOccured = true
@@ -107,6 +120,7 @@ export default {
         this.recordCount = response.count
         this.pages = Math.ceil(this.recordCount / this.pageSize)
       }
+      this.loading = false
     },
     snakeToTitle (str) {
       return str
@@ -116,7 +130,12 @@ export default {
     }
   },
   watch: {
-    applicationStatus: function (oldVal, newVal) { this.getApplications() },
+    applicationStatus: function (oldVal, newVal) {
+      if (oldVal !== newVal) {
+        this.page = 1
+        this.getApplications()
+      }
+    },
     page: function (oldVal, newVal) { this.getApplications() },
     pageSize: function (oldVal, newVal) { this.getApplications() }
   }
