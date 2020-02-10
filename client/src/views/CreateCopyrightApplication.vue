@@ -76,24 +76,55 @@
             </div>
           </div>
         </details>
+          <details open>
+          <summary class="md-title">Upload</summary>
+          <div class="md-layout md-gutter">
+          <div class="md-layout-item md-size-85">
+            <md-field :class="getValidationClass('workDepositUrl')">
+              <label ref="workDepositUrl">Work Deposit (.pdf)</label>
+              <md-file required accept="application/pdf" @change="onWorkDepositsSelection($event.target.files)" />
+              <span
+                class="md-error"
+                v-if="!$v.form.workDepositUrl.required"
+              >The work deposit is required</span>
+            </md-field>
+          </div>
+          <div class="md-layout-item md-size-5">
+            <md-button :disabled="uploadingWorkDeposit" class="md-primary" @click="uploadWorkDeposits()">Upload</md-button>
+          </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-progress-bar v-if="uploadingWorkDeposit" md-mode="indeterminate"></md-progress-bar>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <div v-if="form.workDepositUrl" class="uploaded-work-deposits">
+                <a class="field-label" :href="form.workDepositUrl">{{form.workDepositName}}</a>
+              </div>
+            </div>
+          </div>
+        </details>
+        <details open>
+          <summary class="md-title">How would you like the author name to appear on the copyright?</summary>
+          <md-radio v-model="form.authorWorkType" value="full_name">Full Name</md-radio>
+          <md-radio v-model="form.authorWorkType" value="pseudonymous" @change="toggleWorkType()">Pseudonymous</md-radio>
+          <md-radio v-model="form.authorWorkType" value="anonymous" @change="toggleWorkType()">Anonymous</md-radio>
+        </details>
         <details open>
           <summary class="md-title">Author</summary>
           <div class="author-name">
-            <label class="field-label">Name *</label>
-            <div class="switches">
-              <md-checkbox v-model="authorPseudonymous"
-                name="author-pseudonymous"
-                id="author-pseudonymous"
-                @change="togglePseudonymity">Pseudonymous
-              </md-checkbox>
-              <md-checkbox v-model="form.authorAnonymous"
-                name="author-anonymous"
-                id="author-anonymous"
-                @change="toggleAnonymity">Anonymous
-              </md-checkbox>
-            </div>
+            <label class="field-label">Name *
+              <md-tooltip md-direction="right" v-if="form.authorWorkType === 'full_name'">
+                First name &amp; last name or pseudonym is required
+              </md-tooltip>
+              <md-tooltip md-direction="right" v-else>
+                Pseudonymous &amp; anonymous copyrights don't require an author name; but may be optionally provided
+              </md-tooltip>
+            </label>
           </div>
-          <div class="md-layout md-gutter" v-if="!form.authorAnonymous">
+          <div class="md-layout md-gutter">
             <div class="md-layout-item md-size-10">
               <md-field>
                 <label>Prefix</label>
@@ -114,13 +145,12 @@
                   id="author-first-name"
                   v-model="form.authorFirstName"
                   :disabled="sending"
-                  required
                   maxlength=255
                 />
                 <span
                   class="md-error"
-                  v-if="!$v.form.authorFirstName.required"
-                >The author first name is required</span>
+                  v-if="customValidationFields.authorFirstName.invalid"
+                >{{customValidationFields.authorFirstName.message}}</span>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -143,13 +173,12 @@
                   id="author-last-name"
                   v-model="form.authorLastName"
                   :disabled="sending"
-                  required
                   maxlength=255
                 />
                 <span
                   class="md-error"
-                  v-if="!$v.form.authorLastName.required"
-                >The author last name is required</span>
+                  v-if="customValidationFields.authorLastName.invalid"
+                >{{customValidationFields.authorLastName.message}}</span>
               </md-field>
             </div>
             <div class="md-layout-item md-size-10">
@@ -166,7 +195,7 @@
             </div>
           </div>
           <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100" v-if="authorPseudonymous">
+            <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('authorPseudonym')">
                 <label for="author-pseudonym" ref="authorPseudonym">Pseudonym</label>
                 <md-input
@@ -175,68 +204,72 @@
                   v-model="form.authorPseudonym"
                   :disabled="sending"
                   maxlength=255
-                  required
                 />
                 <span
                   class="md-error"
-                  v-if="!$v.form.authorPseudonym.required"
-                >The author pseudonym is required</span>
+                  v-if="customValidationFields.authorPseudonym.invalid"
+                >{{customValidationFields.authorPseudonym.message}}</span>
               </md-field>
             </div>
           </div>
-          <div>
-            <label class="field-label">Citizenship/Domicile *
-              <md-tooltip md-direction="right">Citizenship and/or domicile is required</md-tooltip>
-            </label>
-            <div class="md-layout md-gutter">
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('authorCitizenship')">
-                  <label for="author-citizenship" ref="authorCitizenship">Citizenship</label>
-                  <md-input
-                    name="author-citizenship"
-                    id="author-citizenship"
-                    v-model="form.authorCitizenship"
-                    :disabled="sending"
-                    maxlength=255
-                  />
-                  <span
-                    class="md-error"
-                    v-if="customValidationFields.authorCitizenship.invalid"
-                  >The author citizenship and/or domicile is required</span>
-                </md-field>
-              </div>
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('authorDomicile')">
-                  <label for="author-domicile" ref="authorDomicile">Domicile</label>
-                  <md-input
-                    name="author-domicile"
-                    id="author-domicile"
-                    v-model="form.authorDomicile"
-                    :disabled="sending"
-                    maxlength=255
-                  />
-                  <span
-                    class="md-error"
-                    v-if="customValidationFields.authorDomicile.invalid"
-                  >The author citizenship and/or domicile is required</span>
-                </md-field>
-              </div>
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('authorYearOfBirth')">
-                  <label for="author-year-of-birth" ref="authorYearOfBirth">Year of Birth</label>
-                  <md-input
-                    name="author-year-of-birth"
-                    id="author-year-of-birth"
-                    type="number"
-                    v-model="form.authorYearOfBirth"
-                    :disabled="sending"
-                  />
-                  <span
-                    class="md-error"
-                    v-if="!$v.form.authorYearOfBirth.minValue || !$v.form.authorYearOfBirth.maxValue"
-                  >The year of birth must be between {{minAuthorYearOfBirth}} and {{maxAuthorYearOfBirth}}</span>
-                </md-field>
-              </div>
+          <label class="field-label">Citizenship/Domicile *
+            <md-tooltip md-direction="right">Citizenship or domicile is required</md-tooltip>
+          </label>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('authorCitizenship')">
+                <label for="author-citizenship" ref="authorCitizenship">Citizenship</label>
+                <md-input
+                  name="author-citizenship"
+                  id="author-citizenship"
+                  v-model="form.authorCitizenship"
+                  :disabled="sending"
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="customValidationFields.authorCitizenship.invalid"
+                >The author citizenship or domicile is required</span>
+              </md-field>
+            </div>
+            <div class="or">- or -</div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('authorDomicile')">
+                <label for="author-domicile" ref="authorDomicile">Domicile</label>
+                <md-input
+                  name="author-domicile"
+                  id="author-domicile"
+                  v-model="form.authorDomicile"
+                  :disabled="sending"
+                  maxlength=255
+                />
+                <span
+                  class="md-error"
+                  v-if="customValidationFields.authorDomicile.invalid"
+                >The author citizenship or domicile is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('authorYearOfBirth')">
+                <label for="author-year-of-birth" ref="authorYearOfBirth">Year of Birth</label>
+                <md-input
+                  name="author-year-of-birth"
+                  id="author-year-of-birth"
+                  type="number"
+                  v-model="form.authorYearOfBirth"
+                  :disabled="sending"
+                  required
+                  @blur="validateField('authorYearOfBirth')"
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.authorYearOfBirth.required"
+                >The year of birth is required</span>
+                <span
+                  class="md-error"
+                  v-else-if="!$v.form.authorYearOfBirth.minValue || !$v.form.authorYearOfBirth.maxValue"
+                >The year of birth must be between {{minAuthorYearOfBirth}} and {{maxAuthorYearOfBirth}}</span>
+              </md-field>
             </div>
           </div>
         </details>
@@ -1038,36 +1071,6 @@
             >The USCO notes max length is 2000 characters</span>
           </md-field>
         </details>
-        <details open>
-          <summary class="md-title">Work Deposit</summary>
-          <div class="md-layout md-gutter">
-          <div class="md-layout-item md-size-85">
-            <md-field :class="getValidationClass('workDepositUrl')">
-              <label ref="workDepositUrl">Work Deposit (.pdf)</label>
-              <md-file required accept="application/pdf" @change="onWorkDepositsSelection($event.target.files)" />
-              <span
-                class="md-error"
-                v-if="!$v.form.workDepositUrl.required"
-              >The work deposit is required</span>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-5">
-            <md-button :disabled="uploadingWorkDeposit" class="md-primary" @click="uploadWorkDeposits()">Upload</md-button>
-          </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-progress-bar v-if="uploadingWorkDeposit" md-mode="indeterminate"></md-progress-bar>
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <div v-if="form.workDepositUrl" class="uploaded-work-deposits">
-                <a class="field-label" :href="form.workDepositUrl">{{form.workDepositName}}</a>
-              </div>
-            </div>
-          </div>
-        </details>
         <div class="form-actions">
           <md-button class="md-raised md-accent" type="submit">Next</md-button>
         </div>
@@ -1143,13 +1146,15 @@ export default {
       primaryTitle: null,
       alternateTitle: null,
       yearCompleted: null,
-      authorAnonymous: false,
+      workDepositName: null,
+      workDepositUrl: null,
+      authorWorkType: 'full_name',
       authorPrefix: null,
       authorFirstName: null,
       authorMiddleName: null,
       authorLastName: null,
       authorSuffix: null,
-      authorPseudonym: 'n/a',
+      authorPseudonym: null,
       authorCitizenship: null,
       authorDomicile: null,
       authorYearOfBirth: null,
@@ -1205,9 +1210,7 @@ export default {
       possibleRightsAndPermissionsEmail: null,
       notesToUsco: null,
       serviceRequestId: null,
-      applicationStatus: 'draft',
-      workDepositName: null,
-      workDepositUrl: null
+      applicationStatus: 'draft'
     },
     customValidationFields: {
       primaryTitle: {
@@ -1224,6 +1227,17 @@ export default {
       },
       authorDomicile: {
         invalid: false
+      },
+      authorFirstName: {
+        invalid: false,
+        message: null
+      },
+      authorLastName: {
+        invalid: false,
+        message: null
+      },
+      authorPseudonym: {
+        invalid: false
       }
     },
     copyrightApplicationSaved: false,
@@ -1238,7 +1252,6 @@ export default {
     reviewCopyrightApplication: false,
     savingDraft: false,
     loading: true,
-    authorPseudonymous: false,
     workDepositsFormData: null,
     uploadingWorkDeposit: false
   }),
@@ -1267,15 +1280,6 @@ export default {
         required,
         minValue: minValue(minYearCompleted),
         maxValue: maxValue(maxYearCompleted)
-      },
-      authorFirstName: {
-        required
-      },
-      authorLastName: {
-        required
-      },
-      authorPseudonym: {
-        required
       },
       authorYearOfBirth: {
         minValue: minValue(minAuthorYearOfBirth),
@@ -1451,22 +1455,11 @@ export default {
         this.form.correspondenceContactCountry = null
       }
     },
-    toggleAnonymity () {
-      this.form.authorPrefix = null
-      this.form.authorSuffix = null
-      if (this.form.authorAnonymous) {
-        this.form.authorFirstName = 'anonymous'
-        this.form.authorLastName = 'anonymous'
-      } else {
-        this.form.authorFirstName = null
-        this.form.authorLastName = null
-      }
-    },
-    togglePseudonymity () {
-      if (this.authorPseudonymous) {
-        this.form.authorPseudonym = null
-      } else {
-        this.form.authorPseudonym = 'n/a'
+    toggleWorkType () {
+      if (this.form.authorWorkType === 'pseudonymous' || this.form.authorWorkType === 'anonymous') {
+        this.customValidationFields.authorFirstName.invalid = false
+        this.customValidationFields.authorLastName.invalid = false
+        this.customValidationFields.authorPseudonym.invalid = false
       }
     },
     validateField (field) {
@@ -1513,6 +1506,30 @@ export default {
         this.customValidationFields.authorCitizenship.invalid = false
         this.customValidationFields.authorDomicile.invalid = false
       }
+
+      if (this.form.authorWorkType === 'full_name' && empty(this.form.authorPseudonym) &&
+          (empty(this.form.authorFirstName) || empty(this.form.authorLastName))) {
+        this.customValidationFields.authorFirstName.invalid = true
+        this.customValidationFields.authorLastName.invalid = true
+        this.customValidationFields.authorPseudonym.invalid = true
+        this.customValidationFields.authorFirstName.message = 'First name & last name or pseudonym is required'
+        this.customValidationFields.authorLastName.message = 'First name & last name or pseudonym is required'
+        this.customValidationFields.authorPseudonym.message = 'First name & last name or pseudonym is required'
+      } else if (empty(this.form.authorFirstName) && !empty(this.form.authorLastName)) {
+        this.customValidationFields.authorFirstName.invalid = true
+        this.customValidationFields.authorFirstName.message = 'First name is required when last name is populated'
+        this.customValidationFields.authorLastName.invalid = false
+        this.customValidationFields.authorLastName.message = null
+      } else if (!empty(this.form.authorFirstName) && empty(this.form.authorLastName)) {
+        this.customValidationFields.authorFirstName.invalid = false
+        this.customValidationFields.authorFirstName.message = null
+        this.customValidationFields.authorLastName.invalid = true
+        this.customValidationFields.authorLastName.message = 'Last name is required when first name is populated'
+      } else {
+        this.customValidationFields.authorFirstName.invalid = false
+        this.customValidationFields.authorLastName.invalid = false
+        this.customValidationFields.authorPseudonym.invalid = false
+      }
     },
     invalidCustomValidationFields () {
       const fields = Object.keys(this.customValidationFields)
@@ -1541,7 +1558,8 @@ export default {
       this.form.workDepositUrl = fileUrl
       this.uploadingWorkDeposit = false
       this.saveDraft()
-    }
+    },
+    isEmpty: empty
   },
   updated () {
     this.form.correspondencePhoneNumber = formatPhoneNumber(this.form.correspondencePhoneNumber)
@@ -1617,21 +1635,12 @@ summary::-webkit-details-marker {
   justify-content: flex-end;
 }
 
-.switches {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  height: 32px;
-}
-
 .author-name {
   display: flex;
-  margin-bottom: 12px;
 }
 
 .author-name .field-label {
   padding-top: 12px;
-  width: 100px;
 }
 
 .md-progress-bar {
@@ -1642,6 +1651,10 @@ summary::-webkit-details-marker {
 .uploaded-work-deposits {
   display: flex;
   justify-content: center;
+}
+
+.or {
+  padding-top: 28px;
 }
 
 </style>

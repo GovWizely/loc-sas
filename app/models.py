@@ -2,7 +2,7 @@ import datetime
 
 from flask_appbuilder import Model
 from flask_appbuilder.models.mixins import AuditMixin
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Column, Integer, String
 
 date_today = datetime.date.today()
 
@@ -12,13 +12,13 @@ class CopyrightApplication(AuditMixin, Model):
     primary_title = Column(String(2000))
     alternate_title = Column(String(2000))
     year_completed = Column(Integer)
+    author_work_type = Column(String(255), nullable=False, default="full_name")
     author_prefix = Column(String(255))
     author_first_name = Column(String(255))
     author_middle_name = Column(String(255))
     author_last_name = Column(String(255))
     author_suffix = Column(String(255))
     author_pseudonym = Column(String(255))
-    author_anonymous = Column(Boolean, default=False)
     author_citizenship = Column(String(255))
     author_domicile = Column(String(255))
     author_year_of_birth = Column(Integer)
