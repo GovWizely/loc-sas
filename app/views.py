@@ -16,7 +16,7 @@ LIST_APPLICATION_STATUS = [
     "application_status",
 ]
 
-SHOW_APPLICATION_STATUS = LIST_APPLICATION_STATUS + ["file_name", "download"]
+SHOW_APPLICATION_STATUS = LIST_APPLICATION_STATUS + ["work_deposit_name", "work_deposit_url"]
 
 
 def get_user():
@@ -99,7 +99,10 @@ class CopyrightApplicationModelView(ModelView):
         "notes_to_usco"
     ]
     show_columns = SHOW_APPLICATION_STATUS
-    label_columns = {"download": "Download", "file_name": "File Name"}
+    label_columns = {
+        "work_deposit_name": "Work Deposit Name",
+        "work_deposit_url": "Work Deposit URL"
+    }
     base_order = ("created_on", "desc")
     base_filters = [["created_by", FilterEqualFunction, get_user]]
 
@@ -110,8 +113,8 @@ class SuperUserCopyrightApplicationModelView(ModelView):
     edit_columns = [
         "application_status",
     ]
-    label_columns = {'month_year': 'Month', 'year': 'Year', "download": "Download",
-                     "file_name": "File Name"}
+    label_columns = {'month_year': 'Month', 'year': 'Year', "work_deposit_url": "Work Deposit URL",
+                     "work_deposit_name": "Work Deposit Name"}
     show_columns = SHOW_APPLICATION_STATUS
     base_order = ("changed_on", "desc")
 
