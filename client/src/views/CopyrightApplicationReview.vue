@@ -51,10 +51,14 @@
       <span class="md-headline">Completion/Publication</span>
       <div class="col">
         <div class="col-left">
-          <strong>Year of Completion:</strong>
+          <strong>Year of Completion:</strong><br />
+          <strong>Pseudonymous:</strong><br />
+          <strong>Anonymous:</strong>
         </div>
         <div class="col-right">
-          <span>{{application.yearCompleted}}</span>
+          <span>{{application.yearCompleted}}</span><br />
+          <span>{{application.authorWorkType === 'pseudonymous' ? 'Yes' : 'No'}}</span><br />
+          <span>{{application.authorWorkType === 'anonymous' ? 'Yes' : 'No'}}</span>
         </div>
       </div>
     </div>
@@ -66,14 +70,12 @@
           <strong>Author:</strong><br />
           <strong>Pseudonym:</strong><br />
           <strong>Citizen of:</strong><br />
-          <strong>Pseudonymous:</strong><br />
           <strong>Year of Birth:</strong>
         </div>
         <div class="col-right">
           <span>{{application.authorFirstName}} {{application.authorLastName}}</span><br />
           <span>{{application.authorPseudonym}}</span><br />
           <span>{{application.authorCitizenship}}</span><br />
-          <span>{{isPseudonymous()}}</span><br />
           <span>{{application.authorYearOfBirth}}</span><br />
         </div>
       </div>
@@ -161,9 +163,6 @@ export default {
     date: null
   }),
   methods: {
-    isPseudonymous () {
-      return this.application.authorPseudonym !== null ? 'Yes' : 'No'
-    },
     correspondencePhoneNumber (phoneNumber, extension) {
       if (this.application.correspondencePhoneNumberExtension) {
         return this.application.correspondencePhoneNumber + ' X' + this.application.correspondencePhoneNumberExtension
