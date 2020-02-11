@@ -46,14 +46,8 @@
           <div class="pagination-center" v-if="loading">
            loading...
           </div>
-          <div class="pagination-center" v-else-if="page === 1">
-            Showing 1 - {{pageSize}}
-          </div>
-          <div class="pagination-center" v-else-if="page === pages">
-            Showing {{recordCount - copyrightApplications.length + 1}} - {{recordCount}}
-          </div>
           <div class="pagination-center" v-else>
-            Showing {{(pageSize * (page - 1)) + 1}} - {{(pageSize * (page - 1)) + pageSize}}
+            {{getRangeLabelText()}}
           </div>
           <div class="pagination-pages">
             <md-button class="md-icon-button" @click="page--" :disabled="page === 1">
@@ -127,6 +121,21 @@ export default {
         .replace('_', ' ')
         .replace('-', ' ')
         .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
+    },
+    getRangeLabelText () {
+      let startRecord = 1
+      if (this.page === 1 && this.recordCount === this.copyrightApplications.length) {
+        return 'Showing '.concat(startRecord, ' - ', this.recordCount)
+      } else if (this.page === 1) {
+        return 'Showing  '.concat(startRecord, ' - ', this.pageSize)
+      } else if (this.page === this.pages) {
+        startRecord = this.recordCount - this.copyrightApplications.length + 1
+        return 'Showing '.concat(startRecord, ' - ', this.recordCount)
+      } else {
+        startRecord = (parseInt(this.pageSize) * (this.page - 1)) + 1
+        let endRecord = startRecord + parseInt(this.pageSize)
+        return 'Showing '.concat(startRecord, ' - ', endRecord)
+      }
     }
   },
   watch: {
@@ -137,7 +146,12 @@ export default {
       }
     },
     page: function (oldVal, newVal) { this.getApplications() },
-    pageSize: function (oldVal, newVal) { this.getApplications() }
+    pageSize: function (oldVal, newVal) {
+      if (oldVal !== newVal) {
+        this.page = 1
+        this.getApplications()
+      }
+    }
   }
 }
 </script>
