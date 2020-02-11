@@ -45,6 +45,7 @@ if not users_exist:
         c.author_first_name = name[0]
         c.author_last_name = name[-1]
         c.author_citizenship = random.choice(["USA", "GB", "CA", "MX", "JP"])
+        c.author_year_of_birth = "1990"
         c.claimant_first_name = name[0]
         c.claimant_last_name = name[-1]
         c.claimant_address = "foo"

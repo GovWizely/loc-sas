@@ -66,13 +66,15 @@
           <strong>Author:</strong><br />
           <strong>Pseudonym:</strong><br />
           <strong>Citizen of:</strong><br />
-          <strong>Pseudonymous:</strong>
+          <strong>Pseudonymous:</strong><br />
+          <strong>Year of Birth:</strong>
         </div>
         <div class="col-right">
           <span>{{application.authorFirstName}} {{application.authorLastName}}</span><br />
           <span>{{application.authorPseudonym}}</span><br />
           <span>{{application.authorCitizenship}}</span><br />
-          <span>{{isPseudonymous()}}</span>
+          <span>{{isPseudonymous()}}</span><br />
+          <span>{{application.authorYearOfBirth}}</span><br />
         </div>
       </div>
     </div>
