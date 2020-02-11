@@ -82,8 +82,8 @@ export default class Repository {
         'Content-Type': 'application/json'
       },
       data: {
-        username: 'admin',
-        password: 'admin',
+        username: 'user1',
+        password: 'password',
         provider: 'db'
       }
     }).catch(error => this.handleError(error))

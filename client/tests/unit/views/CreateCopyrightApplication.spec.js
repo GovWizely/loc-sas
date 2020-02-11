@@ -27,7 +27,7 @@ describe('Create Copyright Application', () => {
     wrapper.find('#claimant-last-name').setValue('Washington')
     wrapper.find('#claimant-address').setValue('1234 Cool Ln')
     wrapper.find('#claimant-city').setValue('Arlington')
-    wrapper.find('#claimant-state').setValue('VA')
+    wrapper.vm.form.claimantState = 'VA'
     wrapper.find('#claimant-postal-code').setValue('12345')
     wrapper.find('#claimant-country').setValue('USA')
 
@@ -36,6 +36,8 @@ describe('Create Copyright Application', () => {
     wrapper.find('#certificate-contact-address').setValue('1234 Cool Ln')
     wrapper.find('#certificate-contact-city').setValue('Arlington')
     wrapper.find('#certificate-contact-state').setValue('VA')
+    wrapper.vm.form.certificateContactState = 'VA'
+
     wrapper.find('#certificate-contact-postal-code').setValue('12345')
     wrapper.find('#certificate-contact-country').setValue('USA')
     await wrapper.vm.$nextTick()

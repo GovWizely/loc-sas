@@ -119,7 +119,7 @@ select {
 select.copyright-select {
   background-image: url("assets/down-sm-caret.png");
   background-repeat: no-repeat;
-  background-position: 92.5% 50%;
+  background-position: calc(100% - 10px) 50%;
   background-size: $sm-icon-px $sm-icon-px;
 }
 

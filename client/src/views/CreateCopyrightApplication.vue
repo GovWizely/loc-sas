@@ -2,12 +2,20 @@
   <div>
     <div class="header">
       <div class="header-row-1">
-        <h1 class="title">New Copyright Application for non-fiction literary work #{{this.form.serviceRequestId}}</h1>
+        <h1
+          class="title"
+        >New Copyright Application for non-fiction literary work #{{this.form.serviceRequestId}}</h1>
         <span v-if="savingDraft" class="draft-message">Saving draft...</span>
         <button v-else class="secondary-button" @click="saveAndClose">Save &amp; return to home page</button>
       </div>
     </div>
-    <form novalidate class="md-layout" @submit.prevent="validateCopyrightApplication" @change="saveDraft" v-if="!loading" >
+    <form
+      novalidate
+      class="md-layout"
+      @submit.prevent="validateCopyrightApplication"
+      @change="saveDraft"
+      v-if="!loading"
+    >
       <div class="md-layout-item md-size-80 form">
         <span class="md-subheader">* Required fields</span>
         <details open>
@@ -76,22 +84,30 @@
             </div>
           </div>
         </details>
-          <details open>
+        <details open>
           <summary class="md-title">Upload</summary>
           <div class="md-layout md-gutter">
-          <div class="md-layout-item md-size-85">
-            <md-field :class="getValidationClass('workDepositUrl')">
-              <label ref="workDepositUrl">Work Deposit (.pdf)</label>
-              <md-file required accept="application/pdf" @change="onWorkDepositsSelection($event.target.files)" />
-              <span
-                class="md-error"
-                v-if="!$v.form.workDepositUrl.required"
-              >The work deposit is required</span>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-5">
-            <md-button :disabled="uploadingWorkDeposit" class="md-primary" @click="uploadWorkDeposits()">Upload</md-button>
-          </div>
+            <div class="md-layout-item md-size-85">
+              <md-field :class="getValidationClass('workDepositUrl')">
+                <label ref="workDepositUrl">Work Deposit (.pdf)</label>
+                <md-file
+                  required
+                  accept="application/pdf"
+                  @change="onWorkDepositsSelection($event.target.files)"
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.workDepositUrl.required"
+                >The work deposit is required</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-size-5">
+              <md-button
+                :disabled="uploadingWorkDeposit"
+                class="md-primary"
+                @click="uploadWorkDeposits()"
+              >Upload</md-button>
+            </div>
           </div>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
@@ -109,33 +125,39 @@
         <details open>
           <summary class="md-title">How would you like the author name to appear on the copyright?</summary>
           <md-radio v-model="form.authorWorkType" value="full_name">Full Name</md-radio>
-          <md-radio v-model="form.authorWorkType" value="pseudonymous" @change="toggleWorkType()">Pseudonymous</md-radio>
-          <md-radio v-model="form.authorWorkType" value="anonymous" @change="toggleWorkType()">Anonymous</md-radio>
+          <md-radio
+            v-model="form.authorWorkType"
+            value="pseudonymous"
+            @change="toggleWorkType()"
+          >Pseudonymous</md-radio>
+          <md-radio
+            v-model="form.authorWorkType"
+            value="anonymous"
+            @change="toggleWorkType()"
+          >Anonymous</md-radio>
         </details>
         <details open>
           <summary class="md-title">Author</summary>
           <div class="author-name">
-            <label class="field-label">Name *
-              <md-tooltip md-direction="right" v-if="form.authorWorkType === 'full_name'">
-                First name &amp; last name or pseudonym is required
-              </md-tooltip>
-              <md-tooltip md-direction="right" v-else>
-                Pseudonymous &amp; anonymous copyrights don't require an author name; but may be optionally provided
-              </md-tooltip>
+            <label class="field-label">
+              Name *
+              <md-tooltip
+                md-direction="right"
+                v-if="form.authorWorkType === 'full_name'"
+              >First name &amp; last name or pseudonym is required</md-tooltip>
+              <md-tooltip
+                md-direction="right"
+                v-else
+              >Pseudonymous &amp; anonymous copyrights don't require an author name; but may be optionally provided</md-tooltip>
             </label>
           </div>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-size-10">
-              <md-field>
-                <label>Prefix</label>
-                <md-select
-                  v-model="form.authorPrefix"
-                  name="author-prefix"
-                  id="author-prefix"
-                  :disabled="sending">
-                  <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
-                </md-select>
-              </md-field>
+              <copyright-select-field
+                v-model="form.authorPrefix"
+                name="author-prefix"
+                label="Prefix"
+              />
             </div>
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('authorFirstName')">
@@ -145,7 +167,7 @@
                   id="author-first-name"
                   v-model="form.authorFirstName"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -161,7 +183,7 @@
                   id="author-middle-name"
                   v-model="form.authorMiddleName"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
@@ -173,7 +195,7 @@
                   id="author-last-name"
                   v-model="form.authorLastName"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -182,16 +204,11 @@
               </md-field>
             </div>
             <div class="md-layout-item md-size-10">
-              <md-field>
-                <label>Suffix</label>
-                <md-select
-                  v-model="form.authorSuffix"
-                  name="author-suffix"
-                  id="author-suffix"
-                  :disabled="sending">
-                  <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
-                </md-select>
-              </md-field>
+              <copyright-select-field
+                v-model="form.authorSuffix"
+                name="author-suffix"
+                label="Suffix"
+              />
             </div>
           </div>
           <div class="md-layout md-gutter">
@@ -203,7 +220,7 @@
                   id="author-pseudonym"
                   v-model="form.authorPseudonym"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -212,7 +229,8 @@
               </md-field>
             </div>
           </div>
-          <label class="field-label">Citizenship/Domicile *
+          <label class="field-label">
+            Citizenship/Domicile *
             <md-tooltip md-direction="right">Citizenship or domicile is required</md-tooltip>
           </label>
           <div class="md-layout md-gutter">
@@ -224,7 +242,7 @@
                   id="author-citizenship"
                   v-model="form.authorCitizenship"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -241,7 +259,7 @@
                   id="author-domicile"
                   v-model="form.authorDomicile"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -271,16 +289,11 @@
           <summary class="md-title">Claimant</summary>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-size-10">
-              <md-field>
-                <label>Prefix</label>
-                <md-select
-                  v-model="form.claimantPrefix"
-                  name="claimant-prefix"
-                  id="claimant-prefix"
-                  :disabled="sending">
-                  <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
-                </md-select>
-              </md-field>
+              <copyright-select-field
+                v-model="form.claimantPrefix"
+                name="claimant-prefix"
+                label="Prefix"
+              />
             </div>
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('claimantFirstName')">
@@ -291,7 +304,7 @@
                   v-model="form.claimantFirstName"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -307,7 +320,7 @@
                   id="claimant-middle-name"
                   v-model="form.claimantMiddleName"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
@@ -320,7 +333,7 @@
                   v-model="form.claimantLastName"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -329,16 +342,11 @@
               </md-field>
             </div>
             <div class="md-layout-item md-size-10">
-              <md-field>
-                <label>Suffix</label>
-                <md-select
-                  v-model="form.claimantSuffix"
-                  name="claimant-suffix"
-                  id="claimant-suffix"
-                  :disabled="sending">
-                  <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
-                </md-select>
-              </md-field>
+              <copyright-select-field
+                v-model="form.claimantSuffix"
+                name="claimant-suffix"
+                label="Suffix"
+              />
             </div>
           </div>
           <div class="md-layout md-gutter">
@@ -351,7 +359,7 @@
                   v-model="form.claimantAddress"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -369,13 +377,13 @@
                   id="claimant-address2"
                   v-model="form.claimantAddress2"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
           </div>
           <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-30">
+            <div class="md-layout-item md-size-20">
               <md-field :class="getValidationClass('claimantCity')">
                 <label for="claimant-city" ref="claimantCity">City</label>
                 <md-input
@@ -384,7 +392,7 @@
                   v-model="form.claimantCity"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -392,24 +400,17 @@
                 >The claimant city is required</span>
               </md-field>
             </div>
-            <div class="md-layout-item md-size-30">
-              <md-field :class="getValidationClass('claimantState')">
-                <label for="claimant-state" ref="claimantState">State</label>
-                <md-input
-                  name="claimant-state"
-                  id="claimant-state"
-                  v-model="form.claimantState"
-                  :disabled="sending"
-                  required
-                  maxlength=255
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.claimantState.required"
-                >The claimant state is required</span>
-              </md-field>
+            <div class="md-layout-item md-size-20" ref="claimantState">
+              <copyright-select-field
+                v-model="form.claimantState"
+                name="claimant-state"
+                label="State"
+                required="true"
+                :validationClass="getValidationClass('claimantState')"
+                :displayRequiredError="!$v.form.claimantState.required"
+              />
             </div>
-            <div class="md-layout-item md-size-40">
+            <div class="md-layout-item md-size-20">
               <md-field :class="getValidationClass('claimantPostalCode')">
                 <label for="claimant-postal-code" ref="claimantPostalCode">Postal Code</label>
                 <md-input
@@ -418,7 +419,7 @@
                   v-model="form.claimantPostalCode"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -435,7 +436,7 @@
                   v-model="form.claimantCountry"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -449,27 +450,25 @@
           <summary class="md-title">Certificate</summary>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-size-10">
-              <md-field>
-                <label>Prefix</label>
-                <md-select
-                  v-model="form.certificateContactPrefix"
-                  name="certificate-contact-prefix"
-                  id="certificate-contact-prefix"
-                  :disabled="sending">
-                  <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
-                </md-select>
-              </md-field>
+              <copyright-select-field
+                v-model="form.certificateContactPrefix"
+                name="certificate-contact-prefix"
+                label="Prefix"
+              />
             </div>
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('certificateContactFirstName')">
-                <label for="certificate-contact-first-name" ref="certificateContactFirstName">First Name</label>
+                <label
+                  for="certificate-contact-first-name"
+                  ref="certificateContactFirstName"
+                >First Name</label>
                 <md-input
                   name="certificate-contact-first-name"
                   id="certificate-contact-first-name"
                   v-model="form.certificateContactFirstName"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -485,20 +484,23 @@
                   id="certificate-contact-middle-name"
                   v-model="form.certificateContactMiddleName"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('certificateContactLastName')">
-                <label for="certificate-contact-last-name" ref="certificateContactLastName">Last Name</label>
+                <label
+                  for="certificate-contact-last-name"
+                  ref="certificateContactLastName"
+                >Last Name</label>
                 <md-input
                   name="certificate-contact-last-name"
                   id="certificate-contact-last-name"
                   v-model="form.certificateContactLastName"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -507,16 +509,11 @@
               </md-field>
             </div>
             <div class="md-layout-item md-size-10">
-              <md-field>
-                <label>Suffix</label>
-                <md-select
-                  v-model="form.certificateContactSuffix"
-                  name="certificate-contact-suffix"
-                  id="certificate-contact-suffix"
-                  :disabled="sending">
-                  <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
-                </md-select>
-              </md-field>
+              <copyright-select-field
+                v-model="form.certificateContactSuffix"
+                name="certificate-contact-suffix"
+                label="Suffix"
+              />
             </div>
           </div>
           <div class="md-layout md-gutter">
@@ -529,7 +526,7 @@
                   v-model="form.certificateContactAddress"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -547,13 +544,13 @@
                   id="certificate-contact-address2"
                   v-model="form.certificateContactAddress2"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
           </div>
           <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-30">
+            <div class="md-layout-item md-size-20">
               <md-field :class="getValidationClass('certificateContactCity')">
                 <label for="certificate-contact-city" ref="certificateContactCity">City</label>
                 <md-input
@@ -562,7 +559,7 @@
                   v-model="form.certificateContactCity"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -570,33 +567,29 @@
                 >The certificate city is required</span>
               </md-field>
             </div>
-            <div class="md-layout-item md-size-30">
-              <md-field :class="getValidationClass('certificateContactState')">
-                <label for="certificate-contact-state" ref="certificateContactState">State</label>
-                <md-input
-                  name="certificate-contact-state"
-                  id="certificate-contact-state"
-                  v-model="form.certificateContactState"
-                  :disabled="sending"
-                  required
-                  maxlength=255
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.certificateContactState.required"
-                >The certificate state is required</span>
-              </md-field>
+            <div class="md-layout-item md-size-20" ref="certificateContactState">
+              <copyright-select-field
+                v-model="form.certificateContactState"
+                name="certificate-contact-state"
+                label="State"
+                required="true"
+                :validationClass="getValidationClass('certificateContactState')"
+                :displayRequiredError="!$v.form.certificateContactState.required"
+              />
             </div>
-            <div class="md-layout-item md-size-40">
+            <div class="md-layout-item md-size-20">
               <md-field :class="getValidationClass('certificateContactPostalCode')">
-                <label for="certificate-contact-postal-code" ref="certificateContactPostalCode">Postal Code</label>
+                <label
+                  for="certificate-contact-postal-code"
+                  ref="certificateContactPostalCode"
+                >Postal Code</label>
                 <md-input
                   name="certificate-contact-postal-code"
                   id="certificate-contact-postal-code"
                   v-model="form.certificateContactPostalCode"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -613,7 +606,7 @@
                   v-model="form.certificateContactCountry"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -629,31 +622,29 @@
             v-model="useClaimantAddress"
             @change="copyClaimantAddress"
             id="copy-claimant-address-btn"
-            name="copy-claimant-address-btn">Use Claimant Address
-          </md-switch>
+            name="copy-claimant-address-btn"
+          >Use Claimant Address</md-switch>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-size-10">
-              <md-field>
-                <label>Prefix</label>
-                <md-select
-                  v-model="form.correspondenceContactPrefix"
-                  name="correspondence-contact-prefix"
-                  id="correspondence-contact-prefix"
-                  :disabled="sending">
-                  <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
-                </md-select>
-              </md-field>
+              <copyright-select-field
+                v-model="form.correspondenceContactPrefix"
+                name="correspondence-contact-prefix"
+                label="Prefix"
+              />
             </div>
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('correspondenceContactFirstName')">
-                <label for="correspondence-contact-first-name" ref="correspondenceContactFirstName">First Name</label>
+                <label
+                  for="correspondence-contact-first-name"
+                  ref="correspondenceContactFirstName"
+                >First Name</label>
                 <md-input
                   name="correspondence-contact-first-name"
                   id="correspondence-contact-first-name"
                   v-model="form.correspondenceContactFirstName"
                   :disabled="sending || useClaimantAddress"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -669,20 +660,23 @@
                   id="correspondence-contact-middle-name"
                   v-model="form.correspondenceContactMiddleName"
                   :disabled="sending || useClaimantAddress"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('correspondenceContactLastName')">
-                <label for="correspondence-contact-last-name" ref="correspondenceContactLastName">Last Name</label>
+                <label
+                  for="correspondence-contact-last-name"
+                  ref="correspondenceContactLastName"
+                >Last Name</label>
                 <md-input
                   name="correspondence-contact-last-name"
                   id="correspondence-contact-last-name"
                   v-model="form.correspondenceContactLastName"
                   :disabled="sending || useClaimantAddress"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -691,29 +685,27 @@
               </md-field>
             </div>
             <div class="md-layout-item md-size-10">
-              <md-field>
-                <label>Suffix</label>
-                <md-select
-                  v-model="form.correspondenceContactSuffix"
-                  name="correspondence-contact-suffix"
-                  id="correspondence-contact-suffix"
-                  :disabled="sending">
-                  <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
-                </md-select>
-              </md-field>
+              <copyright-select-field
+                v-model="form.correspondenceContactSuffix"
+                name="correspondence-contact-suffix"
+                label="Suffix"
+              />
             </div>
           </div>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('correspondenceContactAddress')">
-                <label for="correspondence-contact-address" ref="correspondenceContactAddress">Address</label>
+                <label
+                  for="correspondence-contact-address"
+                  ref="correspondenceContactAddress"
+                >Address</label>
                 <md-input
                   name="correspondence-contact-address"
                   id="correspondence-contact-address"
                   v-model="form.correspondenceContactAddress"
                   :disabled="sending || useClaimantAddress"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -731,13 +723,13 @@
                   id="correspondence-contact-address2"
                   v-model="form.correspondenceContactAddress2"
                   :disabled="sending || useClaimantAddress"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
           </div>
           <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-30">
+            <div class="md-layout-item md-size-20">
               <md-field :class="getValidationClass('correspondenceContactCity')">
                 <label for="correspondence-contact-city" ref="correspondenceContactCity">City</label>
                 <md-input
@@ -746,7 +738,7 @@
                   v-model="form.correspondenceContactCity"
                   :disabled="sending || useClaimantAddress"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -754,33 +746,29 @@
                 >The correspondence city is required</span>
               </md-field>
             </div>
-            <div class="md-layout-item md-size-30">
-              <md-field :class="getValidationClass('correspondenceContactState')">
-                <label for="correspondence-contact-state" ref="correspondenceContactState">State</label>
-                <md-input
-                  name="correspondence-contact-state"
-                  id="correspondence-contact-state"
-                  v-model="form.correspondenceContactState"
-                  :disabled="sending || useClaimantAddress"
-                  required
-                  maxlength=255
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.correspondenceContactState.required"
-                >The correspondence state is required</span>
-              </md-field>
+            <div class="md-layout-item md-size-20" ref="correspondenceContactState">
+              <copyright-select-field
+                v-model="form.correspondenceContactState"
+                name="correspondence-contact-state"
+                label="State"
+                required="true"
+                :validationClass="getValidationClass('correspondenceContactState')"
+                :displayRequiredError="!$v.form.correspondenceContactState.required"
+              />
             </div>
-            <div class="md-layout-item md-size-40">
+            <div class="md-layout-item md-size-20">
               <md-field :class="getValidationClass('correspondenceContactPostalCode')">
-                <label for="correspondence-contact-postal-code" ref="correspondenceContactPostalCode">Postal Code</label>
+                <label
+                  for="correspondence-contact-postal-code"
+                  ref="correspondenceContactPostalCode"
+                >Postal Code</label>
                 <md-input
                   name="correspondence-contact-postal-code"
                   id="correspondence-contact-postal-code"
                   v-model="form.correspondenceContactPostalCode"
                   :disabled="sending || useClaimantAddress"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -790,14 +778,17 @@
             </div>
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('correspondenceContactCountry')">
-                <label for="correspondence-contact-country" ref="correspondenceContactCountry">Country</label>
+                <label
+                  for="correspondence-contact-country"
+                  ref="correspondenceContactCountry"
+                >Country</label>
                 <md-input
                   name="correspondence-contact-country"
                   id="correspondence-contact-country"
                   v-model="form.correspondenceContactCountry"
                   :disabled="sending || useClaimantAddress"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -809,7 +800,10 @@
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-60">
               <md-field :class="getValidationClass('correspondencePhoneNumber')">
-                <label for="correspondence-phone-number" ref="correspondencePhoneNumber">Phone Number</label>
+                <label
+                  for="correspondence-phone-number"
+                  ref="correspondencePhoneNumber"
+                >Phone Number</label>
                 <md-input
                   name="correspondence-phone-number"
                   id="correspondence-phone-number"
@@ -854,7 +848,7 @@
                   v-model="form.correspondenceEmail"
                   :disabled="sending"
                   required
-                  maxlength=255
+                  maxlength="255"
                 />
                 <span
                   class="md-error"
@@ -869,15 +863,11 @@
           <summary class="md-title">Rights &amp; Permissions</summary>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-size-10">
-              <md-field>
-                <label>Prefix</label>
-                <md-select
-                  v-model="form.possibleRightsAndPermissionsPrefix"
-                  name="possible-rights-and-permissions-prefix"
-                  id="possible-rights-and-permissions-prefix">
-                  <md-option v-for="option in prefixes" :key="option" :value="option">{{option}}</md-option>
-                </md-select>
-              </md-field>
+              <copyright-select-field
+                v-model="form.possibleRightsAndPermissionsPrefix"
+                name="possible-rights-and-permissions-prefix"
+                label="Prefix"
+              />
             </div>
             <div class="md-layout-item md-small-size-100">
               <md-field>
@@ -887,7 +877,7 @@
                   id="possible-rights-and-permissions-first-name"
                   v-model="form.possibleRightsAndPermissionsFirstName"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
@@ -899,7 +889,7 @@
                   id="possible-rights-and-permissions-middle-name"
                   v-model="form.possibleRightsAndPermissionsMiddleName"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
@@ -911,20 +901,16 @@
                   id="possible-rights-and-permissions-last-name"
                   v-model="form.possibleRightsAndPermissionsLastName"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
             <div class="md-layout-item md-size-10">
-              <md-field>
-                <label>Suffix</label>
-                <md-select
-                  v-model="form.possibleRightsAndPermissionsSuffix"
-                  name="possible-rights-and-permissions-suffix"
-                  id="possible-rights-and-permissions-suffix">
-                  <md-option v-for="option in suffixes" :key="option" :value="option">{{option}}</md-option>
-                </md-select>
-              </md-field>
+              <copyright-select-field
+                v-model="form.possibleRightsAndPermissionsSuffix"
+                name="possible-rights-and-permissions-suffix"
+                label="Suffix"
+              />
             </div>
           </div>
           <div class="md-layout md-gutter">
@@ -936,7 +922,7 @@
                   id="possible-rights-and-permissions-address"
                   v-model="form.possibleRightsAndPermissionsAddress"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
@@ -950,13 +936,13 @@
                   id="possible-rights-and-permissions-address2"
                   v-model="form.possibleRightsAndPermissionsAddress2"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
           </div>
           <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-30">
+            <div class="md-layout-item md-size-20">
               <md-field>
                 <label for="possible-rights-and-permissions-city">City</label>
                 <md-input
@@ -964,23 +950,18 @@
                   id="possible-rights-and-permissions-city"
                   v-model="form.possibleRightsAndPermissionsCity"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
-            <div class="md-layout-item md-size-30">
-              <md-field>
-                <label for="possible-rights-and-permissions-state">State</label>
-                <md-input
-                  name="possible-rights-and-permissions-state"
-                  id="possible-rights-and-permissions-state"
-                  v-model="form.possibleRightsAndPermissionsState"
-                  :disabled="sending"
-                  maxlength=255
-                />
-              </md-field>
+            <div class="md-layout-item md-size-20">
+              <copyright-select-field
+                v-model="form.possibleRightsAndPermissionsState"
+                name="possible-rights-and-permissions-state"
+                label="State"
+              />
             </div>
-            <div class="md-layout-item md-size-40">
+            <div class="md-layout-item md-size-20">
               <md-field>
                 <label for="possible-rights-and-permissions-postal-code">Postal Code</label>
                 <md-input
@@ -988,7 +969,7 @@
                   id="possible-rights-and-permissions-postal-code"
                   v-model="form.possibleRightsAndPermissionsPostalCode"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
@@ -1000,7 +981,7 @@
                   id="possible-rights-and-permissions-country"
                   v-model="form.possibleRightsAndPermissionsCountry"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
               </md-field>
             </div>
@@ -1008,7 +989,10 @@
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-60">
               <md-field :class="getValidationClass('possibleRightsAndPermissionsPhoneNumber')">
-                <label for="possible-rights-and-permissions--phone-number" ref="possibleRightsAndPermissionsPhoneNumber">Phone Number</label>
+                <label
+                  for="possible-rights-and-permissions-phone-number"
+                  ref="possibleRightsAndPermissionsPhoneNumber"
+                >Phone Number</label>
                 <md-input
                   name="possible-rights-and-permissions-phone-number"
                   id="possible-rights-and-permissions-phone-number"
@@ -1039,7 +1023,10 @@
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('possibleRightsAndPermissionsEmail')">
-                <label for="possible-rights-and-permissions-email" ref="possibleRightsAndPermissionsEmail">Email</label>
+                <label
+                  for="possible-rights-and-permissions-email"
+                  ref="possibleRightsAndPermissionsEmail"
+                >Email</label>
                 <md-input
                   type="email"
                   name="possible-rights-and-permissions-email"
@@ -1047,9 +1034,12 @@
                   autocomplete="email"
                   v-model="form.possibleRightsAndPermissionsEmail"
                   :disabled="sending"
-                  maxlength=255
+                  maxlength="255"
                 />
-                <span class="md-error" v-if="!$v.form.possibleRightsAndPermissionsEmail.email">Invalid email</span>
+                <span
+                  class="md-error"
+                  v-if="!$v.form.possibleRightsAndPermissionsEmail.email"
+                >Invalid email</span>
               </md-field>
             </div>
           </div>
@@ -1077,16 +1067,23 @@
           <span class="md-title">Certification</span>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
-              <p><strong>17 USC 506(e): Any person who knowingly makes a false representation of a material fact in the application
-              for copyright registration provided by section 409, or in any written statement filed with the application,
-              shall be fined not more than $2500.</strong></p>
+              <p>
+                <strong>
+                  17 USC 506(e): Any person who knowingly makes a false representation of a material fact in the application
+                  for copyright registration provided by section 409, or in any written statement filed with the application,
+                  shall be fined not more than $2500.
+                </strong>
+              </p>
             </div>
           </div>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-size-90">
-              <p>*<strong>I certify</strong> that I am the author, copyright claimant, or owner of exclusive rights, or the authorized agent of the
-              author, copyright claimant, or owner of exclusive rights of this work and that the information given in this
-              application is correct to the best of my knowledge.</p>
+              <p>
+                *
+                <strong>I certify</strong> that I am the author, copyright claimant, or owner of exclusive rights, or the authorized agent of the
+                author, copyright claimant, or owner of exclusive rights of this work and that the information given in this
+                application is correct to the best of my knowledge.
+              </p>
             </div>
             <div class="md-layout-item md-size-10 certification">
               <md-checkbox v-model="certification" id="certification" name="certification"></md-checkbox>
@@ -1095,12 +1092,24 @@
         </md-dialog-content>
         <md-dialog-actions>
           <md-button class="md-secondary" @click="closeFormReview()">Back</md-button>
-          <md-button class="md-accent" @click="createCopyrightApplication()" id="submit" :disabled="sending || !certification">Submit</md-button>
+          <md-button
+            class="md-accent"
+            @click="createCopyrightApplication()"
+            id="submit"
+            :disabled="sending || !certification"
+          >Submit</md-button>
         </md-dialog-actions>
       </md-dialog>
     </form>
-    <div v-else class="loading-message"><span class="md-subheading">loading...</span></div>
-    <md-dialog-alert class="error" :md-active.sync="errorOccured" md-title="Error Occured!" :md-content="errorMessage" />
+    <div v-else class="loading-message">
+      <span class="md-subheading">loading...</span>
+    </div>
+    <md-dialog-alert
+      class="error"
+      :md-active.sync="errorOccured"
+      md-title="Error Occured!"
+      :md-content="errorMessage"
+    />
   </div>
 </template>
 
@@ -1117,6 +1126,8 @@ import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormat
 import { replaceNonIso8895 } from '@/utils/ISO8895-15validator'
 import { empty } from '@/utils/ValidationHelpers'
 import CopyrightApplicationReview from './CopyrightApplicationReview'
+import CopyrightSelectField from './CopyrightSelectField'
+
 let d = new Date()
 let maxYearCompleted = d.getFullYear()
 let minYearCompleted = maxYearCompleted - 125
@@ -1128,7 +1139,8 @@ export default {
   props: ['repository'],
   mixins: [validationMixin],
   components: {
-    'copyright-application-review': CopyrightApplicationReview
+    'copyright-application-review': CopyrightApplicationReview,
+    'copyright-select-field': CopyrightSelectField
   },
   data: () => ({
     minYearCompleted,
@@ -1237,8 +1249,6 @@ export default {
     copyrightApplicationSaved: false,
     lastCopyrightApplication: '',
     sending: false,
-    prefixes: ['', 'Miss', 'Mr', 'Ms', 'Mrs', 'Dr', 'Prof'],
-    suffixes: ['', 'II', 'III', 'Jr', 'Sr', 'Esq', 'MD', 'PhD'],
     useClaimantAddress: false,
     certification: false,
     errorOccured: false,
@@ -1552,8 +1562,7 @@ export default {
       this.form.workDepositUrl = fileUrl
       this.uploadingWorkDeposit = false
       this.saveDraft()
-    },
-    isEmpty: empty
+    }
   },
   updated () {
     this.form.correspondencePhoneNumber = formatPhoneNumber(this.form.correspondencePhoneNumber)
@@ -1577,7 +1586,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .md-progress-bar {
   position: absolute;
   top: 0;
@@ -1650,5 +1659,4 @@ summary::-webkit-details-marker {
 .or {
   padding-top: 28px;
 }
-
 </style>
