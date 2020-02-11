@@ -36,6 +36,7 @@ class CopyrightApplicationModelApi(ModelRestApi):
         'author_anonymous',
         'author_citizenship',
         'author_domicile',
+        'author_year_of_birth',
         'claimant_prefix',
         'claimant_first_name',
         'claimant_middle_name',

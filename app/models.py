@@ -21,6 +21,7 @@ class CopyrightApplication(AuditMixin, Model):
     author_anonymous = Column(Boolean, default=False)
     author_citizenship = Column(String(255))
     author_domicile = Column(String(255))
+    author_year_of_birth = Column(Integer)
     claimant_prefix = Column(String(255))
     claimant_first_name = Column(String(255))
     claimant_middle_name = Column(String(255))

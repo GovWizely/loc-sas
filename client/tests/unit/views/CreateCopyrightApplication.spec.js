@@ -22,6 +22,7 @@ describe('Create Copyright Application', () => {
     wrapper.find('#author-first-name').setValue('Ray')
     wrapper.find('#author-last-name').setValue('Donovan')
     wrapper.find('#author-citizenship').setValue('Greece')
+    wrapper.find('#author-year-of-birth').setValue('1990')
 
     wrapper.find('#claimant-first-name').setValue('George')
     wrapper.find('#claimant-last-name').setValue('Washington')
@@ -65,6 +66,7 @@ describe('Create Copyright Application', () => {
     expect(submittedApplication.authorFirstName).to.equal('Ray')
     expect(submittedApplication.authorLastName).to.equal('Donovan')
     expect(submittedApplication.authorCitizenship).to.equal('Greece')
+    expect(submittedApplication.authorYearOfBirth).to.equal('1990')
 
     expect(submittedApplication.claimantFirstName).to.equal('George')
     expect(submittedApplication.claimantLastName).to.equal('Washington')

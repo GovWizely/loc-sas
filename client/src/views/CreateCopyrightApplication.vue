@@ -221,6 +221,28 @@
                   >The author citizenship and/or domicile is required</span>
                 </md-field>
               </div>
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('authorYearOfBirth')">
+                  <label for="author-year-of-birth" ref="authorYearOfBirth">Year of Birth</label>
+                  <md-input
+                    name="author-year-of-birth"
+                    id="author-year-of-birth"
+                    type="number"
+                    v-model="form.authorYearOfBirth"
+                    :disabled="sending"
+                    required
+                    @blur="validateField('authorYearOfBirth')"
+                  />
+                  <span
+                    class="md-error"
+                    v-if="!$v.form.authorYearOfBirth.required"
+                  >The year of birth is required</span>
+                  <span
+                    class="md-error"
+                    v-else-if="!$v.form.authorYearOfBirth.minValue || !$v.form.authorYearOfBirth.maxValue"
+                  >The year of birth must be between {{minAuthorYearOfBirth}} and {{maxAuthorYearOfBirth}}</span>
+                </md-field>
+              </div>
             </div>
           </div>
         </details>
@@ -1107,6 +1129,8 @@ import CopyrightApplicationReview from './CopyrightApplicationReview'
 let d = new Date()
 let maxYearCompleted = d.getFullYear()
 let minYearCompleted = maxYearCompleted - 125
+let maxAuthorYearOfBirth = maxYearCompleted
+let minAuthorYearOfBirth = maxAuthorYearOfBirth - 225
 
 export default {
   name: 'CreateCopyrightApplication',
@@ -1118,6 +1142,8 @@ export default {
   data: () => ({
     minYearCompleted,
     maxYearCompleted,
+    minAuthorYearOfBirth,
+    maxAuthorYearOfBirth,
     form: {
       id: null,
       primaryTitle: null,
@@ -1132,6 +1158,7 @@ export default {
       authorPseudonym: 'n/a',
       authorCitizenship: null,
       authorDomicile: null,
+      authorYearOfBirth: null,
       claimantPrefix: null,
       claimantFirstName: null,
       claimantMiddleName: null,
@@ -1255,6 +1282,11 @@ export default {
       },
       authorPseudonym: {
         required
+      },
+      authorYearOfBirth: {
+        required,
+        minValue: minValue(minAuthorYearOfBirth),
+        maxValue: maxValue(maxAuthorYearOfBirth)
       },
       claimantFirstName: {
         required
