@@ -258,16 +258,10 @@
                   type="number"
                   v-model="form.authorYearOfBirth"
                   :disabled="sending"
-                  required
-                  @blur="validateField('authorYearOfBirth')"
                 />
                 <span
                   class="md-error"
-                  v-if="!$v.form.authorYearOfBirth.required"
-                >The year of birth is required</span>
-                <span
-                  class="md-error"
-                  v-else-if="!$v.form.authorYearOfBirth.minValue || !$v.form.authorYearOfBirth.maxValue"
+                  v-if="!$v.form.authorYearOfBirth.minValue || !$v.form.authorYearOfBirth.maxValue"
                 >The year of birth must be between {{minAuthorYearOfBirth}} and {{maxAuthorYearOfBirth}}</span>
               </md-field>
             </div>
