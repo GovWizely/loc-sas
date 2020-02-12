@@ -6,7 +6,7 @@
       :name="name"
       :id="name"
       ref="copyrightSelectField"
-      @input="updatField()"
+      @input="updateField()"
     >
       <option
         v-for="option in getOptions()"
@@ -25,7 +25,7 @@ export default {
   name: 'FixField',
   props: ['value', 'options', 'name', 'label', 'validationClass', 'displayRequiredError', 'required'],
   methods: {
-    updatField () {
+    updateField () {
       this.$emit('input', this.$refs.copyrightSelectField.value)
     },
     getFieldName () {

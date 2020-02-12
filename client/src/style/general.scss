@@ -54,7 +54,8 @@
 }
 
 .current-route {
-  margin: 15px;
+  margin: 16px;
+  font-size: 16px;
 }
 
 .please-log-in {
@@ -126,4 +127,26 @@ select.copyright-select {
 .sm-icon {
   height: $sm-icon-px;
   width: $sm-icon-px;
+}
+
+details {
+  padding: 16px;
+  margin: 0 0 28px 0;
+  border: lightgrey 1px solid;
+}
+
+details > summary:before {
+    content: "+ ";
+}
+
+details[open] > summary:before {
+    content: "- ";
+}
+
+summary {
+  cursor: pointer;
+}
+
+summary::-webkit-details-marker {
+    display: none
 }
