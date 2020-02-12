@@ -4,6 +4,8 @@ import Sinon from 'sinon'
 import { expect } from 'chai'
 import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
 
+window.scrollTo = (x, y) => {}
+
 describe('Create Copyright Application', () => {
   it('user can create a copyright application', async () => {
     let _saveCopyrightApplication = Sinon.stub().resolves({ id: 1 })
