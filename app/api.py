@@ -26,7 +26,6 @@ class CopyrightApplicationModelApi(ModelRestApi):
         'primary_title',
         'alternate_title',
         'year_completed',
-        'author_work_type',
         'author_prefix',
         'author_first_name',
         'author_middle_name',

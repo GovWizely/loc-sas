@@ -46,7 +46,6 @@ class ApplicationsTest(AppTest):
         rv = self.client.post('/copyrightapplicationmodelview/add', data=dict(
             primary_title="My Title",
             year_completed="2000",
-            author_work_type="full_name",
             author_prefix="Mr",
             author_first_name="John",
             author_last_name="Smith",
