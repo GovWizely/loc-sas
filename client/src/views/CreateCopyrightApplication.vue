@@ -123,32 +123,13 @@
           </div>
         </details>
         <details open>
-          <summary class="md-title">How would you like the author name to appear on the copyright?</summary>
-          <md-radio v-model="form.authorWorkType" value="full_name">Full Name</md-radio>
-          <md-radio
-            v-model="form.authorWorkType"
-            value="pseudonymous"
-            @change="toggleWorkType()"
-          >Pseudonymous</md-radio>
-          <md-radio
-            v-model="form.authorWorkType"
-            value="anonymous"
-            @change="toggleWorkType()"
-          >Anonymous</md-radio>
-        </details>
-        <details open>
           <summary class="md-title">Author</summary>
           <div class="author-name">
             <label class="field-label">
               Name *
               <md-tooltip
                 md-direction="right"
-                v-if="form.authorWorkType === 'full_name'"
               >First name &amp; last name or pseudonym is required</md-tooltip>
-              <md-tooltip
-                md-direction="right"
-                v-else
-              >Pseudonymous &amp; anonymous copyrights don't require an author name; but may be optionally provided</md-tooltip>
             </label>
           </div>
           <div class="md-layout md-gutter">
@@ -1154,7 +1135,6 @@ export default {
       yearCompleted: null,
       workDepositName: null,
       workDepositUrl: null,
-      authorWorkType: 'full_name',
       authorPrefix: null,
       authorFirstName: null,
       authorMiddleName: null,
@@ -1243,7 +1223,8 @@ export default {
         message: null
       },
       authorPseudonym: {
-        invalid: false
+        invalid: false,
+        message: null
       }
     },
     copyrightApplicationSaved: false,
@@ -1459,13 +1440,6 @@ export default {
         this.form.correspondenceContactCountry = null
       }
     },
-    toggleWorkType () {
-      if (this.form.authorWorkType === 'pseudonymous' || this.form.authorWorkType === 'anonymous') {
-        this.customValidationFields.authorFirstName.invalid = false
-        this.customValidationFields.authorLastName.invalid = false
-        this.customValidationFields.authorPseudonym.invalid = false
-      }
-    },
     validateField (field) {
       if (!this.$v.form[field]) {
         this.updateCustomValidations()
@@ -1511,8 +1485,7 @@ export default {
         this.customValidationFields.authorDomicile.invalid = false
       }
 
-      if (this.form.authorWorkType === 'full_name' && empty(this.form.authorPseudonym) &&
-          (empty(this.form.authorFirstName) || empty(this.form.authorLastName))) {
+      if (empty(this.form.authorPseudonym) && empty(this.form.authorFirstName) && empty(this.form.authorLastName)) {
         this.customValidationFields.authorFirstName.invalid = true
         this.customValidationFields.authorLastName.invalid = true
         this.customValidationFields.authorPseudonym.invalid = true
@@ -1570,7 +1543,6 @@ export default {
     Object.keys(this.form).forEach(k => { this.form[k] = replaceNonIso8895(this.form[k]) })
   },
   watch: {
-    'form.authorAnonymous': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.authorPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.authorSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.claimantPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },

@@ -12,7 +12,6 @@ class CopyrightApplication(AuditMixin, Model):
     primary_title = Column(String(2000))
     alternate_title = Column(String(2000))
     year_completed = Column(Integer)
-    author_work_type = Column(String(255), nullable=False, default="full_name")
     author_prefix = Column(String(255))
     author_first_name = Column(String(255))
     author_middle_name = Column(String(255))

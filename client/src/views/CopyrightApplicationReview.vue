@@ -52,13 +52,9 @@
       <div class="col">
         <div class="col-left">
           <strong>Year of Completion:</strong><br />
-          <strong>Pseudonymous:</strong><br />
-          <strong>Anonymous:</strong>
         </div>
         <div class="col-right">
           <span>{{application.yearCompleted}}</span><br />
-          <span>{{application.authorWorkType === 'pseudonymous' ? 'Yes' : 'No'}}</span><br />
-          <span>{{application.authorWorkType === 'anonymous' ? 'Yes' : 'No'}}</span>
         </div>
       </div>
     </div>
