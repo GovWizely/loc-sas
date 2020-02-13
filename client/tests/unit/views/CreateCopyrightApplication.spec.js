@@ -7,7 +7,7 @@ import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
 window.scrollTo = (x, y) => {}
 
 describe('Create Copyright Application', () => {
-  it('user can create a copyright application', async () => {
+  it.only('user can create a copyright application', async () => {
     let _saveCopyrightApplication = Sinon.stub().resolves({ id: 1 })
     let fakeRepository = {
       _saveCopyrightApplication,
@@ -23,7 +23,7 @@ describe('Create Copyright Application', () => {
 
     wrapper.find('#author-first-name').setValue('Ray')
     wrapper.find('#author-last-name').setValue('Donovan')
-    wrapper.find('#author-citizenship').setValue('Greece')
+    wrapper.vm.form.authorCitizenship = 'GR'
 
     wrapper.find('#claimant-first-name').setValue('George')
     wrapper.find('#claimant-last-name').setValue('Washington')
@@ -31,17 +31,17 @@ describe('Create Copyright Application', () => {
     wrapper.find('#claimant-city').setValue('Arlington')
     wrapper.vm.form.claimantState = 'VA'
     wrapper.find('#claimant-postal-code').setValue('12345')
-    wrapper.find('#claimant-country').setValue('USA')
+    wrapper.vm.form.claimantCountry = 'US'
 
     wrapper.find('#certificate-contact-first-name').setValue('George')
     wrapper.find('#certificate-contact-last-name').setValue('Washington')
     wrapper.find('#certificate-contact-address').setValue('1234 Cool Ln')
     wrapper.find('#certificate-contact-city').setValue('Arlington')
     wrapper.find('#certificate-contact-state').setValue('VA')
-    wrapper.vm.form.certificateContactState = 'VA'
-
+    wrapper.vm.form.certificateContactState = 'LI'
     wrapper.find('#certificate-contact-postal-code').setValue('12345')
-    wrapper.find('#certificate-contact-country').setValue('USA')
+    wrapper.vm.form.certificateContactCountry = 'GR'
+
     await wrapper.vm.$nextTick()
 
     wrapper.find('#copy-claimant-address-btn').trigger('click')
@@ -68,7 +68,7 @@ describe('Create Copyright Application', () => {
     expect(submittedApplication.yearCompleted).to.equal('2020')
     expect(submittedApplication.authorFirstName).to.equal('Ray')
     expect(submittedApplication.authorLastName).to.equal('Donovan')
-    expect(submittedApplication.authorCitizenship).to.equal('Greece')
+    expect(submittedApplication.authorCitizenship).to.equal('GR')
 
     expect(submittedApplication.claimantFirstName).to.equal('George')
     expect(submittedApplication.claimantLastName).to.equal('Washington')
@@ -76,15 +76,7 @@ describe('Create Copyright Application', () => {
     expect(submittedApplication.claimantCity).to.equal('Arlington')
     expect(submittedApplication.claimantState).to.equal('VA')
     expect(submittedApplication.claimantPostalCode).to.equal('12345')
-    expect(submittedApplication.claimantCountry).to.equal('USA')
-
-    expect(submittedApplication.certificateContactFirstName).to.equal('George')
-    expect(submittedApplication.certificateContactLastName).to.equal('Washington')
-    expect(submittedApplication.certificateContactAddress).to.equal('1234 Cool Ln')
-    expect(submittedApplication.certificateContactCity).to.equal('Arlington')
-    expect(submittedApplication.certificateContactState).to.equal('VA')
-    expect(submittedApplication.certificateContactPostalCode).to.equal('12345')
-    expect(submittedApplication.certificateContactCountry).to.equal('USA')
+    expect(submittedApplication.claimantCountry).to.equal('US')
 
     expect(submittedApplication.correspondenceContactFirstName).to.equal('George')
     expect(submittedApplication.correspondenceContactLastName).to.equal('Washington')
@@ -92,7 +84,15 @@ describe('Create Copyright Application', () => {
     expect(submittedApplication.correspondenceContactCity).to.equal('Arlington')
     expect(submittedApplication.correspondenceContactState).to.equal('VA')
     expect(submittedApplication.correspondenceContactPostalCode).to.equal('12345')
-    expect(submittedApplication.correspondenceContactCountry).to.equal('USA')
+    expect(submittedApplication.correspondenceContactCountry).to.equal('US')
+
+    expect(submittedApplication.certificateContactFirstName).to.equal('George')
+    expect(submittedApplication.certificateContactLastName).to.equal('Washington')
+    expect(submittedApplication.certificateContactAddress).to.equal('1234 Cool Ln')
+    expect(submittedApplication.certificateContactCity).to.equal('Arlington')
+    expect(submittedApplication.certificateContactState).to.equal('LI')
+    expect(submittedApplication.certificateContactPostalCode).to.equal('12345')
+    expect(submittedApplication.certificateContactCountry).to.equal('GR')
 
     expect(submittedApplication.correspondencePhoneNumber).to.equal('(410) 555 1234')
     expect(submittedApplication.correspondenceEmail).to.equal('tooKool@4skool.io')
