@@ -7,6 +7,7 @@
       :id="name"
       ref="copyrightSelectField"
       @input="updateField()"
+      :disabled="disabled"
     >
       <option
         v-for="option in getOptions()"
@@ -15,15 +16,16 @@
         :selected="option.id === value"
       >{{option.name}}</option>
     </select>
-    <span class="md-error" v-if="displayRequiredError">The {{getFieldName()}} is required</span>
+    <span class="md-error" v-if="displayRequiredError">{{getErrorMessage()}}</span>
   </md-field>
 </template>
 <script>
-import { states } from '@/utils/StateList'
+import stateList from '@/utils/StateList'
+import countryList from '@/utils/CountryList'
 
 export default {
   name: 'FixField',
-  props: ['value', 'options', 'name', 'label', 'validationClass', 'displayRequiredError', 'required'],
+  props: ['value', 'options', 'name', 'label', 'validationClass', 'displayRequiredError', 'errorMessage', 'required', 'disabled'],
   methods: {
     updateField () {
       this.$emit('input', this.$refs.copyrightSelectField.value)
@@ -37,6 +39,10 @@ export default {
       } else {
         return 'select-label'
       }
+    },
+    getErrorMessage () {
+      if (this.errorMessage) return this.errorMessage
+      else return 'The '.concat(this.getFieldName(), ' is required')
     },
     getOptions () {
       if (this.label === 'Prefix') {
@@ -61,7 +67,9 @@ export default {
           { id: 'PhD', name: 'PhD' }
         ]
       } else if (this.label === 'State') {
-        return states
+        return stateList
+      } else if (['Country', 'Citizenship', 'Domicile'].includes(this.label)) {
+        return countryList
       }
     }
   }

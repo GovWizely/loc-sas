@@ -44,29 +44,30 @@ if not users_exist:
         name = c.primary_title.split()
         c.author_first_name = name[0]
         c.author_last_name = name[-1]
-        c.author_citizenship = random.choice(["USA", "GB", "CA", "MX", "JP"])
+        c.author_citizenship = random.choice(["US", "GB", "CA", "MX", "JP"])
+        c.author_domicile = random.choice(["GR", "IT", "KY", "MD"])
         c.author_year_of_birth = "1990"
         c.claimant_first_name = name[0]
         c.claimant_last_name = name[-1]
-        c.claimant_address = "foo"
-        c.claimant_city = "foo"
+        c.claimant_address = "3333 Fairfax Dr"
+        c.claimant_city = "Arlington"
         c.claimant_state = "VA"
-        c.claimant_postal_code = "foo"
-        c.claimant_country = "Canada"
+        c.claimant_postal_code = "22203"
+        c.claimant_country = "US"
         c.certificate_contact_first_name = name[0]
         c.certificate_contact_last_name = name[-1]
-        c.certificate_contact_address = "foo"
-        c.certificate_contact_city = "foo"
+        c.certificate_contact_address = "123 Eastern Ave"
+        c.certificate_contact_city = "Baltimore"
         c.certificate_contact_state = "MD"
-        c.certificate_contact_postal_code = "foo"
-        c.certificate_contact_country = "Canada"
+        c.certificate_contact_postal_code = "22212"
+        c.certificate_contact_country = "US"
         c.correspondence_contact_first_name = name[0]
         c.correspondence_contact_last_name = name[-1]
-        c.correspondence_contact_address = "foo"
-        c.correspondence_contact_city = "foo"
+        c.correspondence_contact_address = "1600 Pennsylvania Ave NW"
+        c.correspondence_contact_city = "Washington"
         c.correspondence_contact_state = "DC"
-        c.correspondence_contact_postal_code = "foo"
-        c.correspondence_contact_country = "Canada"
+        c.correspondence_contact_postal_code = "20500"
+        c.correspondence_contact_country = "US"
         c.correspondence_email = "foo@bar.baz"
         c.correspondence_phone_number = "800-555-1212"
         month = random.choice(range(1, 12))
@@ -86,6 +87,8 @@ if not users_exist:
         c.changed_by = _user
         c.service_request_id = str(uuid.uuid1())
         c.application_status = random.choice(["draft", "under_review", "approved"])
+        c.work_deposit_name = "The Best Book.pdf"
+        c.work_deposit_url = "https://some-cloud-storage.io/us-copyright-office/the_best_book.pdf"
         db.session.add(c)
         try:
             db.session.commit()

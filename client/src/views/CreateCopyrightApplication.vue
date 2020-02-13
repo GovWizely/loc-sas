@@ -138,6 +138,7 @@
                 v-model="form.authorPrefix"
                 name="author-prefix"
                 label="Prefix"
+                :disabled="sending"
               />
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -189,6 +190,7 @@
                 v-model="form.authorSuffix"
                 name="author-suffix"
                 label="Suffix"
+                :disabled="sending"
               />
             </div>
           </div>
@@ -215,38 +217,30 @@
             <md-tooltip md-direction="right">Citizenship or domicile is required</md-tooltip>
           </label>
           <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('authorCitizenship')">
-                <label for="author-citizenship" ref="authorCitizenship">Citizenship</label>
-                <md-input
-                  name="author-citizenship"
-                  id="author-citizenship"
-                  v-model="form.authorCitizenship"
-                  :disabled="sending"
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="customValidationFields.authorCitizenship.invalid"
-                >The author citizenship or domicile is required</span>
-              </md-field>
+            <div class="md-layout-item md-small-size-100" ref="authorCitizenship">
+              <copyright-select-field
+                v-model="form.authorCitizenship"
+                name="author-citizenship"
+                label="Citizenship"
+                required="true"
+                :disabled="sending"
+                :validationClass="getValidationClass('authorCitizenship')"
+                :displayRequiredError="customValidationFields.authorCitizenship.invalid"
+                :errorMessage="customValidationFields.authorCitizenship.message"
+              />
             </div>
             <div class="or">- or -</div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('authorDomicile')">
-                <label for="author-domicile" ref="authorDomicile">Domicile</label>
-                <md-input
-                  name="author-domicile"
-                  id="author-domicile"
-                  v-model="form.authorDomicile"
-                  :disabled="sending"
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="customValidationFields.authorDomicile.invalid"
-                >The author citizenship or domicile is required</span>
-              </md-field>
+            <div class="md-layout-item md-small-size-100" ref="authorDomicile">
+               <copyright-select-field
+                v-model="form.authorDomicile"
+                name="author-domicile"
+                label="Domicile"
+                required="true"
+                :disabled="sending"
+                :validationClass="getValidationClass('authorDomicile')"
+                :displayRequiredError="customValidationFields.authorDomicile.invalid"
+                :errorMessage="customValidationFields.authorDomicile.message"
+              />
             </div>
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('authorYearOfBirth')">
@@ -274,6 +268,7 @@
                 v-model="form.claimantPrefix"
                 name="claimant-prefix"
                 label="Prefix"
+                :disabled="sending"
               />
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -327,6 +322,7 @@
                 v-model="form.claimantSuffix"
                 name="claimant-suffix"
                 label="Suffix"
+                :disabled="sending"
               />
             </div>
           </div>
@@ -387,6 +383,7 @@
                 name="claimant-state"
                 label="State"
                 required="true"
+                :disabled="sending"
                 :validationClass="getValidationClass('claimantState')"
                 :displayRequiredError="!$v.form.claimantState.required"
               />
@@ -408,22 +405,16 @@
                 >The claimant postal code is required</span>
               </md-field>
             </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('claimantCountry')">
-                <label for="claimant-country" ref="claimantCountry">Country</label>
-                <md-input
-                  name="claimant-country"
-                  id="claimant-country"
-                  v-model="form.claimantCountry"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.claimantCountry.required"
-                >The claimant country is required</span>
-              </md-field>
+            <div class="md-layout-item md-small-size-100" ref="claimantCountry">
+              <copyright-select-field
+                v-model="form.claimantCountry"
+                name="claimant-country"
+                label="Country"
+                required="true"
+                :disabled="sending"
+                :validationClass="getValidationClass('claimantCountry')"
+                :displayRequiredError="!$v.form.claimantCountry.required"
+              />
             </div>
           </div>
         </details>
@@ -435,6 +426,7 @@
                 v-model="form.certificateContactPrefix"
                 name="certificate-contact-prefix"
                 label="Prefix"
+                :disabled="sending"
               />
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -494,6 +486,7 @@
                 v-model="form.certificateContactSuffix"
                 name="certificate-contact-suffix"
                 label="Suffix"
+                :disabled="sending"
               />
             </div>
           </div>
@@ -554,6 +547,7 @@
                 name="certificate-contact-state"
                 label="State"
                 required="true"
+                :disabled="sending"
                 :validationClass="getValidationClass('certificateContactState')"
                 :displayRequiredError="!$v.form.certificateContactState.required"
               />
@@ -578,22 +572,16 @@
                 >The certificate postal code is required</span>
               </md-field>
             </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('certificateContactCountry')">
-                <label for="certificate-contact-country" ref="certificateContactCountry">Country</label>
-                <md-input
-                  name="certificate-contact-country"
-                  id="certificate-contact-country"
-                  v-model="form.certificateContactCountry"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.certificateContactCountry.required"
-                >The certificate country is required</span>
-              </md-field>
+            <div class="md-layout-item md-small-size-100" ref="certificateContactCountry">
+              <copyright-select-field
+                v-model="form.certificateContactCountry"
+                name="certificate-contact-country"
+                label="Country"
+                required="true"
+                :disabled="sending"
+                :validationClass="getValidationClass('certificateContactCountry')"
+                :displayRequiredError="!$v.form.certificateContactCountry.required"
+              />
             </div>
           </div>
         </details>
@@ -611,6 +599,7 @@
                 v-model="form.correspondenceContactPrefix"
                 name="correspondence-contact-prefix"
                 label="Prefix"
+                :disabled="sending"
               />
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -670,6 +659,7 @@
                 v-model="form.correspondenceContactSuffix"
                 name="correspondence-contact-suffix"
                 label="Suffix"
+                :disabled="sending"
               />
             </div>
           </div>
@@ -733,6 +723,7 @@
                 name="correspondence-contact-state"
                 label="State"
                 required="true"
+                :disabled="sending"
                 :validationClass="getValidationClass('correspondenceContactState')"
                 :displayRequiredError="!$v.form.correspondenceContactState.required"
               />
@@ -757,25 +748,16 @@
                 >The correspondence postal code is required</span>
               </md-field>
             </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('correspondenceContactCountry')">
-                <label
-                  for="correspondence-contact-country"
-                  ref="correspondenceContactCountry"
-                >Country</label>
-                <md-input
-                  name="correspondence-contact-country"
-                  id="correspondence-contact-country"
-                  v-model="form.correspondenceContactCountry"
-                  :disabled="sending || useClaimantAddress"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.correspondenceContactCountry.required"
-                >The correspondence country is required</span>
-              </md-field>
+            <div class="md-layout-item md-small-size-100" ref="correspondenceContactCountry">
+              <copyright-select-field
+                v-model="form.correspondenceContactCountry"
+                name="correspondence-contact-country"
+                label="Country"
+                required="true"
+                :disabled="sending"
+                :validationClass="getValidationClass('correspondenceContactCountry')"
+                :displayRequiredError="!$v.form.correspondenceContactCountry.required"
+              />
             </div>
           </div>
           <div class="md-layout md-gutter">
@@ -848,6 +830,7 @@
                 v-model="form.possibleRightsAndPermissionsPrefix"
                 name="possible-rights-and-permissions-prefix"
                 label="Prefix"
+                :disabled="sending"
               />
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -891,6 +874,7 @@
                 v-model="form.possibleRightsAndPermissionsSuffix"
                 name="possible-rights-and-permissions-suffix"
                 label="Suffix"
+                :disabled="sending"
               />
             </div>
           </div>
@@ -940,6 +924,7 @@
                 v-model="form.possibleRightsAndPermissionsState"
                 name="possible-rights-and-permissions-state"
                 label="State"
+                :disabled="sending"
               />
             </div>
             <div class="md-layout-item md-size-20">
@@ -955,16 +940,12 @@
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="possible-rights-and-permissions-country">Country</label>
-                <md-input
-                  name="possible-rights-and-permissions-country"
-                  id="possible-rights-and-permissions-country"
-                  v-model="form.possibleRightsAndPermissionsCountry"
-                  :disabled="sending"
-                  maxlength="255"
-                />
-              </md-field>
+              <copyright-select-field
+                v-model="form.possibleRightsAndPermissionsCountry"
+                name="possible-rights-and-permissions-country"
+                label="Country"
+                :disabled="sending"
+              />
             </div>
           </div>
           <div class="md-layout md-gutter">
@@ -1176,10 +1157,12 @@ export default {
         invalid: false
       },
       authorCitizenship: {
-        invalid: false
+        invalid: false,
+        message: null
       },
       authorDomicile: {
-        invalid: false
+        invalid: false,
+        message: null
       },
       authorFirstName: {
         invalid: false,
@@ -1444,7 +1427,9 @@ export default {
     updateCustomValidations () {
       if (empty(this.form.authorCitizenship) && empty(this.form.authorDomicile)) {
         this.customValidationFields.authorCitizenship.invalid = true
+        this.customValidationFields.authorCitizenship.message = 'The author citizenship or domicile is required'
         this.customValidationFields.authorDomicile.invalid = true
+        this.customValidationFields.authorDomicile.message = 'The author citizenship or domicile is required'
       } else {
         this.customValidationFields.authorCitizenship.invalid = false
         this.customValidationFields.authorDomicile.invalid = false
