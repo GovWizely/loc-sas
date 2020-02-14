@@ -16,7 +16,7 @@
         :selected="option.id === value"
       >{{option.name}}</option>
     </select>
-    <span class="md-error" v-if="displayRequiredError">{{getErrorMessage()}}</span>
+    <span class="md-error" v-if="displayRequiredError">{{errorMessage}}</span>
   </md-field>
 </template>
 <script>
@@ -39,10 +39,6 @@ export default {
       } else {
         return 'select-label'
       }
-    },
-    getErrorMessage () {
-      if (this.errorMessage) return this.errorMessage
-      else return 'The '.concat(this.getFieldName(), ' is required')
     },
     getOptions () {
       if (this.label === 'Prefix') {
