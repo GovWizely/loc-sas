@@ -222,11 +222,10 @@
                 v-model="form.authorCitizenship"
                 name="author-citizenship"
                 label="Citizenship"
-                required="true"
                 :disabled="sending"
                 :validationClass="getValidationClass('authorCitizenship')"
                 :displayRequiredError="customValidationFields.authorCitizenship.invalid"
-                :errorMessage="customValidationFields.authorCitizenship.message"
+                errorMessage="'The author citizenship or domicile is required'"
               />
             </div>
             <div class="or">- or -</div>
@@ -235,11 +234,10 @@
                 v-model="form.authorDomicile"
                 name="author-domicile"
                 label="Domicile"
-                required="true"
                 :disabled="sending"
                 :validationClass="getValidationClass('authorDomicile')"
                 :displayRequiredError="customValidationFields.authorDomicile.invalid"
-                :errorMessage="customValidationFields.authorDomicile.message"
+                errorMessage="The author citizenship or domicile is required"
               />
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -386,6 +384,7 @@
                 :disabled="sending"
                 :validationClass="getValidationClass('claimantState')"
                 :displayRequiredError="!$v.form.claimantState.required"
+                errorMessage="The claimant state is required"
               />
             </div>
             <div class="md-layout-item md-size-20">
@@ -414,6 +413,7 @@
                 :disabled="sending"
                 :validationClass="getValidationClass('claimantCountry')"
                 :displayRequiredError="!$v.form.claimantCountry.required"
+                errorMessage="The claimant country is required"
               />
             </div>
           </div>
@@ -550,6 +550,7 @@
                 :disabled="sending"
                 :validationClass="getValidationClass('certificateContactState')"
                 :displayRequiredError="!$v.form.certificateContactState.required"
+                errorMessage="The certificate state is required"
               />
             </div>
             <div class="md-layout-item md-size-20">
@@ -581,6 +582,7 @@
                 :disabled="sending"
                 :validationClass="getValidationClass('certificateContactCountry')"
                 :displayRequiredError="!$v.form.certificateContactCountry.required"
+                errorMessage="The certificate country is required"
               />
             </div>
           </div>
@@ -726,6 +728,7 @@
                 :disabled="sending"
                 :validationClass="getValidationClass('correspondenceContactState')"
                 :displayRequiredError="!$v.form.correspondenceContactState.required"
+                errorMessage="The correspondence state is required"
               />
             </div>
             <div class="md-layout-item md-size-20">
@@ -757,6 +760,7 @@
                 :disabled="sending"
                 :validationClass="getValidationClass('correspondenceContactCountry')"
                 :displayRequiredError="!$v.form.correspondenceContactCountry.required"
+                errorMessage="The correspondence country is required"
               />
             </div>
           </div>
@@ -1157,12 +1161,10 @@ export default {
         invalid: false
       },
       authorCitizenship: {
-        invalid: false,
-        message: null
+        invalid: false
       },
       authorDomicile: {
-        invalid: false,
-        message: null
+        invalid: false
       },
       authorFirstName: {
         invalid: false,
@@ -1427,9 +1429,7 @@ export default {
     updateCustomValidations () {
       if (empty(this.form.authorCitizenship) && empty(this.form.authorDomicile)) {
         this.customValidationFields.authorCitizenship.invalid = true
-        this.customValidationFields.authorCitizenship.message = 'The author citizenship or domicile is required'
         this.customValidationFields.authorDomicile.invalid = true
-        this.customValidationFields.authorDomicile.message = 'The author citizenship or domicile is required'
       } else {
         this.customValidationFields.authorCitizenship.invalid = false
         this.customValidationFields.authorDomicile.invalid = false
