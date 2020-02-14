@@ -1,6 +1,10 @@
+import logging
 import os
 import uuid
 
+import boto3
+from botocore.exceptions import ClientError
+from config import S3_BUCKET
 from flask import g
 from flask import request, send_from_directory, session
 from flask_appbuilder.api import BaseApi, expose, ModelRestApi
@@ -75,7 +79,7 @@ appbuilder.add_api(CopyrightApplicationModelApi)
 
 class CurrentUserApi(BaseApi):
     @expose('/current-user-id')
-    def currentUser(self):
+    def current_user(self):
         try:
             return self.response(200, user_id=session["user_id"])
         except KeyError:
@@ -87,7 +91,7 @@ appbuilder.add_api(CurrentUserApi)
 
 class CopyrightApplicationServiceRequestApi(BaseApi):
     @expose('/generate-service-request')
-    def generateServiceRequest(self):
+    def generate_service_request(self):
         # TODO: This ID will eventually come from a different system
         return self.response(200, id=uuid.uuid1())
 
@@ -101,7 +105,23 @@ class CopyrightApplicationFileApi(BaseApi):
         service_request_id = request.args.get('service_request_id')
         file = request.files['file']
         filename = secure_filename(service_request_id + '_' + file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        fullpath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(fullpath)
+
+        if S3_BUCKET:
+            bucket = S3_BUCKET
+            s3_client = boto3.client('s3')
+            try:
+                s3_client.upload_file(fullpath, bucket, filename)
+            except ClientError as e:
+                logging.error(e)
+                return False
+            finally:
+                os.remove(fullpath)
+            return self.response(
+                201,
+                file_url=f's3://{bucket}/{filename}')
+
         return self.response(
             201,
             file_url='/api/v1/copyrightapplicationfileapi/file-download/' + filename)

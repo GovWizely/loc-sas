@@ -79,3 +79,9 @@ else:
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 FAB_API_SWAGGER_UI = True
 JWT_ACCESS_TOKEN_EXPIRES = False
+
+
+if 'BUCKET' in os.environ:
+    S3_BUCKET = os.environ['BUCKET']
+else:
+    S3_BUCKET = False
