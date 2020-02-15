@@ -22,27 +22,6 @@
       </div>
       <div class="col">
         <div class="col-left">
-          <label class="field-label">Correspondence:</label>
-        </div>
-        <div class="col-right">
-          <span>{{formatName(
-            application.correspondenceContactPrefix,
-            application.correspondenceContactFirstName,
-            application.correspondenceContactMiddleName,
-            application.correspondenceContactLastName,
-            application.correspondenceContactSuffix)}}</span><br />
-          <span>{{application.correspondenceContactAddress}} {{application.correspondenceContactAddress2}}</span><br />
-          <span>{{formatCityStateZipCountry(
-            application.correspondenceContactCity,
-            application.correspondenceContactState,
-            application.correspondenceContactPostalCode,
-            application.correspondenceContactCountry)}}</span><br />
-          <span>{{correspondencePhoneNumber()}}</span><br />
-          <span>{{application.correspondenceEmail}}</span>
-        </div>
-      </div>
-      <div class="col">
-        <div class="col-left">
           <label class="field-label">Primary Title:</label>
         </div>
         <div class="col-right">
@@ -212,13 +191,6 @@ export default {
     certification: false
   }),
   methods: {
-    correspondencePhoneNumber (phoneNumber, extension) {
-      if (this.application.correspondencePhoneNumberExtension) {
-        return this.application.correspondencePhoneNumber.concat(' X', this.application.correspondencePhoneNumberExtension)
-      } else {
-        return this.application.correspondencePhoneNumber
-      }
-    },
     possibleRightsAndPermissionsPhoneNumber (phoneNumber, extension) {
       if (this.application.possibleRightsAndPermissionsPhoneNumberExtension) {
         return this.application.possibleRightsAndPermissionsPhoneNumber.concat(' X', this.application.possibleRightsAndPermissionsPhoneNumberExtension)

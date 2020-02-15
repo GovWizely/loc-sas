@@ -54,15 +54,6 @@ if not users_exist:
         c.claimant_state = "VA"
         c.claimant_postal_code = "22203"
         c.claimant_country = "US"
-        c.correspondence_contact_first_name = name[0]
-        c.correspondence_contact_last_name = name[-1]
-        c.correspondence_contact_address = "1600 Pennsylvania Ave NW"
-        c.correspondence_contact_city = "Washington"
-        c.correspondence_contact_state = "DC"
-        c.correspondence_contact_postal_code = "20500"
-        c.correspondence_contact_country = "US"
-        c.correspondence_email = "foo@bar.baz"
-        c.correspondence_phone_number = "800-555-1212"
         month = random.choice(range(1, 12))
         day = random.choice(range(1, 28))
         c.created_on = datetime(int(c.year_completed), month, day)
