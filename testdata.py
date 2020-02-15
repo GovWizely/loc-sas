@@ -54,13 +54,6 @@ if not users_exist:
         c.claimant_state = "VA"
         c.claimant_postal_code = "22203"
         c.claimant_country = "US"
-        c.certificate_contact_first_name = name[0]
-        c.certificate_contact_last_name = name[-1]
-        c.certificate_contact_address = "123 Eastern Ave"
-        c.certificate_contact_city = "Baltimore"
-        c.certificate_contact_state = "MD"
-        c.certificate_contact_postal_code = "22212"
-        c.certificate_contact_country = "US"
         c.correspondence_contact_first_name = name[0]
         c.correspondence_contact_last_name = name[-1]
         c.correspondence_contact_address = "1600 Pennsylvania Ave NW"

@@ -22,25 +22,6 @@
       </div>
       <div class="col">
         <div class="col-left">
-          <label class="field-label">Certificate:</label>
-        </div>
-        <div class="col-right">
-          <span>{{formatName(
-            application.certificateContactPrefix,
-            application.certificateContactFirstName,
-            application.certificateContactMiddleName,
-            application.certificateContactLastName,
-            application.certificateContactSuffix)}}</span><br />
-          <span>{{application.certificateContactAddress}} {{application.certificateContactAddress2}}</span><br />
-          <span>{{formatCityStateZipCountry(
-            application.certificateContactCity,
-            application.certificateContactState,
-            application.certificateContactPostalCode,
-            application.certificateContactCountry)}}</span>
-        </div>
-      </div>
-      <div class="col">
-        <div class="col-left">
           <label class="field-label">Correspondence:</label>
         </div>
         <div class="col-right">
