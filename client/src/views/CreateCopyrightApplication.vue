@@ -419,175 +419,6 @@
           </div>
         </details>
         <details open>
-          <summary class="md-title">Certificate</summary>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-10">
-              <copyright-select-field
-                v-model="form.certificateContactPrefix"
-                name="certificate-contact-prefix"
-                label="Prefix"
-                :disabled="sending"
-              />
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('certificateContactFirstName')">
-                <label
-                  for="certificate-contact-first-name"
-                  ref="certificateContactFirstName"
-                >First Name</label>
-                <md-input
-                  name="certificate-contact-first-name"
-                  id="certificate-contact-first-name"
-                  v-model="form.certificateContactFirstName"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.certificateContactFirstName.required"
-                >The certificate contact first name is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="certificate-contact-middle-name">Middle Name</label>
-                <md-input
-                  name="certificate-contact-middle-name"
-                  id="certificate-contact-middle-name"
-                  v-model="form.certificateContactMiddleName"
-                  :disabled="sending"
-                  maxlength="255"
-                />
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('certificateContactLastName')">
-                <label
-                  for="certificate-contact-last-name"
-                  ref="certificateContactLastName"
-                >Last Name</label>
-                <md-input
-                  name="certificate-contact-last-name"
-                  id="certificate-contact-last-name"
-                  v-model="form.certificateContactLastName"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.certificateContactLastName.required"
-                >The certificate contact last name is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-size-10">
-              <copyright-select-field
-                v-model="form.certificateContactSuffix"
-                name="certificate-contact-suffix"
-                label="Suffix"
-                :disabled="sending"
-              />
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('certificateContactAddress')">
-                <label for="certificate-contact-address" ref="certificateContactAddress">Address</label>
-                <md-input
-                  name="certificate-contact-address"
-                  id="certificate-contact-address"
-                  v-model="form.certificateContactAddress"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.certificateContactAddress.required"
-                >The certificate address is required</span>
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="certificate-contact-address2">Address 2</label>
-                <md-input
-                  name="certificate-contact-address2"
-                  id="certificate-contact-address2"
-                  v-model="form.certificateContactAddress2"
-                  :disabled="sending"
-                  maxlength="255"
-                />
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-20">
-              <md-field :class="getValidationClass('certificateContactCity')">
-                <label for="certificate-contact-city" ref="certificateContactCity">City</label>
-                <md-input
-                  name="certificate-contact-city"
-                  id="certificate-contact-city"
-                  v-model="form.certificateContactCity"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.certificateContactCity.required"
-                >The certificate city is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-size-20" ref="certificateContactState">
-              <copyright-select-field
-                v-model="form.certificateContactState"
-                name="certificate-contact-state"
-                label="State"
-                required="true"
-                :disabled="sending"
-                :validationClass="getValidationClass('certificateContactState')"
-                :displayRequiredError="!$v.form.certificateContactState.required"
-                errorMessage="The certificate state is required"
-              />
-            </div>
-            <div class="md-layout-item md-size-20">
-              <md-field :class="getValidationClass('certificateContactPostalCode')">
-                <label
-                  for="certificate-contact-postal-code"
-                  ref="certificateContactPostalCode"
-                >Postal Code</label>
-                <md-input
-                  name="certificate-contact-postal-code"
-                  id="certificate-contact-postal-code"
-                  v-model="form.certificateContactPostalCode"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.certificateContactPostalCode.required"
-                >The certificate postal code is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100" ref="certificateContactCountry">
-              <copyright-select-field
-                v-model="form.certificateContactCountry"
-                name="certificate-contact-country"
-                label="Country"
-                required="true"
-                :disabled="sending"
-                :validationClass="getValidationClass('certificateContactCountry')"
-                :displayRequiredError="!$v.form.certificateContactCountry.required"
-                errorMessage="The certificate country is required"
-              />
-            </div>
-          </div>
-        </details>
-        <details open>
           <summary class="md-title">Correspondence</summary>
           <md-switch
             v-model="useClaimantAddress"
@@ -1107,17 +938,6 @@ export default {
       claimantState: null,
       claimantPostalCode: null,
       claimantCountry: null,
-      certificateContactPrefix: null,
-      certificateContactFirstName: null,
-      certificateContactMiddleName: null,
-      certificateContactLastName: null,
-      certificateContactSuffix: null,
-      certificateContactAddress: null,
-      certificateContactAddress2: null,
-      certificateContactCity: null,
-      certificateContactState: null,
-      certificateContactPostalCode: null,
-      certificateContactCountry: null,
       correspondenceContactPrefix: null,
       correspondenceContactFirstName: null,
       correspondenceContactMiddleName: null,
@@ -1240,27 +1060,6 @@ export default {
         required
       },
       claimantCountry: {
-        required
-      },
-      certificateContactFirstName: {
-        required
-      },
-      certificateContactLastName: {
-        required
-      },
-      certificateContactAddress: {
-        required
-      },
-      certificateContactCity: {
-        required
-      },
-      certificateContactState: {
-        required
-      },
-      certificateContactPostalCode: {
-        required
-      },
-      certificateContactCountry: {
         required
       },
       correspondenceContactFirstName: {
@@ -1497,8 +1296,6 @@ export default {
     'form.authorSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.claimantPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.claimantSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    'form.certificateContactPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    'form.certificateContactSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.correspondenceContactPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.correspondenceContactSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.possibleRightsAndPermissionsPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },

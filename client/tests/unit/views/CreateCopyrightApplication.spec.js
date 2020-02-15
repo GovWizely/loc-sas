@@ -33,15 +33,6 @@ describe('Create Copyright Application', () => {
     wrapper.find('#claimant-postal-code').setValue('12345')
     wrapper.vm.form.claimantCountry = 'US'
 
-    wrapper.find('#certificate-contact-first-name').setValue('George')
-    wrapper.find('#certificate-contact-last-name').setValue('Washington')
-    wrapper.find('#certificate-contact-address').setValue('1234 Cool Ln')
-    wrapper.find('#certificate-contact-city').setValue('Arlington')
-    wrapper.find('#certificate-contact-state').setValue('VA')
-    wrapper.vm.form.certificateContactState = 'LI'
-    wrapper.find('#certificate-contact-postal-code').setValue('12345')
-    wrapper.vm.form.certificateContactCountry = 'GR'
-
     await wrapper.vm.$nextTick()
 
     wrapper.find('#copy-claimant-address-btn').trigger('click')
@@ -85,14 +76,6 @@ describe('Create Copyright Application', () => {
     expect(submittedApplication.correspondenceContactState).to.equal('VA')
     expect(submittedApplication.correspondenceContactPostalCode).to.equal('12345')
     expect(submittedApplication.correspondenceContactCountry).to.equal('US')
-
-    expect(submittedApplication.certificateContactFirstName).to.equal('George')
-    expect(submittedApplication.certificateContactLastName).to.equal('Washington')
-    expect(submittedApplication.certificateContactAddress).to.equal('1234 Cool Ln')
-    expect(submittedApplication.certificateContactCity).to.equal('Arlington')
-    expect(submittedApplication.certificateContactState).to.equal('LI')
-    expect(submittedApplication.certificateContactPostalCode).to.equal('12345')
-    expect(submittedApplication.certificateContactCountry).to.equal('GR')
 
     expect(submittedApplication.correspondencePhoneNumber).to.equal('(410) 555 1234')
     expect(submittedApplication.correspondenceEmail).to.equal('tooKool@4skool.io')
