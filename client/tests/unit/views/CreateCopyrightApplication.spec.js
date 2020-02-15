@@ -7,7 +7,7 @@ import CreateCopyrightApplication from '@/views/CreateCopyrightApplication'
 window.scrollTo = (x, y) => {}
 
 describe('Create Copyright Application', () => {
-  it.only('user can create a copyright application', async () => {
+  it('user can create a copyright application', async () => {
     let _saveCopyrightApplication = Sinon.stub().resolves({ id: 1 })
     let fakeRepository = {
       _saveCopyrightApplication,
@@ -33,13 +33,6 @@ describe('Create Copyright Application', () => {
     wrapper.find('#claimant-postal-code').setValue('12345')
     wrapper.vm.form.claimantCountry = 'US'
 
-    await wrapper.vm.$nextTick()
-
-    wrapper.find('#copy-claimant-address-btn').trigger('click')
-    await wrapper.vm.$nextTick()
-
-    wrapper.find('#correspondence-phone-number').setValue('(410) 555 1234')
-    wrapper.find('#correspondence-email').setValue('tooKool@4skool.io')
     await wrapper.vm.$nextTick()
 
     wrapper.vm.form.workDepositUrl = 'some-work-deposit.pdf'
@@ -68,17 +61,6 @@ describe('Create Copyright Application', () => {
     expect(submittedApplication.claimantState).to.equal('VA')
     expect(submittedApplication.claimantPostalCode).to.equal('12345')
     expect(submittedApplication.claimantCountry).to.equal('US')
-
-    expect(submittedApplication.correspondenceContactFirstName).to.equal('George')
-    expect(submittedApplication.correspondenceContactLastName).to.equal('Washington')
-    expect(submittedApplication.correspondenceContactAddress).to.equal('1234 Cool Ln')
-    expect(submittedApplication.correspondenceContactCity).to.equal('Arlington')
-    expect(submittedApplication.correspondenceContactState).to.equal('VA')
-    expect(submittedApplication.correspondenceContactPostalCode).to.equal('12345')
-    expect(submittedApplication.correspondenceContactCountry).to.equal('US')
-
-    expect(submittedApplication.correspondencePhoneNumber).to.equal('(410) 555 1234')
-    expect(submittedApplication.correspondenceEmail).to.equal('tooKool@4skool.io')
     expect(submittedApplication.serviceRequestId).to.equal('abc123')
   })
 })

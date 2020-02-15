@@ -419,245 +419,6 @@
           </div>
         </details>
         <details open>
-          <summary class="md-title">Correspondence</summary>
-          <md-switch
-            v-model="useClaimantAddress"
-            @change="copyClaimantAddress"
-            id="copy-claimant-address-btn"
-            name="copy-claimant-address-btn"
-          >Use Claimant Address</md-switch>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-10">
-              <copyright-select-field
-                v-model="form.correspondenceContactPrefix"
-                name="correspondence-contact-prefix"
-                label="Prefix"
-                :disabled="sending"
-              />
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('correspondenceContactFirstName')">
-                <label
-                  for="correspondence-contact-first-name"
-                  ref="correspondenceContactFirstName"
-                >First Name</label>
-                <md-input
-                  name="correspondence-contact-first-name"
-                  id="correspondence-contact-first-name"
-                  v-model="form.correspondenceContactFirstName"
-                  :disabled="sending || useClaimantAddress"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.correspondenceContactFirstName.required"
-                >The correspondence contact first name is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="correspondence-contact-middle-name">Middle Name</label>
-                <md-input
-                  name="correspondence-contact-middle-name"
-                  id="correspondence-contact-middle-name"
-                  v-model="form.correspondenceContactMiddleName"
-                  :disabled="sending || useClaimantAddress"
-                  maxlength="255"
-                />
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('correspondenceContactLastName')">
-                <label
-                  for="correspondence-contact-last-name"
-                  ref="correspondenceContactLastName"
-                >Last Name</label>
-                <md-input
-                  name="correspondence-contact-last-name"
-                  id="correspondence-contact-last-name"
-                  v-model="form.correspondenceContactLastName"
-                  :disabled="sending || useClaimantAddress"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.correspondenceContactLastName.required"
-                >The correspondence contact last name is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-size-10">
-              <copyright-select-field
-                v-model="form.correspondenceContactSuffix"
-                name="correspondence-contact-suffix"
-                label="Suffix"
-                :disabled="sending"
-              />
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('correspondenceContactAddress')">
-                <label
-                  for="correspondence-contact-address"
-                  ref="correspondenceContactAddress"
-                >Address</label>
-                <md-input
-                  name="correspondence-contact-address"
-                  id="correspondence-contact-address"
-                  v-model="form.correspondenceContactAddress"
-                  :disabled="sending || useClaimantAddress"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.correspondenceContactAddress.required"
-                >The correspondence address is required</span>
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="correspondence-contact-address2">Address 2</label>
-                <md-input
-                  name="correspondence-contact-address2"
-                  id="correspondence-contact-address2"
-                  v-model="form.correspondenceContactAddress2"
-                  :disabled="sending || useClaimantAddress"
-                  maxlength="255"
-                />
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-20">
-              <md-field :class="getValidationClass('correspondenceContactCity')">
-                <label for="correspondence-contact-city" ref="correspondenceContactCity">City</label>
-                <md-input
-                  name="correspondence-contact-city"
-                  id="correspondence-contact-city"
-                  v-model="form.correspondenceContactCity"
-                  :disabled="sending || useClaimantAddress"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.correspondenceContactCity.required"
-                >The correspondence city is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-size-20" ref="correspondenceContactState">
-              <copyright-select-field
-                v-model="form.correspondenceContactState"
-                name="correspondence-contact-state"
-                label="State"
-                required="true"
-                :disabled="sending"
-                :validationClass="getValidationClass('correspondenceContactState')"
-                :displayRequiredError="!$v.form.correspondenceContactState.required"
-                errorMessage="The correspondence state is required"
-              />
-            </div>
-            <div class="md-layout-item md-size-20">
-              <md-field :class="getValidationClass('correspondenceContactPostalCode')">
-                <label
-                  for="correspondence-contact-postal-code"
-                  ref="correspondenceContactPostalCode"
-                >Postal Code</label>
-                <md-input
-                  name="correspondence-contact-postal-code"
-                  id="correspondence-contact-postal-code"
-                  v-model="form.correspondenceContactPostalCode"
-                  :disabled="sending || useClaimantAddress"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.correspondenceContactPostalCode.required"
-                >The correspondence postal code is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100" ref="correspondenceContactCountry">
-              <copyright-select-field
-                v-model="form.correspondenceContactCountry"
-                name="correspondence-contact-country"
-                label="Country"
-                required="true"
-                :disabled="sending"
-                :validationClass="getValidationClass('correspondenceContactCountry')"
-                :displayRequiredError="!$v.form.correspondenceContactCountry.required"
-                errorMessage="The correspondence country is required"
-              />
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-60">
-              <md-field :class="getValidationClass('correspondencePhoneNumber')">
-                <label
-                  for="correspondence-phone-number"
-                  ref="correspondencePhoneNumber"
-                >Phone Number</label>
-                <md-input
-                  name="correspondence-phone-number"
-                  id="correspondence-phone-number"
-                  autocomplete="tel"
-                  v-model="form.correspondencePhoneNumber"
-                  :disabled="sending"
-                  required
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.correspondencePhoneNumber.required"
-                >The correspondence phone number is required</span>
-                <span
-                  class="md-error"
-                  v-else-if="!$v.form.correspondencePhoneNumber.isValidPhoneNumber"
-                >The correspondence phone number must be 10 digits</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-size-30">
-              <md-field>
-                <label for="correspondence-phone-number-extension">Ext.</label>
-                <md-input
-                  name="correspondence-phone-number-extension"
-                  id="correspondence-phone-number-extension"
-                  autocomplete="tel"
-                  type="number"
-                  v-model="form.correspondencePhoneNumberExtension"
-                  :disabled="sending"
-                />
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('correspondenceEmail')">
-                <label for="correspondence-email" ref="correspondenceEmail">Email</label>
-                <md-input
-                  type="email"
-                  name="correspondence-email"
-                  id="correspondence-email"
-                  autocomplete="email"
-                  v-model="form.correspondenceEmail"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.correspondenceEmail.required"
-                >The Correspondence email is required</span>
-                <span class="md-error" v-else-if="!$v.form.correspondenceEmail.email">Invalid email</span>
-              </md-field>
-            </div>
-          </div>
-        </details>
-        <details open>
           <summary class="md-title">Rights &amp; Permissions</summary>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-size-10">
@@ -938,20 +699,6 @@ export default {
       claimantState: null,
       claimantPostalCode: null,
       claimantCountry: null,
-      correspondenceContactPrefix: null,
-      correspondenceContactFirstName: null,
-      correspondenceContactMiddleName: null,
-      correspondenceContactLastName: null,
-      correspondenceContactSuffix: null,
-      correspondenceEmail: null,
-      correspondencePhoneNumber: null,
-      correspondencePhoneNumberExtension: null,
-      correspondenceContactAddress: null,
-      correspondenceContactAddress2: null,
-      correspondenceContactCity: null,
-      correspondenceContactState: null,
-      correspondenceContactPostalCode: null,
-      correspondenceContactCountry: null,
       possibleRightsAndPermissionsPrefix: null,
       possibleRightsAndPermissionsFirstName: null,
       possibleRightsAndPermissionsMiddleName: null,
@@ -1002,7 +749,6 @@ export default {
     copyrightApplicationSaved: false,
     lastCopyrightApplication: '',
     sending: false,
-    useClaimantAddress: false,
     errorOccured: false,
     errorMessage: null,
     reviewCopyrightApplication: false,
@@ -1062,35 +808,6 @@ export default {
       claimantCountry: {
         required
       },
-      correspondenceContactFirstName: {
-        required
-      },
-      correspondenceContactLastName: {
-        required
-      },
-      correspondenceEmail: {
-        required,
-        email
-      },
-      correspondencePhoneNumber: {
-        required,
-        isValidPhoneNumber
-      },
-      correspondenceContactAddress: {
-        required
-      },
-      correspondenceContactCity: {
-        required
-      },
-      correspondenceContactState: {
-        required
-      },
-      correspondenceContactPostalCode: {
-        required
-      },
-      correspondenceContactCountry: {
-        required
-      },
       possibleRightsAndPermissionsEmail: {
         email
       },
@@ -1133,8 +850,6 @@ export default {
       Object.keys(this.customValidationFields).map(k => {
         this.customValidationFields[k].invalid = false
       })
-
-      this.useClaimantAddress = false
     },
     async createCopyrightApplication () {
       this.sending = true
@@ -1161,33 +876,6 @@ export default {
         window.scrollTo(0, 0)
       } else {
         this.scrollToInvalidField()
-      }
-    },
-    copyClaimantAddress () {
-      if (this.useClaimantAddress) {
-        this.form.correspondenceContactPrefix = this.form.claimantPrefix
-        this.form.correspondenceContactFirstName = this.form.claimantFirstName
-        this.form.correspondenceContactMiddleName = this.form.claimantMiddleName
-        this.form.correspondenceContactLastName = this.form.claimantLastName
-        this.form.correspondenceContactSuffix = this.form.claimantSuffix
-        this.form.correspondenceContactAddress = this.form.claimantAddress
-        this.form.correspondenceContactAddress2 = this.form.claimantAddress2
-        this.form.correspondenceContactCity = this.form.claimantCity
-        this.form.correspondenceContactState = this.form.claimantState
-        this.form.correspondenceContactPostalCode = this.form.claimantPostalCode
-        this.form.correspondenceContactCountry = this.form.claimantCountry
-      } else {
-        this.form.correspondenceContactPrefix = null
-        this.form.correspondenceContactFirstName = null
-        this.form.correspondenceContactMiddleName = null
-        this.form.correspondenceContactLastName = null
-        this.form.correspondenceContactSuffix = null
-        this.form.correspondenceContactAddress = null
-        this.form.correspondenceContactAddress2 = null
-        this.form.correspondenceContactCity = null
-        this.form.correspondenceContactState = null
-        this.form.correspondenceContactPostalCode = null
-        this.form.correspondenceContactCountry = null
       }
     },
     validateField (field) {
@@ -1287,7 +975,6 @@ export default {
     }
   },
   updated () {
-    this.form.correspondencePhoneNumber = formatPhoneNumber(this.form.correspondencePhoneNumber)
     this.form.possibleRightsAndPermissionsPhoneNumber = formatPhoneNumber(this.form.possibleRightsAndPermissionsPhoneNumber)
     Object.keys(this.form).forEach(k => { this.form[k] = replaceNonIso8895(this.form[k]) })
   },
@@ -1296,11 +983,8 @@ export default {
     'form.authorSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.claimantPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.claimantSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    'form.correspondenceContactPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    'form.correspondenceContactSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
     'form.possibleRightsAndPermissionsPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    'form.possibleRightsAndPermissionsSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    useClaimantAddress: function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) }
+    'form.possibleRightsAndPermissionsSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) }
   }
 }
 </script>

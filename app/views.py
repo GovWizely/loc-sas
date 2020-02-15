@@ -4,7 +4,7 @@ from flask import g
 from flask_appbuilder import aggregate_count, GroupByChartView, ModelView
 from flask_appbuilder.models.sqla.filters import FilterEqualFunction
 from flask_appbuilder.models.sqla.interface import SQLAInterface
-from wtforms.validators import Email, NumberRange
+from wtforms.validators import NumberRange
 
 from . import appbuilder, db
 from .models import CopyrightApplication, date_today
@@ -27,7 +27,6 @@ class CopyrightApplicationModelView(ModelView):
     datamodel = SQLAInterface(CopyrightApplication)
     list_columns = LIST_APPLICATION_STATUS
     validators_columns = {
-        "correspondence_email": [Email()],
         "year_completed": [NumberRange(min=(date_today.year - 125), max=date_today.year)]
     }
     add_columns = [
@@ -54,20 +53,6 @@ class CopyrightApplicationModelView(ModelView):
         "claimant_state",
         "claimant_postal_code",
         "claimant_country",
-        "correspondence_contact_prefix",
-        "correspondence_contact_first_name",
-        "correspondence_contact_middle_name",
-        "correspondence_contact_last_name",
-        "correspondence_contact_suffix",
-        "correspondence_contact_address",
-        "correspondence_contact_address2",
-        "correspondence_contact_city",
-        "correspondence_contact_state",
-        "correspondence_contact_postal_code",
-        "correspondence_contact_country",
-        "correspondence_email",
-        "correspondence_phone_number",
-        'correspondence_phone_number_extension',
         "possible_rights_and_permissions_prefix",
         "possible_rights_and_permissions_first_name",
         "possible_rights_and_permissions_middle_name",
