@@ -570,8 +570,8 @@
                 <md-input
                   name="possible-rights-and-permissions-phone-number-extension"
                   id="possible-rights-and-permissions-phone-number-extension"
-                  autocomplete="tel"
                   type="number"
+                  autocomplete="tel"
                   v-model="form.possibleRightsAndPermissionsPhoneNumberExtension"
                   :disabled="sending"
                 />
@@ -648,7 +648,7 @@ import {
   maxLength
 } from 'vuelidate/lib/validators'
 import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormatter'
-import { replaceNonIso8895 } from '@/utils/ISO8895-15validator'
+import { removeNonIso8895 } from '@/utils/InvalidCharacters'
 import { empty } from '@/utils/ValidationHelpers'
 import CopyrightApplicationReview from './CopyrightApplicationReview'
 import CopyrightSelectField from './CopyrightSelectField'
@@ -975,8 +975,13 @@ export default {
     }
   },
   updated () {
-    this.form.possibleRightsAndPermissionsPhoneNumber = formatPhoneNumber(this.form.possibleRightsAndPermissionsPhoneNumber)
-    Object.keys(this.form).forEach(k => { this.form[k] = replaceNonIso8895(this.form[k]) })
+    Object.keys(this.form).forEach(k => {
+      if (k === 'possibleRightsAndPermissionsPhoneNumber') {
+        this.form[k] = formatPhoneNumber(this.form[k])
+      } else {
+        this.form[k] = removeNonIso8895(this.form[k])
+      }
+    })
   },
   watch: {
     'form.authorPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
