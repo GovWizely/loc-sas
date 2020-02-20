@@ -2,7 +2,7 @@ import datetime
 
 from flask_appbuilder import Model
 from flask_appbuilder.models.mixins import AuditMixin
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String
 
 date_today = datetime.date.today()
 
@@ -21,6 +21,7 @@ class CopyrightApplication(AuditMixin, Model):
     author_citizenship = Column(String(255))
     author_domicile = Column(String(255))
     author_year_of_birth = Column(Integer)
+    organization = Column(Boolean)
     claimant_prefix = Column(String(255))
     claimant_first_name = Column(String(255))
     claimant_middle_name = Column(String(255))
