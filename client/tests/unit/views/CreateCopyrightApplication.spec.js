@@ -21,6 +21,9 @@ describe('Create Copyright Application', () => {
     wrapper.find('#primary-title').setValue('Zorba')
     wrapper.find('#year-completed').setValue(2020)
 
+    wrapper.vm.form.organization = false
+    await wrapper.vm.$nextTick()
+
     wrapper.find('#author-first-name').setValue('Ray')
     wrapper.find('#author-last-name').setValue('Donovan')
     wrapper.vm.form.authorCitizenship = 'GR'

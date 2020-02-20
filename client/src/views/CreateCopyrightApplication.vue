@@ -124,137 +124,148 @@
         </details>
         <details open>
           <summary class="md-title">Author</summary>
-          <div class="author-name">
+          <div class="question-and-answer">
+            <div class="question">
+              <label class="field-label">Is the author an individual or organization?</label>
+            </div>
+            <div class="answer">
+              <md-radio v-model="form.organization" :value="false" @change="toggleOrganization()">Individual</md-radio>
+              <md-radio v-model="form.organization" :value="true" @change="toggleOrganization()">Organization</md-radio>
+            </div>
+          </div>
+          <div id="individual" v-if="form.organization === false">
+            <div class="name-field">
+              <label class="field-label">
+                Name *
+                <md-tooltip
+                  md-direction="right"
+                >First name &amp; last name or pseudonym is required</md-tooltip>
+              </label>
+            </div>
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item md-size-10">
+                <copyright-select-field
+                  v-model="form.authorPrefix"
+                  name="author-prefix"
+                  label="Prefix"
+                  :disabled="sending"
+                />
+              </div>
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('authorFirstName')">
+                  <label for="author-first-name" ref="authorFirstName">First Name</label>
+                  <md-input
+                    name="author-first-name"
+                    id="author-first-name"
+                    v-model="form.authorFirstName"
+                    :disabled="sending"
+                    maxlength="255"
+                  />
+                  <span
+                    class="md-error"
+                    v-if="customValidationFields.authorFirstName.invalid"
+                  >{{customValidationFields.authorFirstName.message}}</span>
+                </md-field>
+              </div>
+              <div class="md-layout-item md-small-size-100">
+                <md-field>
+                  <label for="author-middle-name">Middle Name</label>
+                  <md-input
+                    name="author-middle-name"
+                    id="author-middle-name"
+                    v-model="form.authorMiddleName"
+                    :disabled="sending"
+                    maxlength="255"
+                  />
+                </md-field>
+              </div>
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('authorLastName')">
+                  <label for="author-last-name" ref="authorLastName">Last Name</label>
+                  <md-input
+                    name="author-last-name"
+                    id="author-last-name"
+                    v-model="form.authorLastName"
+                    :disabled="sending"
+                    maxlength="255"
+                  />
+                  <span
+                    class="md-error"
+                    v-if="customValidationFields.authorLastName.invalid"
+                  >{{customValidationFields.authorLastName.message}}</span>
+                </md-field>
+              </div>
+              <div class="md-layout-item md-size-10">
+                <copyright-select-field
+                  v-model="form.authorSuffix"
+                  name="author-suffix"
+                  label="Suffix"
+                  :disabled="sending"
+                />
+              </div>
+            </div>
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('authorPseudonym')">
+                  <label for="author-pseudonym" ref="authorPseudonym">Pseudonym</label>
+                  <md-input
+                    name="author-pseudonym"
+                    id="author-pseudonym"
+                    v-model="form.authorPseudonym"
+                    :disabled="sending"
+                    maxlength="255"
+                  />
+                  <span
+                    class="md-error"
+                    v-if="customValidationFields.authorPseudonym.invalid"
+                  >{{customValidationFields.authorPseudonym.message}}</span>
+                </md-field>
+              </div>
+            </div>
             <label class="field-label">
-              Name *
-              <md-tooltip
-                md-direction="right"
-              >First name &amp; last name or pseudonym is required</md-tooltip>
+              Citizenship/Domicile *
+              <md-tooltip md-direction="right">Citizenship or domicile is required</md-tooltip>
             </label>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-10">
-              <copyright-select-field
-                v-model="form.authorPrefix"
-                name="author-prefix"
-                label="Prefix"
-                :disabled="sending"
-              />
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('authorFirstName')">
-                <label for="author-first-name" ref="authorFirstName">First Name</label>
-                <md-input
-                  name="author-first-name"
-                  id="author-first-name"
-                  v-model="form.authorFirstName"
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item md-small-size-100" ref="authorCitizenship">
+                <copyright-select-field
+                  v-model="form.authorCitizenship"
+                  name="author-citizenship"
+                  label="Citizenship"
                   :disabled="sending"
-                  maxlength="255"
+                  :validationClass="getValidationClass('authorCitizenship')"
+                  :displayRequiredError="customValidationFields.authorCitizenship.invalid"
+                  errorMessage="'The author citizenship or domicile is required'"
                 />
-                <span
-                  class="md-error"
-                  v-if="customValidationFields.authorFirstName.invalid"
-                >{{customValidationFields.authorFirstName.message}}</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="author-middle-name">Middle Name</label>
-                <md-input
-                  name="author-middle-name"
-                  id="author-middle-name"
-                  v-model="form.authorMiddleName"
+              </div>
+              <div class="or">- or -</div>
+              <div class="md-layout-item md-small-size-100" ref="authorDomicile">
+                <copyright-select-field
+                  v-model="form.authorDomicile"
+                  name="author-domicile"
+                  label="Domicile"
                   :disabled="sending"
-                  maxlength="255"
+                  :validationClass="getValidationClass('authorDomicile')"
+                  :displayRequiredError="customValidationFields.authorDomicile.invalid"
+                  errorMessage="The author citizenship or domicile is required"
                 />
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('authorLastName')">
-                <label for="author-last-name" ref="authorLastName">Last Name</label>
-                <md-input
-                  name="author-last-name"
-                  id="author-last-name"
-                  v-model="form.authorLastName"
-                  :disabled="sending"
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="customValidationFields.authorLastName.invalid"
-                >{{customValidationFields.authorLastName.message}}</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-size-10">
-              <copyright-select-field
-                v-model="form.authorSuffix"
-                name="author-suffix"
-                label="Suffix"
-                :disabled="sending"
-              />
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('authorPseudonym')">
-                <label for="author-pseudonym" ref="authorPseudonym">Pseudonym</label>
-                <md-input
-                  name="author-pseudonym"
-                  id="author-pseudonym"
-                  v-model="form.authorPseudonym"
-                  :disabled="sending"
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="customValidationFields.authorPseudonym.invalid"
-                >{{customValidationFields.authorPseudonym.message}}</span>
-              </md-field>
-            </div>
-          </div>
-          <label class="field-label">
-            Citizenship/Domicile *
-            <md-tooltip md-direction="right">Citizenship or domicile is required</md-tooltip>
-          </label>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100" ref="authorCitizenship">
-              <copyright-select-field
-                v-model="form.authorCitizenship"
-                name="author-citizenship"
-                label="Citizenship"
-                :disabled="sending"
-                :validationClass="getValidationClass('authorCitizenship')"
-                :displayRequiredError="customValidationFields.authorCitizenship.invalid"
-                errorMessage="'The author citizenship or domicile is required'"
-              />
-            </div>
-            <div class="or">- or -</div>
-            <div class="md-layout-item md-small-size-100" ref="authorDomicile">
-               <copyright-select-field
-                v-model="form.authorDomicile"
-                name="author-domicile"
-                label="Domicile"
-                :disabled="sending"
-                :validationClass="getValidationClass('authorDomicile')"
-                :displayRequiredError="customValidationFields.authorDomicile.invalid"
-                errorMessage="The author citizenship or domicile is required"
-              />
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('authorYearOfBirth')">
-                <label for="author-year-of-birth" ref="authorYearOfBirth">Year of Birth</label>
-                <md-input
-                  name="author-year-of-birth"
-                  id="author-year-of-birth"
-                  type="number"
-                  v-model="form.authorYearOfBirth"
-                  :disabled="sending"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.authorYearOfBirth.minValue || !$v.form.authorYearOfBirth.maxValue"
-                >The year of birth must be between {{minAuthorYearOfBirth}} and {{maxAuthorYearOfBirth}}</span>
-              </md-field>
+              </div>
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="getValidationClass('authorYearOfBirth')">
+                  <label for="author-year-of-birth" ref="authorYearOfBirth">Year of Birth</label>
+                  <md-input
+                    name="author-year-of-birth"
+                    id="author-year-of-birth"
+                    type="number"
+                    v-model="form.authorYearOfBirth"
+                    :disabled="sending"
+                  />
+                  <span
+                    class="md-error"
+                    v-if="!$v.form.authorYearOfBirth.minValue || !$v.form.authorYearOfBirth.maxValue"
+                  >The year of birth must be between {{minAuthorYearOfBirth}} and {{maxAuthorYearOfBirth}}</span>
+                </md-field>
+              </div>
             </div>
           </div>
         </details>
@@ -679,6 +690,7 @@ export default {
       yearCompleted: null,
       workDepositName: null,
       workDepositUrl: null,
+      organization: null,
       authorPrefix: null,
       authorFirstName: null,
       authorMiddleName: null,
@@ -972,6 +984,17 @@ export default {
       this.form.workDepositUrl = fileUrl
       this.uploadingWorkDeposit = false
       this.saveDraft()
+    },
+    toggleOrganization () {
+      if (this.form.organization) {
+        this.form.authorFirstName = 'organization'
+        this.form.authorLastName = 'organization'
+        this.form.authorCitizenship = 'organization'
+      } else {
+        this.form.authorFirstName = null
+        this.form.authorLastName = null
+        this.form.authorCitizenship = null
+      }
     }
   },
   updated () {
@@ -1020,11 +1043,11 @@ export default {
   justify-content: flex-end;
 }
 
-.author-name {
+.name-field {
   display: flex;
 }
 
-.author-name .field-label {
+.name-field .field-label {
   padding-top: 12px;
 }
 
@@ -1040,5 +1063,14 @@ export default {
 
 .or {
   padding-top: 28px;
+}
+
+.question-and-answer {
+  display: flex;
+}
+
+.question {
+  margin-top: 20px;
+  margin-right: 22px;
 }
 </style>

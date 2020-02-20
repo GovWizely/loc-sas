@@ -44,7 +44,7 @@
           <span>{{application.yearCompleted}}</span>
         </div>
       </div>
-      <div class="col" v-if="application.authorFirstName || application.authorLastName">
+      <div class="col" v-if="!application.organization && (application.authorFirstName || application.authorLastName)">
         <div class="col-left">
           <label class="field-label">Author:</label>
         </div>
@@ -57,7 +57,7 @@
             application.authorSuffix)}}</span>
         </div>
       </div>
-      <div class="col" v-if="application.authorPseudonym">
+      <div class="col" v-if="!application.organization && application.authorPseudonym">
         <div class="col-left">
           <label class="field-label">Pseudonym:</label>
         </div>
@@ -65,7 +65,7 @@
           <span>{{application.authorPseudonym}}</span>
         </div>
       </div>
-      <div class="col" v-if="application.authorCitizenship">
+      <div class="col" v-if="!application.organization && application.authorCitizenship">
         <div class="col-left">
           <label class="field-label">Citizenship:</label>
         </div>
@@ -73,7 +73,7 @@
           <span>{{application.authorCitizenship}}</span>
         </div>
       </div>
-       <div class="col" v-if="application.authorDomicile">
+       <div class="col" v-if="!application.organization && application.authorDomicile">
         <div class="col-left">
           <label class="field-label">Domicile:</label>
         </div>
