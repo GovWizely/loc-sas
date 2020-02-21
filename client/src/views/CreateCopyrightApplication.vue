@@ -128,146 +128,27 @@
             <div class="question">
               <label class="field-label">Is the author an individual or organization?</label>
             </div>
-            <div class="answer">
-              <md-radio v-model="form.organization" :value="false" @change="toggleOrganization()">Individual</md-radio>
-              <md-radio v-model="form.organization" :value="true" @change="toggleOrganization()">Organization</md-radio>
+            <div class="answer" ref="organization">
+              <md-radio id="individual" v-model="form.organization" :value="false" @change="toggleOrganization()">
+                Individual
+              </md-radio>
+              <md-radio id="organization" v-model="form.organization" :value="true" @change="toggleOrganization()">
+                Organization
+              </md-radio>
             </div>
           </div>
-          <div id="individual" v-if="form.organization === false">
-            <div class="name-field">
-              <label class="field-label">
-                Name *
-                <md-tooltip
-                  md-direction="right"
-                >First name &amp; last name or pseudonym is required</md-tooltip>
-              </label>
-            </div>
-            <div class="md-layout md-gutter">
-              <div class="md-layout-item md-size-10">
-                <copyright-select-field
-                  v-model="form.authorPrefix"
-                  name="author-prefix"
-                  label="Prefix"
-                  :disabled="sending"
-                />
-              </div>
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('authorFirstName')">
-                  <label for="author-first-name" ref="authorFirstName">First Name</label>
-                  <md-input
-                    name="author-first-name"
-                    id="author-first-name"
-                    v-model="form.authorFirstName"
-                    :disabled="sending"
-                    maxlength="255"
-                  />
-                  <span
-                    class="md-error"
-                    v-if="customValidationFields.authorFirstName.invalid"
-                  >{{customValidationFields.authorFirstName.message}}</span>
-                </md-field>
-              </div>
-              <div class="md-layout-item md-small-size-100">
-                <md-field>
-                  <label for="author-middle-name">Middle Name</label>
-                  <md-input
-                    name="author-middle-name"
-                    id="author-middle-name"
-                    v-model="form.authorMiddleName"
-                    :disabled="sending"
-                    maxlength="255"
-                  />
-                </md-field>
-              </div>
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('authorLastName')">
-                  <label for="author-last-name" ref="authorLastName">Last Name</label>
-                  <md-input
-                    name="author-last-name"
-                    id="author-last-name"
-                    v-model="form.authorLastName"
-                    :disabled="sending"
-                    maxlength="255"
-                  />
-                  <span
-                    class="md-error"
-                    v-if="customValidationFields.authorLastName.invalid"
-                  >{{customValidationFields.authorLastName.message}}</span>
-                </md-field>
-              </div>
-              <div class="md-layout-item md-size-10">
-                <copyright-select-field
-                  v-model="form.authorSuffix"
-                  name="author-suffix"
-                  label="Suffix"
-                  :disabled="sending"
-                />
-              </div>
-            </div>
-            <div class="md-layout md-gutter">
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('authorPseudonym')">
-                  <label for="author-pseudonym" ref="authorPseudonym">Pseudonym</label>
-                  <md-input
-                    name="author-pseudonym"
-                    id="author-pseudonym"
-                    v-model="form.authorPseudonym"
-                    :disabled="sending"
-                    maxlength="255"
-                  />
-                  <span
-                    class="md-error"
-                    v-if="customValidationFields.authorPseudonym.invalid"
-                  >{{customValidationFields.authorPseudonym.message}}</span>
-                </md-field>
-              </div>
-            </div>
-            <label class="field-label">
-              Citizenship/Domicile *
-              <md-tooltip md-direction="right">Citizenship or domicile is required</md-tooltip>
-            </label>
-            <div class="md-layout md-gutter">
-              <div class="md-layout-item md-small-size-100" ref="authorCitizenship">
-                <copyright-select-field
-                  v-model="form.authorCitizenship"
-                  name="author-citizenship"
-                  label="Citizenship"
-                  :disabled="sending"
-                  :validationClass="getValidationClass('authorCitizenship')"
-                  :displayRequiredError="customValidationFields.authorCitizenship.invalid"
-                  errorMessage="'The author citizenship or domicile is required'"
-                />
-              </div>
-              <div class="or">- or -</div>
-              <div class="md-layout-item md-small-size-100" ref="authorDomicile">
-                <copyright-select-field
-                  v-model="form.authorDomicile"
-                  name="author-domicile"
-                  label="Domicile"
-                  :disabled="sending"
-                  :validationClass="getValidationClass('authorDomicile')"
-                  :displayRequiredError="customValidationFields.authorDomicile.invalid"
-                  errorMessage="The author citizenship or domicile is required"
-                />
-              </div>
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="getValidationClass('authorYearOfBirth')">
-                  <label for="author-year-of-birth" ref="authorYearOfBirth">Year of Birth</label>
-                  <md-input
-                    name="author-year-of-birth"
-                    id="author-year-of-birth"
-                    type="number"
-                    v-model="form.authorYearOfBirth"
-                    :disabled="sending"
-                  />
-                  <span
-                    class="md-error"
-                    v-if="!$v.form.authorYearOfBirth.minValue || !$v.form.authorYearOfBirth.maxValue"
-                  >The year of birth must be between {{minAuthorYearOfBirth}} and {{maxAuthorYearOfBirth}}</span>
-                </md-field>
-              </div>
-            </div>
-          </div>
+          <individual-form
+            v-if="form.organization === false"
+            ref="individualForm"
+            v-model="form"
+            :sending="sending"
+          />
+          <organization-form
+            v-if="form.organization === true"
+            ref="organizationForm"
+            v-model="form"
+            :sending="sending"
+          />
         </details>
         <details open>
           <summary class="md-title">Claimant</summary>
@@ -660,15 +541,14 @@ import {
 } from 'vuelidate/lib/validators'
 import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormatter'
 import { removeNonIso8895 } from '@/utils/InvalidCharacters'
-import { empty } from '@/utils/ValidationHelpers'
-import CopyrightApplicationReview from './CopyrightApplicationReview'
-import CopyrightSelectField from './CopyrightSelectField'
+import CopyrightApplicationReview from '@/views/CopyrightApplicationReview'
+import CopyrightSelectField from '@/views/CopyrightSelectField'
+import IndividualForm from '@/views/IndividualForm'
+import OrganizationForm from '@/views/OrganizationForm'
 
 let d = new Date()
 let maxYearCompleted = d.getFullYear()
 let minYearCompleted = maxYearCompleted - 125
-let maxAuthorYearOfBirth = maxYearCompleted
-let minAuthorYearOfBirth = maxAuthorYearOfBirth - 225
 
 export default {
   name: 'CreateCopyrightApplication',
@@ -676,13 +556,13 @@ export default {
   mixins: [validationMixin],
   components: {
     'copyright-application-review': CopyrightApplicationReview,
-    'copyright-select-field': CopyrightSelectField
+    'copyright-select-field': CopyrightSelectField,
+    'individual-form': IndividualForm,
+    'organization-form': OrganizationForm
   },
   data: () => ({
     minYearCompleted,
     maxYearCompleted,
-    minAuthorYearOfBirth,
-    maxAuthorYearOfBirth,
     form: {
       id: null,
       primaryTitle: null,
@@ -690,7 +570,7 @@ export default {
       yearCompleted: null,
       workDepositName: null,
       workDepositUrl: null,
-      organization: null,
+      domicile: null,
       authorPrefix: null,
       authorFirstName: null,
       authorMiddleName: null,
@@ -698,8 +578,9 @@ export default {
       authorSuffix: null,
       authorPseudonym: null,
       authorCitizenship: null,
-      authorDomicile: null,
       authorYearOfBirth: null,
+      organization: null,
+      organizationName: null,
       claimantPrefix: null,
       claimantFirstName: null,
       claimantMiddleName: null,
@@ -738,24 +619,6 @@ export default {
       },
       yearCompleted: {
         invalid: false
-      },
-      authorCitizenship: {
-        invalid: false
-      },
-      authorDomicile: {
-        invalid: false
-      },
-      authorFirstName: {
-        invalid: false,
-        message: null
-      },
-      authorLastName: {
-        invalid: false,
-        message: null
-      },
-      authorPseudonym: {
-        invalid: false,
-        message: null
       }
     },
     copyrightApplicationSaved: false,
@@ -795,9 +658,8 @@ export default {
         minValue: minValue(minYearCompleted),
         maxValue: maxValue(maxYearCompleted)
       },
-      authorYearOfBirth: {
-        minValue: minValue(minAuthorYearOfBirth),
-        maxValue: maxValue(maxAuthorYearOfBirth)
+      organization: {
+        required
       },
       claimantFirstName: {
         required
@@ -858,10 +720,6 @@ export default {
       Object.keys(this.form).map(k => {
         typeof this.form[k] === 'boolean' ? this.form[k] = false : this.form[k] = null
       })
-
-      Object.keys(this.customValidationFields).map(k => {
-        this.customValidationFields[k].invalid = false
-      })
     },
     async createCopyrightApplication () {
       this.sending = true
@@ -880,10 +738,22 @@ export default {
       this.sending = false
     },
     async validateCopyrightApplication () {
-      this.$v.$touch()
-      this.updateCustomValidations()
+      let invalid = false
+      this.$v.form.$touch()
 
-      if (!this.$v.$invalid && !this.invalidCustomValidationFields()) {
+      if (this.$v.$invalid) {
+        invalid = true
+      } else {
+        if (this.form.organization) {
+          this.$refs.organizationForm.validate()
+          invalid = this.$refs.organizationForm.invalid
+        } else {
+          this.$refs.individualForm.validate()
+          invalid = this.$refs.individualForm.invalid
+        }
+      }
+
+      if (!invalid) {
         this.reviewCopyrightApplication = true
         window.scrollTo(0, 0)
       } else {
@@ -891,9 +761,7 @@ export default {
       }
     },
     validateField (field) {
-      if (!this.$v.form[field]) {
-        this.updateCustomValidations()
-      } else {
+      if (this.$v.form[field]) {
         this.customValidationFields[field].invalid = this.$v.form[field].$invalid
       }
     },
@@ -925,47 +793,6 @@ export default {
     closeFormReview () {
       this.reviewCopyrightApplication = false
     },
-    updateCustomValidations () {
-      if (empty(this.form.authorCitizenship) && empty(this.form.authorDomicile)) {
-        this.customValidationFields.authorCitizenship.invalid = true
-        this.customValidationFields.authorDomicile.invalid = true
-      } else {
-        this.customValidationFields.authorCitizenship.invalid = false
-        this.customValidationFields.authorDomicile.invalid = false
-      }
-
-      if (empty(this.form.authorPseudonym) && empty(this.form.authorFirstName) && empty(this.form.authorLastName)) {
-        this.customValidationFields.authorFirstName.invalid = true
-        this.customValidationFields.authorLastName.invalid = true
-        this.customValidationFields.authorPseudonym.invalid = true
-        this.customValidationFields.authorFirstName.message = 'First name & last name or pseudonym is required'
-        this.customValidationFields.authorLastName.message = 'First name & last name or pseudonym is required'
-        this.customValidationFields.authorPseudonym.message = 'First name & last name or pseudonym is required'
-      } else if (empty(this.form.authorFirstName) && !empty(this.form.authorLastName)) {
-        this.customValidationFields.authorFirstName.invalid = true
-        this.customValidationFields.authorFirstName.message = 'First name is required when last name is populated'
-        this.customValidationFields.authorLastName.invalid = false
-        this.customValidationFields.authorLastName.message = null
-      } else if (!empty(this.form.authorFirstName) && empty(this.form.authorLastName)) {
-        this.customValidationFields.authorFirstName.invalid = false
-        this.customValidationFields.authorFirstName.message = null
-        this.customValidationFields.authorLastName.invalid = true
-        this.customValidationFields.authorLastName.message = 'Last name is required when first name is populated'
-      } else {
-        this.customValidationFields.authorFirstName.invalid = false
-        this.customValidationFields.authorLastName.invalid = false
-        this.customValidationFields.authorPseudonym.invalid = false
-      }
-    },
-    invalidCustomValidationFields () {
-      const fields = Object.keys(this.customValidationFields)
-      for (let i = 0; i < fields.length; i++) {
-        if (this.customValidationFields[fields[i]].invalid) {
-          return true
-        }
-      }
-      return false
-    },
     onWorkDepositsSelection (files) {
       const formData = new FormData()
       if (!files.length) return
@@ -986,14 +813,17 @@ export default {
       this.saveDraft()
     },
     toggleOrganization () {
-      if (this.form.organization) {
-        this.form.authorFirstName = 'organization'
-        this.form.authorLastName = 'organization'
-        this.form.authorCitizenship = 'organization'
-      } else {
+      if (this.form.organization === true) {
+        this.form.organizationName = null
+        this.form.authorPrefix = null
         this.form.authorFirstName = null
+        this.form.authorMiddleName = null
         this.form.authorLastName = null
+        this.form.authorSuffix = null
+        this.form.authorPseudonym = null
         this.form.authorCitizenship = null
+        this.form.domicile = null
+        this.form.authorYearOfBirth = null
       }
     }
   },
@@ -1059,10 +889,6 @@ export default {
 .uploaded-work-deposits {
   display: flex;
   justify-content: center;
-}
-
-.or {
-  padding-top: 28px;
 }
 
 .question-and-answer {

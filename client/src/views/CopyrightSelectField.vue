@@ -1,6 +1,6 @@
 <template>
   <md-field :class="validationClass">
-    <label v-if="!value" :class="getLabelClass()" :for="name">{{label}}</label>
+    <label :class="getLabelClass()" :for="name">{{getLabel()}}</label>
     <select
       class="copyright-select"
       :name="name"
@@ -24,7 +24,7 @@ import stateList from '@/utils/StateList'
 import countryList from '@/utils/CountryList'
 
 export default {
-  name: 'FixField',
+  name: 'CopyrightSelectField',
   props: ['value', 'options', 'name', 'label', 'validationClass', 'displayRequiredError', 'errorMessage', 'required', 'disabled'],
   methods: {
     updateField () {
@@ -33,12 +33,11 @@ export default {
     getFieldName () {
       return this.name.replace(/-/g, ' ')
     },
+    getLabel () {
+      return this.label + ((this.required) ? ' *' : '')
+    },
     getLabelClass () {
-      if (this.required) {
-        return 'select-label' + ' required'
-      } else {
-        return 'select-label'
-      }
+      return 'select-label' + ((this.value) ? ' populated' : '')
     },
     getOptions () {
       if (this.label === 'Prefix') {
@@ -80,7 +79,8 @@ export default {
   padding-left: 10px;
 }
 
-label.select-label.required:after {
-  content: " *";
+label.select-label.populated {
+  top: -5px;
+  font-size: 12px;
 }
 </style>
