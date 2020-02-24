@@ -154,7 +154,7 @@ let maxAuthorYearOfBirth = maxYearCompleted
 let minAuthorYearOfBirth = maxAuthorYearOfBirth - 225
 
 export default {
-  name: 'IndividualForm',
+  name: 'AuthorIndividualForm',
   props: ['value', 'sending'],
   mixins: [validationMixin],
   components: {

@@ -128,95 +128,56 @@
             <div class="question">
               <label class="field-label">Is the author an individual or organization?</label>
             </div>
-            <div class="answer" ref="organization">
-              <md-radio id="individual" v-model="form.organization" :value="false" @change="toggleOrganization()">
+            <div class="answer" ref="authorOrganization">
+              <md-radio id="author-individual" v-model="form.authorOrganization" :value="false" @change="toggleAuthorOrganization()">
                 Individual
               </md-radio>
-              <md-radio id="organization" v-model="form.organization" :value="true" @change="toggleOrganization()">
+              <md-radio id="author-organization" v-model="form.authorOrganization" :value="true" @change="toggleAuthorOrganization()">
                 Organization
               </md-radio>
             </div>
           </div>
-          <individual-form
-            v-if="form.organization === false"
-            ref="individualForm"
+          <author-individual-form
+            v-if="form.authorOrganization === false"
+            ref="authorIndividualForm"
             v-model="form"
             :sending="sending"
           />
-          <organization-form
-            v-if="form.organization === true"
-            ref="organizationForm"
+          <author-organization-form
+            v-if="form.authorOrganization === true"
+            ref="authorOrganizationForm"
             v-model="form"
             :sending="sending"
           />
         </details>
         <details open>
           <summary class="md-title">Claimant</summary>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-10">
-              <copyright-select-field
-                v-model="form.claimantPrefix"
-                name="claimant-prefix"
-                label="Prefix"
-                :disabled="sending"
-              />
+          <div class="question-and-answer">
+            <div class="question">
+            <label class="field-label">Is the claimant an individual or organization?</label>
             </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('claimantFirstName')">
-                <label for="claimant-first-name" ref="claimantFirstName">First Name</label>
-                <md-input
-                  name="claimant-first-name"
-                  id="claimant-first-name"
-                  v-model="form.claimantFirstName"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.claimantFirstName.required"
-                >The claimant first name is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="claimant-middle-name">Middle Name</label>
-                <md-input
-                  name="claimant-middle-name"
-                  id="claimant-middle-name"
-                  v-model="form.claimantMiddleName"
-                  :disabled="sending"
-                  maxlength="255"
-                />
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('claimantLastName')">
-                <label for="claimant-first-name" ref="claimantLastName">Last Name</label>
-                <md-input
-                  name="claimant-last-name"
-                  id="claimant-last-name"
-                  v-model="form.claimantLastName"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.claimantLastName.required"
-                >The claimant last name is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-size-10">
-              <copyright-select-field
-                v-model="form.claimantSuffix"
-                name="claimant-suffix"
-                label="Suffix"
-                :disabled="sending"
-              />
+            <div class="answer" ref="claimantOrganization">
+              <md-radio id="claimant-individual" v-model="form.claimantOrganization" :value="false" @change="toggleClaimantOrganization()">
+                Individual
+              </md-radio>
+              <md-radio id="claimant-organization" v-model="form.claimantOrganization" :value="true" @change="toggleClaimantOrganization()">
+                Organization
+              </md-radio>
             </div>
           </div>
-          <div class="md-layout md-gutter">
+          <claimant-individual-form
+            v-if="form.claimantOrganization === false"
+            ref="claimantIndividualForm"
+            v-model="form"
+            :sending="sending"
+          />
+          <claimant-organization-form
+            v-if="form.claimantOrganization === true"
+            ref="claimantOrganizationForm"
+            v-model="form"
+            :sending="sending"
+          />
+           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('claimantAddress')">
                 <label for="claimant-address" ref="claimantAddress">Address</label>
@@ -543,8 +504,10 @@ import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormat
 import { removeNonIso8895 } from '@/utils/InvalidCharacters'
 import CopyrightApplicationReview from '@/views/CopyrightApplicationReview'
 import CopyrightSelectField from '@/views/CopyrightSelectField'
-import IndividualForm from '@/views/IndividualForm'
-import OrganizationForm from '@/views/OrganizationForm'
+import AuthorIndividualForm from '@/views/AuthorIndividualForm'
+import AuthorOrganizationForm from '@/views/AuthorOrganizationForm'
+import ClaimantIndividualForm from '@/views/ClaimantIndividualForm'
+import ClaimantOrganizationForm from '@/views/ClaimantOrganizationForm'
 
 let d = new Date()
 let maxYearCompleted = d.getFullYear()
@@ -557,8 +520,10 @@ export default {
   components: {
     'copyright-application-review': CopyrightApplicationReview,
     'copyright-select-field': CopyrightSelectField,
-    'individual-form': IndividualForm,
-    'organization-form': OrganizationForm
+    'author-individual-form': AuthorIndividualForm,
+    'author-organization-form': AuthorOrganizationForm,
+    'claimant-individual-form': ClaimantIndividualForm,
+    'claimant-organization-form': ClaimantOrganizationForm
   },
   data: () => ({
     minYearCompleted,
@@ -579,8 +544,10 @@ export default {
       authorPseudonym: null,
       authorCitizenship: null,
       authorYearOfBirth: null,
-      organization: null,
-      organizationName: null,
+      authorOrganization: null,
+      authorOrganizationName: null,
+      claimantOrganization: null,
+      claimantOrganizationName: null,
       claimantPrefix: null,
       claimantFirstName: null,
       claimantMiddleName: null,
@@ -658,13 +625,10 @@ export default {
         minValue: minValue(minYearCompleted),
         maxValue: maxValue(maxYearCompleted)
       },
-      organization: {
+      authorOrganization: {
         required
       },
-      claimantFirstName: {
-        required
-      },
-      claimantLastName: {
+      claimantOrganization: {
         required
       },
       claimantAddress: {
@@ -743,13 +707,25 @@ export default {
 
       if (this.$v.$invalid) {
         invalid = true
-      } else {
-        if (this.form.organization) {
-          this.$refs.organizationForm.validate()
-          invalid = this.$refs.organizationForm.invalid
+      }
+
+      if (!invalid) {
+        if (this.form.authorOrganization) {
+          this.$refs.authorOrganizationForm.validate()
+          invalid = this.$refs.authorOrganizationForm.invalid
         } else {
-          this.$refs.individualForm.validate()
-          invalid = this.$refs.individualForm.invalid
+          this.$refs.authorIndividualForm.validate()
+          invalid = this.$refs.authorIndividualForm.invalid
+        }
+      }
+
+      if (!invalid) {
+        if (this.form.claimantOrganization) {
+          this.$refs.claimantOrganizationForm.validate()
+          invalid = this.$refs.claimantOrganizationForm.invalid
+        } else {
+          this.$refs.claimantIndividualForm.validate()
+          invalid = this.$refs.claimantIndividualForm.invalid
         }
       }
 
@@ -812,9 +788,9 @@ export default {
       this.uploadingWorkDeposit = false
       this.saveDraft()
     },
-    toggleOrganization () {
-      if (this.form.organization === true) {
-        this.form.organizationName = null
+    toggleAuthorOrganization () {
+      if (this.form.authorOrganization === true) {
+        this.form.authorOrganizationName = null
         this.form.authorPrefix = null
         this.form.authorFirstName = null
         this.form.authorMiddleName = null
@@ -824,6 +800,16 @@ export default {
         this.form.authorCitizenship = null
         this.form.domicile = null
         this.form.authorYearOfBirth = null
+      }
+    },
+    toggleClaimantOrganization () {
+      if (this.form.claimantOrganization === true) {
+        this.form.claimantOrganizationName = null
+        this.form.claimantPrefix = null
+        this.form.claimantFirstName = null
+        this.form.claimantMiddleName = null
+        this.form.claimantLastName = null
+        this.form.claimantSuffix = null
       }
     }
   },
