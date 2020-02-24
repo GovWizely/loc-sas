@@ -44,15 +44,15 @@
           <span>{{application.yearCompleted}}</span>
         </div>
       </div>
-      <div class="col" v-if="application.organization">
+      <div class="col" v-if="application.authorOrganization">
         <div class="col-left">
           <label class="field-label">Organization Name:</label>
         </div>
         <div class="col-right">
-          <span>{{application.organizationName}}</span>
+          <span>{{application.authorOrganizationName}}</span>
         </div>
       </div>
-      <div class="col" v-if="!application.organization && (application.authorFirstName || application.authorLastName)">
+      <div class="col" v-if="!application.authorOrganization && (application.authorFirstName || application.authorLastName)">
         <div class="col-left">
           <label class="field-label">Author:</label>
         </div>
@@ -65,7 +65,7 @@
             application.authorSuffix)}}</span>
         </div>
       </div>
-      <div class="col" v-if="!application.organization && application.authorPseudonym">
+      <div class="col" v-if="!application.authorOrganization && application.authorPseudonym">
         <div class="col-left">
           <label class="field-label">Pseudonym:</label>
         </div>
@@ -73,7 +73,7 @@
           <span>{{application.authorPseudonym}}</span>
         </div>
       </div>
-      <div class="col" v-if="!application.organization && application.authorCitizenship">
+      <div class="col" v-if="!application.authorOrganization && application.authorCitizenship">
         <div class="col-left">
           <label class="field-label">Citizenship:</label>
         </div>
@@ -89,7 +89,7 @@
           <span>{{application.domicile}}</span>
         </div>
       </div>
-      <div class="col" v-if="!application.organization && application.authorYearOfBirth">
+      <div class="col" v-if="!application.authorOrganization && application.authorYearOfBirth">
         <div class="col-left">
           <label class="field-label">Year of Birth:</label>
         </div>
@@ -102,12 +102,17 @@
           <label class="field-label">Copyright Claimant:</label>
         </div>
         <div class="col-right">
+          <div v-if="application.claimantOrganization">
+            <span>{{application.claimantOrganizationName}}</span>
+          </div>
+          <div v-else>
           <span>{{formatName(
             application.claimantPrefix,
             application.claimantFirstName,
             application.claimantMiddleName,
             application.claimantLastName,
-            application.claimantSuffix)}}</span><br />
+            application.claimantSuffix)}}</span>
+          </div>
           <span>{{application.claimantAddress}} {{application.claimantAddress2}}</span><br />
           <span>{{formatCityStateZipCountry(
             application.claimantCity,

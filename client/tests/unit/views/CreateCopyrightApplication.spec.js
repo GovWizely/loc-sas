@@ -22,11 +22,14 @@ describe('Create Copyright Application', () => {
     wrapper.find('#year-completed').setValue(2020)
 
     wrapper.vm.form.authorCitizenship = 'GR'
-    wrapper.find('#individual').trigger('click')
+    wrapper.find('#author-individual').trigger('click')
     await wrapper.vm.$nextTick()
 
     wrapper.find('#author-first-name').setValue('Ray')
     wrapper.find('#author-last-name').setValue('Donovan')
+
+    wrapper.find('#claimant-individual').trigger('click')
+    await wrapper.vm.$nextTick()
     wrapper.find('#claimant-first-name').setValue('George')
     wrapper.find('#claimant-last-name').setValue('Washington')
     wrapper.find('#claimant-address').setValue('1234 Cool Ln')

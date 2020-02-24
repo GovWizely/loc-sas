@@ -1,74 +1,52 @@
 <template>
   <div class="md-layout md-gutter">
-    <div class="md-layout-item md-small-size-100" ref="tmpOrganizationName">
-      <md-field :class="getValidationClass('tmpOrganizationName')">
-        <label for="organization-name">Organization Name</label>
+    <div class="md-layout-item md-small-size-100" ref="tmpClaimantOrganizationName">
+      <md-field :class="getValidationClass('tmpClaimantOrganizationName')">
+        <label for="claimant-organization-name">Organization Name</label>
         <md-input
-          name="organization-name"
-          id="organization-name"
-          v-model="form.tmpOrganizationName"
+          name="claimant-organization-name"
+          id="claimant-organization-name"
+          v-model="form.tmpClaimantOrganizationName"
           :disabled="sending"
           maxlength="255"
+          required
           @input="updateField()"
         />
         <span
           class="md-error"
-          v-if="!$v.form.tmpOrganizationName.required"
+          v-if="!$v.form.tmpClaimantOrganizationName.required"
         >The organization name is required</span>
       </md-field>
-    </div>
-    <div class="md-layout-item md-small-size-100" ref="tmpDomicile">
-      <copyright-select-field
-        v-model="form.tmpDomicile"
-        name="domicile"
-        label="Domicile"
-        required="true"
-        :disabled="sending"
-        :validationClass="getValidationClass('tmpDomicile')"
-        :displayRequiredError="!$v.form.tmpDomicile.required"
-        errorMessage="The domicile is required"
-        @input="updateField()"
-      />
     </div>
   </div>
 </template>
 <script>
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
-import CopyrightSelectField from '@/views/CopyrightSelectField'
 
 export default {
-  name: 'OrganizationForm',
+  name: 'ClaimantOrganizationForm',
   props: ['value', 'sending'],
   mixins: [validationMixin],
-  components: {
-    'copyright-select-field': CopyrightSelectField
-  },
   created () {
-    this.form.tmpOrganizationName = this.value.organizationName
-    this.form.tmpDomicile = this.value.domicile
+    this.form.tmpClaimantOrganizationName = this.value.claimantOrganizationName
   },
   data: () => ({
     invalid: false,
     form: {
-      tmpOrganizationName: null,
-      tmpDomicile: null
+      tmpClaimantOrganizationName: null
     }
   }),
   validations: {
     form: {
-      tmpOrganizationName: {
-        required
-      },
-      tmpDomicile: {
+      tmpClaimantOrganizationName: {
         required
       }
     }
   },
   methods: {
     updateField () {
-      this.value.organizationName = this.form.tmpOrganizationName
-      this.value.domicile = this.form.tmpDomicile
+      this.value.claimantOrganizationName = this.form.tmpClaimantOrganizationName
       this.$emit('input', this.value)
     },
     getValidationClass (fieldName) {
