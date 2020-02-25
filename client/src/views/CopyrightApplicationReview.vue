@@ -132,6 +132,11 @@
             application.possibleRightsAndPermissionsMiddleName,
             application.possibleRightsAndPermissionsLastName,
             application.possibleRightsAndPermissionsSuffix)}}</span><br />
+          <div v-if="application.possibleRightsAndPermissionsOrganizationName">
+            <span>
+              {{application.possibleRightsAndPermissionsOrganizationName}}
+            </span><br />
+          </div>
           <span>{{application.possibleRightsAndPermissionsAddress}} {{application.possibleRightsAndPermissionsAddress2}}</span><br />
           <span>{{formatCityStateZipCountry(
             application.possibleRightsAndPermissionsCity,
