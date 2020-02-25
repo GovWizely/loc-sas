@@ -330,6 +330,20 @@
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
               <md-field>
+                <label for="possible-rights-and-permissions-organization-name">Organization Name</label>
+                <md-input
+                  name="possible-rights-and-permissions-organization-name"
+                  id="possible-rights-and-permissions-organization-name"
+                  v-model="form.possibleRightsAndPermissionsOrganizationName"
+                  :disabled="sending"
+                  maxlength="255"
+                />
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
                 <label for="possible-rights-and-permissions-address">Address</label>
                 <md-input
                   name="possible-rights-and-permissions-address"
@@ -559,6 +573,7 @@ export default {
       claimantState: null,
       claimantPostalCode: null,
       claimantCountry: null,
+      possibleRightsAndPermissionOrganizationName: null,
       possibleRightsAndPermissionsPrefix: null,
       possibleRightsAndPermissionsFirstName: null,
       possibleRightsAndPermissionsMiddleName: null,
@@ -702,34 +717,36 @@ export default {
       this.sending = false
     },
     async validateCopyrightApplication () {
-      let invalid = false
       this.$v.form.$touch()
 
-      if (this.$v.$invalid) {
-        invalid = true
+      if (this.form.authorOrganization === true) {
+        this.$refs.authorOrganizationForm.validate()
+      } else if (this.form.authorOrganization === false) {
+        this.$refs.authorIndividualForm.validate()
       }
 
-      if (!invalid) {
-        if (this.form.authorOrganization) {
-          this.$refs.authorOrganizationForm.validate()
-          invalid = this.$refs.authorOrganizationForm.invalid
-        } else {
-          this.$refs.authorIndividualForm.validate()
-          invalid = this.$refs.authorIndividualForm.invalid
-        }
+      if (this.form.claimantOrganization === true) {
+        this.$refs.claimantOrganizationForm.validate()
+      } else if (this.form.claimantOrganization === false) {
+        this.$refs.claimantIndividualForm.validate()
       }
 
-      if (!invalid) {
-        if (this.form.claimantOrganization) {
-          this.$refs.claimantOrganizationForm.validate()
-          invalid = this.$refs.claimantOrganizationForm.invalid
-        } else {
-          this.$refs.claimantIndividualForm.validate()
-          invalid = this.$refs.claimantIndividualForm.invalid
-        }
+      let authorSectionInvalid = false
+      let claimantSectionInvalid = false
+
+      if (this.form.authorOrganization === true) {
+        authorSectionInvalid = this.$refs.authorOrganizationForm.invalid
+      } else if (this.form.authorOrganization === false) {
+        authorSectionInvalid = this.$refs.authorIndividualForm.invalid
       }
 
-      if (!invalid) {
+      if (this.form.claimantOrganization === true) {
+        claimantSectionInvalid = this.$refs.claimantOrganizationForm.invalid
+      } else if (this.form.claimantOrganization === false) {
+        claimantSectionInvalid = this.$refs.claimantIndividualForm.invalid
+      }
+
+      if (!this.$v.$invalid && !authorSectionInvalid && !claimantSectionInvalid) {
         this.reviewCopyrightApplication = true
         window.scrollTo(0, 0)
       } else {

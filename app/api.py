@@ -54,6 +54,7 @@ class CopyrightApplicationModelApi(ModelRestApi):
         'claimant_state',
         'claimant_postal_code',
         'claimant_country',
+        'possible_rights_and_permissions_organization_name',
         'possible_rights_and_permissions_prefix',
         'possible_rights_and_permissions_first_name',
         'possible_rights_and_permissions_middle_name',

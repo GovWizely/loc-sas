@@ -36,6 +36,7 @@ class CopyrightApplication(AuditMixin, Model):
     claimant_state = Column(String(255))
     claimant_postal_code = Column(String(255))
     claimant_country = Column(String(255))
+    possible_rights_and_permissions_organization_name = Column(String(255))
     possible_rights_and_permissions_prefix = Column(String(255))
     possible_rights_and_permissions_first_name = Column(String(255))
     possible_rights_and_permissions_middle_name = Column(String(255))
