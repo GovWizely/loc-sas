@@ -558,6 +558,7 @@ export default {
       authorPseudonym: null,
       authorCitizenship: null,
       authorYearOfBirth: null,
+      authorYearOfDeath: null,
       authorOrganization: null,
       authorOrganizationName: null,
       claimantOrganization: null,
@@ -817,6 +818,7 @@ export default {
         this.form.authorCitizenship = null
         this.form.domicile = null
         this.form.authorYearOfBirth = null
+        this.form.authorYearOfDeath = null
       }
     },
     toggleClaimantOrganization () {

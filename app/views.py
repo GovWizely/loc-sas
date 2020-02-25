@@ -41,6 +41,7 @@ class CopyrightApplicationModelView(ModelView):
         "author_pseudonym",
         "author_citizenship",
         "author_year_of_birth",
+        "author_year_of_death",
         "author_organization",
         "author_organization_name",
         "domicile",
