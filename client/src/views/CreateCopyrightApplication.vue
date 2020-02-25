@@ -19,7 +19,7 @@
       <div class="md-layout-item md-size-80 form">
         <span class="md-subheader">* Required fields</span>
         <details open>
-          <summary class="md-title">Title</summary>
+          <summary class="md-title">Work Details</summary>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('primaryTitle')">
