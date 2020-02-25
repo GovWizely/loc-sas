@@ -20,6 +20,7 @@ class CopyrightApplication(AuditMixin, Model):
     author_pseudonym = Column(String(255))
     author_citizenship = Column(String(255))
     author_year_of_birth = Column(Integer)
+    author_year_of_death = Column(Integer)
     author_organization = Column(Boolean)
     author_organization_name = Column(String(255))
     domicile = Column(String(255))

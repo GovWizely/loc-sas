@@ -139,6 +139,23 @@
           >The year of birth must be between {{minAuthorYearOfBirth}} and {{maxAuthorYearOfBirth}}</span>
         </md-field>
       </div>
+      <div class="md-layout-item md-small-size-100" ref="tmpAuthorYearOfDeath">
+        <md-field :class="getValidationClass('tmpAuthorYearOfDeath')">
+          <label for="author-year-of-death">Deceased</label>
+          <md-input
+            name="author-year-of-death"
+            id="author-year-of-death"
+            type="number"
+            v-model="form.tmpAuthorYearOfDeath"
+            :disabled="sending"
+            @input="updateField()"
+          />
+          <span
+            class="md-error"
+            v-if="!$v.form.tmpAuthorYearOfDeath.minYearOfDeath"
+          >The author's year of death, if applicable, must be after the year of birth</span>
+        </md-field>
+      </div>
     </div>
   </div>
 </template>
@@ -170,6 +187,7 @@ export default {
     this.form.tmpAuthorCitizenship = this.value.authorCitizenship
     this.form.tmpDomicile = this.value.domicile
     this.form.tmpAuthorYearOfBirth = this.value.authorYearOfBirth
+    this.form.tmpAuthorYearOfDeath = this.value.authorYearOfDeath
   },
   data: () => ({
     minAuthorYearOfBirth,
@@ -183,7 +201,8 @@ export default {
       tmpAuthorPseudonym: null,
       tmpAuthorCitizenship: null,
       tmpDomicile: null,
-      tmpAuthorYearOfBirth: null
+      tmpAuthorYearOfBirth: null,
+      tmpAuthorYearOfDeath: null
     },
     customValidationFields: {
       invalid: false,
@@ -207,12 +226,23 @@ export default {
       }
     }
   }),
-  validations: {
-    invalid: false,
-    form: {
-      tmpAuthorYearOfBirth: {
-        minValue: minValue(minAuthorYearOfBirth),
-        maxValue: maxValue(maxAuthorYearOfBirth)
+  validations () {
+    return {
+      form: {
+        tmpAuthorYearOfBirth: {
+          minValue: minValue(minAuthorYearOfBirth),
+          maxValue: maxValue(maxAuthorYearOfBirth)
+        },
+        tmpAuthorYearOfDeath: {
+          minYearOfDeath: (yearOfDeath) => {
+            let yearOfBirth = this.form.tmpAuthorYearOfBirth
+            if (!empty(yearOfBirth) && !empty(yearOfDeath)) {
+              return yearOfBirth <= yearOfDeath
+            } else {
+              return true
+            }
+          }
+        }
       }
     }
   },
@@ -227,6 +257,7 @@ export default {
       this.value.authorCitizenship = this.form.tmpAuthorCitizenship
       this.value.domicile = this.form.tmpDomicile
       this.value.authorYearOfBirth = this.form.tmpAuthorYearOfBirth
+      this.value.authorYearOfDeath = this.form.tmpAuthorYearOfDeath
 
       this.$emit('input', this.value)
     },
@@ -290,11 +321,8 @@ export default {
         this.customValidationFields.tmpAuthorPseudonym.invalid = false
       }
 
-      if (authorNameInvalid || authorCitizenshipDomicileInvalid || this.$v.$invalid) {
-        this.invalid = true
-      }
-
       if (this.$v.$invalid || authorNameInvalid || authorCitizenshipDomicileInvalid) {
+        this.invalid = true
         const fields = Object.keys(this.form)
         for (let i = 0; i < fields.length; i++) {
           let field = fields[i]
@@ -305,6 +333,8 @@ export default {
             break
           }
         }
+      } else {
+        this.invalid = false
       }
     }
   }

@@ -97,6 +97,15 @@
           <span>{{application.authorYearOfBirth}}</span>
         </div>
       </div>
+      <div class="col" v-if="!application.authorOrganization && application.authorYearOfDeath">
+        <div class="col-left">
+          <label class="field-label">Deceased:</label>
+        </div>
+        <div class="col-right">
+          <span>{{application.authorYearOfDeath}}</span>
+        </div>
+      </div>
+
       <div class="col">
         <div class="col-left">
           <label class="field-label">Copyright Claimant:</label>
