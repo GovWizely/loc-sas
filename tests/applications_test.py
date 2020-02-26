@@ -53,7 +53,6 @@ class ApplicationsTest(AppTest):
             author_citizenship="Canada",
             author_year_of_birth="1990",
             author_year_of_death="2020",
-            organization=False,
             claimant_prefix="Mrs",
             claimant_first_name="John",
             claimant_last_name="Smith",
