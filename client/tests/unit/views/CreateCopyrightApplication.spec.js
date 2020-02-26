@@ -56,7 +56,7 @@ describe('Create Copyright Application', () => {
     expect(_saveCopyrightApplication.called).to.be.true
     const submittedApplication = _saveCopyrightApplication.lastCall.args[0]
     expect(submittedApplication.primaryTitle).to.equal('Zorba')
-    expect(submittedApplication.yearCompleted).to.equal('2020')
+    expect(submittedApplication.yearCompleted).to.equal(2020)
     expect(submittedApplication.authorFirstName).to.equal('Ray')
     expect(submittedApplication.authorLastName).to.equal('Donovan')
     expect(submittedApplication.authorCitizenship).to.equal('GR')

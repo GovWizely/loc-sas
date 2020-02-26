@@ -129,7 +129,7 @@
             name="author-year-of-birth"
             id="author-year-of-birth"
             type="number"
-            v-model="form.tmpAuthorYearOfBirth"
+            v-model.number="form.tmpAuthorYearOfBirth"
             :disabled="sending"
             @input="updateField()"
           />
@@ -146,7 +146,7 @@
             name="author-year-of-death"
             id="author-year-of-death"
             type="number"
-            v-model="form.tmpAuthorYearOfDeath"
+            v-model.number="form.tmpAuthorYearOfDeath"
             :disabled="sending"
             @input="updateField()"
           />
@@ -256,12 +256,9 @@ export default {
       this.value.authorPseudonym = this.form.tmpAuthorPseudonym
       this.value.authorCitizenship = this.form.tmpAuthorCitizenship
       this.value.domicile = this.form.tmpDomicile
-      this.value.authorYearOfBirth = this.formatInt(this.form.tmpAuthorYearOfBirth)
-      this.value.authorYearOfDeath = this.formatInt(this.form.tmpAuthorYearOfDeath)
+      this.value.authorYearOfBirth = this.form.tmpAuthorYearOfBirth
+      this.value.authorYearOfDeath = this.form.tmpAuthorYearOfDeath
       this.$emit('input', this.value)
-    },
-    formatInt (v) {
-      return (empty(v)) ? null : parseInt(v)
     },
     getValidationClass (fieldName) {
       let field
