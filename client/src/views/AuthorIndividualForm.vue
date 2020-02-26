@@ -256,10 +256,12 @@ export default {
       this.value.authorPseudonym = this.form.tmpAuthorPseudonym
       this.value.authorCitizenship = this.form.tmpAuthorCitizenship
       this.value.domicile = this.form.tmpDomicile
-      this.value.authorYearOfBirth = this.form.tmpAuthorYearOfBirth
-      this.value.authorYearOfDeath = this.form.tmpAuthorYearOfDeath
-
+      this.value.authorYearOfBirth = this.formatInt(this.form.tmpAuthorYearOfBirth)
+      this.value.authorYearOfDeath = this.formatInt(this.form.tmpAuthorYearOfDeath)
       this.$emit('input', this.value)
+    },
+    formatInt (v) {
+      return (empty(v)) ? null : parseInt(v)
     },
     getValidationClass (fieldName) {
       let field
