@@ -67,7 +67,7 @@
                   name="year-completed"
                   id="year-completed"
                   type="number"
-                  v-model="form.yearCompleted"
+                  v-model.number="form.yearCompleted"
                   :disabled="sending"
                   required
                   @blur="validateField('yearCompleted')"
@@ -422,7 +422,7 @@
                   name="possible-rights-and-permissions-phone-number"
                   id="possible-rights-and-permissions-phone-number"
                   autocomplete="tel"
-                  v-model="form.possibleRightsAndPermissionsPhoneNumber"
+                  v-model.number="form.possibleRightsAndPermissionsPhoneNumber"
                   :disabled="sending"
                 />
                 <span
@@ -439,7 +439,7 @@
                   id="possible-rights-and-permissions-phone-number-extension"
                   type="number"
                   autocomplete="tel"
-                  v-model="form.possibleRightsAndPermissionsPhoneNumberExtension"
+                  v-model.number="form.possibleRightsAndPermissionsPhoneNumberExtension"
                   :disabled="sending"
                 />
               </md-field>
