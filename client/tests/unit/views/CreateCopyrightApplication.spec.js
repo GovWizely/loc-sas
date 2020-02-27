@@ -20,6 +20,7 @@ describe('Create Copyright Application', () => {
 
     wrapper.find('#primary-title').setValue('Zorba')
     wrapper.find('#year-completed').setValue(2020)
+    wrapper.find('#publication-date').setValue('04281988')
 
     wrapper.vm.form.authorCitizenship = 'GR'
     wrapper.find('#author-individual').trigger('click')
@@ -57,6 +58,8 @@ describe('Create Copyright Application', () => {
     const submittedApplication = _saveCopyrightApplication.lastCall.args[0]
     expect(submittedApplication.primaryTitle).to.equal('Zorba')
     expect(submittedApplication.yearCompleted).to.equal(2020)
+    expect(submittedApplication.publicationDate).to.equal('04281988')
+
     expect(submittedApplication.authorFirstName).to.equal('Ray')
     expect(submittedApplication.authorLastName).to.equal('Donovan')
     expect(submittedApplication.authorCitizenship).to.equal('GR')

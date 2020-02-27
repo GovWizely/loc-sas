@@ -30,6 +30,8 @@ class CopyrightApplicationModelApi(ModelRestApi):
         'primary_title',
         'alternate_title',
         'year_completed',
+        'publication_date',
+        'publication_country',
         'author_prefix',
         'author_first_name',
         'author_middle_name',

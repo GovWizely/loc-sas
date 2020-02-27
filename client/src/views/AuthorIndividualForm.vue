@@ -124,7 +124,7 @@
       </div>
       <div class="md-layout-item md-small-size-100" ref="tmpAuthorYearOfBirth">
         <md-field :class="getValidationClass('tmpAuthorYearOfBirth')">
-          <label for="author-year-of-birth">Year of Birth</label>
+          <label for="author-year-of-birth">Year of Birth (YYYY)</label>
           <md-input
             name="author-year-of-birth"
             id="author-year-of-birth"
@@ -141,7 +141,7 @@
       </div>
       <div class="md-layout-item md-small-size-100" ref="tmpAuthorYearOfDeath">
         <md-field :class="getValidationClass('tmpAuthorYearOfDeath')">
-          <label for="author-year-of-death">Deceased</label>
+          <label for="author-year-of-death">Deceased (YYYY)</label>
           <md-input
             name="author-year-of-death"
             id="author-year-of-death"
