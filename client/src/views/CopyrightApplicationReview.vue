@@ -44,6 +44,22 @@
           <span>{{application.yearCompleted}}</span>
         </div>
       </div>
+      <div class="col" v-if="application.publicationDate">
+        <div class="col-left">
+          <label class="field-label">Publication Date:</label>
+        </div>
+        <div class="col-right">
+          <span>{{application.publicationDate}}</span>
+        </div>
+      </div>
+      <div class="col" v-if="application.publicationCountry">
+        <div class="col-left">
+          <label class="field-label">Nation of First Publication:</label>
+        </div>
+        <div class="col-right">
+          <span>{{application.publicationCountry}}</span>
+        </div>
+      </div>
       <div class="col" v-if="application.authorOrganization">
         <div class="col-left">
           <label class="field-label">Organization Name:</label>

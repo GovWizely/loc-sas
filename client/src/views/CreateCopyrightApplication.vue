@@ -60,9 +60,11 @@
                 >The alternate title max length is 2000 characters</span>
               </md-field>
             </div>
+          </div>
+          <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('yearCompleted')">
-                <label for="year-completed" ref="yearCompleted">Year Completed</label>
+                <label for="year-completed" ref="yearCompleted">Year Completed (YYYY)</label>
                 <md-input
                   name="year-completed"
                   id="year-completed"
@@ -81,6 +83,34 @@
                   v-else-if="!$v.form.yearCompleted.minValue || !$v.form.yearCompleted.maxValue"
                 >The year completed must be between {{minYearCompleted}} and {{maxYearCompleted}}</span>
               </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('publicationDate')">
+                <label for="publication-date" ref="publicationDate">Publication Date (MMDDYYYY)</label>
+                <md-input
+                  name="publication-date"
+                  id="publication-date"
+                  v-model="form.publicationDate"
+                  :disabled="sending"
+                  maxlength="8"
+                />
+                <span
+                  class="md-error"
+                  v-if="!$v.form.publicationDate.mmddyyyy"
+                >The publication date must valid and formatted as MMDDYYYY</span>
+                <span
+                  class="md-error"
+                  v-else-if="!$v.form.publicationDate.within"
+                >The publication year must be between the {{this.form.yearCompleted - 95}} and {{this.form.yearCompleted}}</span>
+              </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100" ref="publicationCountry">
+              <copyright-select-field
+                v-model="form.publicationCountry"
+                name="publication-country"
+                label="Nation of First Publication"
+                :disabled="sending"
+              />
             </div>
           </div>
         </details>
@@ -515,6 +545,7 @@ import {
   maxLength
 } from 'vuelidate/lib/validators'
 import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormatter'
+import { mmddyyyy, empty } from '@/utils/ValidationHelpers'
 import { removeNonIso8895 } from '@/utils/InvalidCharacters'
 import CopyrightApplicationReview from '@/views/CopyrightApplicationReview'
 import CopyrightSelectField from '@/views/CopyrightSelectField'
@@ -547,6 +578,8 @@ export default {
       primaryTitle: null,
       alternateTitle: null,
       yearCompleted: null,
+      publicationDate: null,
+      publicationCountry: null,
       workDepositName: null,
       workDepositUrl: null,
       domicile: null,
@@ -613,7 +646,8 @@ export default {
     savingDraft: false,
     loading: true,
     workDepositsFormData: null,
-    uploadingWorkDeposit: false
+    uploadingWorkDeposit: false,
+    workPublished: false
   }),
   async created () {
     const applicationId = parseInt(this.$route.query['id'])
@@ -627,52 +661,66 @@ export default {
     }
     this.loading = false
   },
-  validations: {
-    form: {
-      primaryTitle: {
-        required,
-        maxLength: maxLength(2000)
-      },
-      alternateTitle: {
-        maxLength: maxLength(2000)
-      },
-      yearCompleted: {
-        required,
-        minValue: minValue(minYearCompleted),
-        maxValue: maxValue(maxYearCompleted)
-      },
-      authorOrganization: {
-        required
-      },
-      claimantOrganization: {
-        required
-      },
-      claimantAddress: {
-        required
-      },
-      claimantCity: {
-        required
-      },
-      claimantState: {
-        required
-      },
-      claimantPostalCode: {
-        required
-      },
-      claimantCountry: {
-        required
-      },
-      possibleRightsAndPermissionsEmail: {
-        email
-      },
-      possibleRightsAndPermissionsPhoneNumber: {
-        isValidPhoneNumber
-      },
-      notesToUsco: {
-        maxLength: maxLength(2000)
-      },
-      workDepositUrl: {
-        required
+  validations () {
+    return {
+      form: {
+        primaryTitle: {
+          required,
+          maxLength: maxLength(2000)
+        },
+        alternateTitle: {
+          maxLength: maxLength(2000)
+        },
+        yearCompleted: {
+          required,
+          minValue: minValue(minYearCompleted),
+          maxValue: maxValue(maxYearCompleted)
+        },
+        publicationDate: {
+          mmddyyyy: mmddyyyy,
+          within: (publicatonDate) => {
+            if (!empty(publicatonDate) && !empty(this.form.yearCompleted)) {
+              let publicatonYear = parseInt(publicatonDate.substring(4, 8))
+              return ((publicatonYear <= this.form.yearCompleted) &&
+                (publicatonYear >= this.form.yearCompleted - 95))
+            } else {
+              return true
+            }
+          }
+        },
+        authorOrganization: {
+          required
+        },
+        claimantOrganization: {
+          required
+        },
+        claimantAddress: {
+          required
+        },
+        claimantCity: {
+          required
+        },
+        claimantState: {
+          required
+        },
+        claimantPostalCode: {
+          required
+        },
+        claimantCountry: {
+          required
+        },
+        possibleRightsAndPermissionsEmail: {
+          email
+        },
+        possibleRightsAndPermissionsPhoneNumber: {
+          isValidPhoneNumber
+        },
+        notesToUsco: {
+          maxLength: maxLength(2000)
+        },
+        workDepositUrl: {
+          required
+        }
       }
     }
   },

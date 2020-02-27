@@ -63,7 +63,7 @@ export default {
         ]
       } else if (this.label === 'State') {
         return stateList
-      } else if (['Country', 'Citizenship', 'Domicile'].includes(this.label)) {
+      } else if (['Country', 'Citizenship', 'Domicile', 'Nation of First Publication'].includes(this.label)) {
         return countryList
       }
     }
