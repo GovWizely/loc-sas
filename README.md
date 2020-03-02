@@ -1,4 +1,5 @@
 [![CircleCI](https://circleci.com/gh/GovWizely/loc-sas.svg?style=svg)](https://circleci.com/gh/GovWizely/loc-sas)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=GovWizely/loc-sas)](https://dependabot.com)
 
 LoC SAS
 =================================
