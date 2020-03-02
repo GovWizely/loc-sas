@@ -29,8 +29,8 @@
           />
           <span
             class="md-error"
-            v-if="customValidationFields.tmpAuthorFirstName.invalid"
-          >{{customValidationFields.tmpAuthorFirstName.message}}</span>
+            v-if="!$v.form.tmpAuthorFirstName.requiredIf"
+          >First name &amp; last name or pseudonym is required</span>
         </md-field>
       </div>
       <div class="md-layout-item md-small-size-100">
@@ -59,8 +59,8 @@
           />
           <span
             class="md-error"
-            v-if="customValidationFields.tmpAuthorLastName.invalid"
-          >{{customValidationFields.tmpAuthorLastName.message}}</span>
+            v-if="!$v.form.tmpAuthorLastName.requiredIf"
+          >First name &amp; last name or pseudonym is required</span>
         </md-field>
       </div>
       <div class="md-layout-item md-size-10">
@@ -87,8 +87,8 @@
           />
           <span
             class="md-error"
-            v-if="customValidationFields.tmpAuthorPseudonym.invalid"
-          >{{customValidationFields.tmpAuthorPseudonym.message}}</span>
+            v-if="!$v.form.tmpAuthorPseudonym.requiredIf"
+          >First name &amp; last name or pseudonym is required</span>
         </md-field>
       </div>
     </div>
@@ -104,8 +104,8 @@
           label="Citizenship"
           :disabled="sending"
           :validationClass="getValidationClass('tmpAuthorCitizenship')"
-          :displayRequiredError="customValidationFields.tmpAuthorCitizenship.invalid"
-          errorMessage="'The author citizenship or domicile is required'"
+          :displayRequiredError="!$v.form.tmpAuthorCitizenship.requiredIf"
+          errorMessage="The author citizenship or domicile is required'"
           @input="updateField()"
         />
       </div>
@@ -117,7 +117,7 @@
           label="Domicile"
           :disabled="sending"
           :validationClass="getValidationClass('tmpDomicile')"
-          :displayRequiredError="customValidationFields.tmpDomicile.invalid"
+          :displayRequiredError="!$v.form.tmpDomicile.requiredIf"
           errorMessage="The author citizenship or domicile is required"
           @input="updateField()"
         />
@@ -203,27 +203,6 @@ export default {
       tmpDomicile: null,
       tmpAuthorYearOfBirth: null,
       tmpAuthorYearOfDeath: null
-    },
-    customValidationFields: {
-      invalid: false,
-      tmpAuthorCitizenship: {
-        invalid: false
-      },
-      tmpDomicile: {
-        invalid: false
-      },
-      tmpAuthorFirstName: {
-        invalid: false,
-        message: null
-      },
-      tmpAuthorLastName: {
-        invalid: false,
-        message: null
-      },
-      tmpAuthorPseudonym: {
-        invalid: false,
-        message: null
-      }
     }
   }),
   validations () {
@@ -236,11 +215,38 @@ export default {
         tmpAuthorYearOfDeath: {
           minYearOfDeath: (yearOfDeath) => {
             let yearOfBirth = this.form.tmpAuthorYearOfBirth
-            if (!empty(yearOfBirth) && !empty(yearOfDeath)) {
-              return yearOfBirth <= yearOfDeath
-            } else {
-              return true
-            }
+            return (!empty(yearOfBirth) && !empty(yearOfDeath)) ? yearOfBirth <= yearOfDeath : true
+          }
+        },
+        tmpDomicile: {
+          requiredIf: (domicile) => {
+            return (empty(this.form.tmpAuthorCitizenship)) ? !empty(domicile) : true
+          }
+        },
+        tmpAuthorCitizenship: {
+          requiredIf: (authorCitizenship) => {
+            return (empty(this.form.tmpDomicile)) ? !empty(authorCitizenship) : true
+          }
+        },
+        tmpAuthorFirstName: {
+          requiredIf: (authorFirstName) => {
+            return (empty(this.form.tmpAuthorPseudonym))
+              ? !empty(authorFirstName) && !empty(this.form.tmpAuthorLastName)
+              : true
+          }
+        },
+        tmpAuthorLastName: {
+          requiredIf: (authorLastName) => {
+            return (empty(this.form.tmpAuthorPseudonym))
+              ? !empty(authorLastName) && !empty(this.form.tmpAuthorFirstName)
+              : true
+          }
+        },
+        tmpAuthorPseudonym: {
+          requiredIf: (authorPseudonym) => {
+            return (empty(this.form.tmpAuthorFirstName) && empty(this.form.tmpAuthorLastName))
+              ? !empty(authorPseudonym)
+              : true
           }
         }
       }
@@ -261,16 +267,7 @@ export default {
       this.$emit('input', this.value)
     },
     getValidationClass (fieldName) {
-      let field
-
-      field = this.customValidationFields[fieldName]
-      if (field && field.invalid) {
-        return {
-          'md-invalid': true
-        }
-      }
-
-      field = this.$v.form[fieldName]
+      let field = this.$v.form[fieldName]
       if (field && field.$invalid && field.$dirty) {
         return {
           'md-invalid': true
@@ -279,54 +276,12 @@ export default {
     },
     validate () {
       this.$v.$touch()
-
-      let authorNameInvalid = false
-      let authorCitizenshipDomicileInvalid = false
-
-      if (empty(this.form.tmpAuthorCitizenship) && empty(this.form.tmpDomicile)) {
-        this.customValidationFields.tmpAuthorCitizenship.invalid = true
-        this.customValidationFields.tmpDomicile.invalid = true
-        authorCitizenshipDomicileInvalid = true
-      } else {
-        this.customValidationFields.tmpAuthorCitizenship.invalid = false
-        this.customValidationFields.tmpDomicile.invalid = false
-      }
-
-      if (empty(this.form.tmpAuthorPseudonym) &&
-          empty(this.form.tmpAuthorFirstName) &&
-          empty(this.form.tmpAuthorLastName)) {
-        this.customValidationFields.tmpAuthorFirstName.invalid = true
-        this.customValidationFields.tmpAuthorLastName.invalid = true
-        this.customValidationFields.tmpAuthorPseudonym.invalid = true
-        this.customValidationFields.tmpAuthorFirstName.message = 'First name & last name or pseudonym is required'
-        this.customValidationFields.tmpAuthorLastName.message = 'First name & last name or pseudonym is required'
-        this.customValidationFields.tmpAuthorPseudonym.message = 'First name & last name or pseudonym is required'
-        authorNameInvalid = true
-      } else if (empty(this.form.tmpAuthorFirstName) && !empty(this.form.tmpAuthorLastName)) {
-        this.customValidationFields.tmpAuthorFirstName.invalid = true
-        this.customValidationFields.tmpAuthorFirstName.message = 'First name is required when last name is populated'
-        this.customValidationFields.tmpAuthorLastName.invalid = false
-        this.customValidationFields.tmpAuthorLastName.message = null
-        authorNameInvalid = true
-      } else if (!empty(this.form.tmpAuthorFirstName) && empty(this.form.tmpAuthorLastName)) {
-        this.customValidationFields.tmpAuthorFirstName.invalid = false
-        this.customValidationFields.tmpAuthorFirstName.message = null
-        this.customValidationFields.tmpAuthorLastName.invalid = true
-        this.customValidationFields.tmpAuthorLastName.message = 'Last name is required when first name is populated'
-        authorNameInvalid = true
-      } else {
-        this.customValidationFields.tmpAuthorFirstName.invalid = false
-        this.customValidationFields.tmpAuthorLastName.invalid = false
-        this.customValidationFields.tmpAuthorPseudonym.invalid = false
-      }
-
-      if (this.$v.$invalid || authorNameInvalid || authorCitizenshipDomicileInvalid) {
+      if (this.$v.$invalid) {
         this.invalid = true
         const fields = Object.keys(this.form)
         for (let i = 0; i < fields.length; i++) {
           let field = fields[i]
-          if ((this.$v.form[field] && this.$v.form[field].$invalid) ||
-              (this.customValidationFields[field] && this.customValidationFields[field].invalid)) {
+          if (this.$v.form[field] && this.$v.form[field].$invalid) {
             let element = this.$refs[field]
             element.scrollIntoView()
             break
