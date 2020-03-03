@@ -1,8 +1,6 @@
 import { keysToCamel, keysToSnake } from './FieldTranslators'
 const axios = require('axios')
 
-let accessToken = null
-
 export default class Repository {
   async _getCopyrightApplications (pageSize, page, applicationStatus) {
     const accessToken = await this._getAccessToken()
@@ -73,9 +71,7 @@ export default class Repository {
   }
 
   async _getAccessToken () {
-    if (accessToken) return accessToken
-
-    const tokenResponse = await axios({
+    const result = await axios({
       url: '/api/v1/security/login',
       method: 'POST',
       headers: {
@@ -86,57 +82,30 @@ export default class Repository {
         password: 'password',
         provider: 'db'
       }
-    }).catch(error => this.handleError(error))
+    }).then(response => response.data.access_token)
+      .catch(error => this.handleError(error))
 
-    accessToken = tokenResponse.data.access_token
-
-    return accessToken
+    return result
   }
 
-  async _getCurrentUserInfo () {
+  async _getCurrentUserInfo (accessToken) {
     let result
-    const currentUserResponse = await axios({
-      url: '/api/v1/currentuserapi/current-user-id',
-      method: 'GET'
-    }).catch(error => this.handleError(error))
-
-    if (currentUserResponse.error) {
-      result = currentUserResponse
-    } else {
-      const userId = currentUserResponse.data.user_id
-      if (userId === null) {
-        result = { loggedIn: false }
-      } else {
-        let usersListResponse = await this.getUsersList('_flt_0_id=' + userId)
-        if (usersListResponse.error) {
-          result = usersListResponse
-        } else {
-          const usersList = usersListResponse.data
-          const currentUser = usersList.result[0]
-          currentUser.loggedIn = true
-          currentUser.userId = userId
-          result = currentUser
+    if (accessToken) {
+      result = await axios({
+        url: '/api/v1/currentuserapi/current-user',
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + accessToken
         }
+      }).then(response => response.data.user)
+        .catch(error => this.handleError(error))
+    } else {
+      result = {
+        error: 'Could not procure access token'
       }
     }
 
     return keysToCamel(result)
-  }
-
-  async getCurrentUser () {
-    const currentUserResponse = await axios({
-      url: '/api/v1/currentuserapi/current-user-id',
-      method: 'GET'
-    }).catch(error => this.handleError(error))
-    return currentUserResponse
-  }
-
-  async getUsersList (filter) {
-    const usersListResponse = await axios({
-      url: '/users/api/read?' + filter,
-      method: 'GET'
-    }).catch(error => this.handleError(error))
-    return usersListResponse
   }
 
   async _generateServiceRequest () {
