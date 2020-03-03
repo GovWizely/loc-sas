@@ -2,11 +2,10 @@
   <div id="app">
     <md-toolbar class="md-primary" md-elevation="1">
       <div class="title-container">
-        <!-- TODO: Conditional rendering for demo; need to remove for Prod deployment -->
-        <img id="logo" height="20px" src="./assets/copyrightLogo.png" v-if="currentUserInfo.loggedIn"/>
-        <h1 class="md-title" v-if="currentUserInfo.loggedIn">| U.S. Copyright Office Registration System</h1>
+        <img id="logo" height="20px" src="./assets/copyrightLogo.png"/>
+        <h1 class="md-title">| U.S. Copyright Office Registration System</h1>
       </div>
-      <div v-if="currentUserInfo.loggedIn">
+      <div v-if="currentUserInfo">
         <div id="nav">
           <router-link to="/">
             <button :class="getClasses('Home')">Home</button>
@@ -16,9 +15,9 @@
           </router-link>
         </div>
       </div>
-      <md-button v-if="!currentUserInfo.loggedIn" @click="login()">Login</md-button>
+      <md-button v-if="!currentUserInfo" @click="login()">Login</md-button>
       <md-menu v-else>
-        <md-button class="md-icon-button" md-menu-trigger>
+        <md-button class="md-icon-button" md-menu-trigger v-if="currentUserInfo.firstName && currentUserInfo.lastName">
           <initials-avatar :initials="this.currentUserInfo.firstName[0] + this.currentUserInfo.lastName[0]" />
         </md-button>
         <md-menu-content>
@@ -28,7 +27,7 @@
         </md-menu-content>
       </md-menu>
     </md-toolbar>
-    <div v-if="currentUserInfo.loggedIn">
+    <div v-if="currentUserInfo">
       <div class="current-route md-caption">
         {{this.$route.name}} |
       </div>
@@ -74,11 +73,11 @@ export default {
     errorMessage: null
   }),
   async created () {
-    let currentUserInfo = await this.repository._getCurrentUserInfo()
-
-    if (currentUserInfo.loggedIn === false) {
+    let accessToken = await this.repository._getAccessToken()
+    let currentUserInfo = await this.repository._getCurrentUserInfo(accessToken)
+    if (!currentUserInfo) {
       this.message = 'Please log in.'
-    } else if (currentUserInfo.loggedIn === true) {
+    } else if (!currentUserInfo.error) {
       this.currentUserInfo = currentUserInfo
     } else if (currentUserInfo.error) {
       this.errorOccured = true

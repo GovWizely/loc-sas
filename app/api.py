@@ -6,10 +6,11 @@ import boto3
 from botocore.exceptions import ClientError
 from config import S3_BUCKET
 from flask import g
-from flask import request, send_from_directory, session
+from flask import request, send_from_directory
 from flask_appbuilder.api import BaseApi, expose, ModelRestApi
 from flask_appbuilder.models.sqla.filters import FilterEqualFunction
 from flask_appbuilder.models.sqla.interface import SQLAInterface
+from flask_appbuilder.security.decorators import protect
 from werkzeug.utils import secure_filename
 
 from app import app
@@ -84,12 +85,21 @@ appbuilder.add_api(CopyrightApplicationModelApi)
 
 
 class CurrentUserApi(BaseApi):
-    @expose('/current-user-id')
+    @expose('/current-user')
+    @protect()
     def current_user(self):
         try:
-            return self.response(200, user_id=session["user_id"])
+            user = get_user()
+            user_id = user.username
+            first_name = user.first_name
+            last_name = user.last_name
+            return self.response(200, user={
+                'user_id': user_id,
+                'first_name': first_name,
+                'last_name': last_name
+                })
         except KeyError:
-            return self.response(200, user_id=None)
+            return self.response(200, user=None)
 
 
 appbuilder.add_api(CurrentUserApi)

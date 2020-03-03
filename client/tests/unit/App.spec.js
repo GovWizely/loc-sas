@@ -5,11 +5,8 @@ import App from '@/App'
 describe('Home page', () => {
   it('prompts user to log in', async () => {
     let fakeRepository = {
-      _getCurrentUserInfo: () => (
-        {
-          loggedIn: false
-        }
-      )
+      _getAccessToken: () => ('abc123'),
+      _getCurrentUserInfo: (_) => (null)
     }
 
     const wrapper = renderComponent(App, fakeRepository)
@@ -18,9 +15,12 @@ describe('Home page', () => {
     expect(wrapper.find('#message').text()).to.equal('Please log in.')
   })
 
-  it('prompts user when a server error occurs', async () => {
+  it.only('prompts user when a server error occurs', async () => {
     let fakeRepository = {
-      _getCurrentUserInfo: () => (
+      _getAccessToken: () => ({
+        error: 'This is a terrible error'
+      }),
+      _getCurrentUserInfo: (_) => (
         {
           error: 'This is a terrible error'
         }
@@ -35,9 +35,10 @@ describe('Home page', () => {
 
   it('displays the users initials upon successful login', async () => {
     let fakeRepository = {
-      _getCurrentUserInfo: () => (
+      _getAccessToken: () => ('abc123'),
+      _getCurrentUserInfo: (_) => (
         {
-          loggedIn: true,
+          userId: 'user1',
           firstName: 'John',
           lastName: 'Wick'
         }
