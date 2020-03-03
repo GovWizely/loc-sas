@@ -62,6 +62,14 @@
       </div>
       <div class="col" v-if="application.authorOrganization">
         <div class="col-left">
+          <label class="field-label">Work Made For Hire:</label>
+        </div>
+        <div class="col-right">
+          <span>Yes</span>
+        </div>
+      </div>
+      <div class="col" v-if="application.authorOrganization">
+        <div class="col-left">
           <label class="field-label">Organization Name:</label>
         </div>
         <div class="col-right">
