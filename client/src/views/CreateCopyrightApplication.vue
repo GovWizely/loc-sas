@@ -117,7 +117,7 @@
         <details open>
           <summary class="md-title">Upload</summary>
           <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-85">
+            <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('workDepositUrl')">
                 <label ref="workDepositUrl">Work Deposit (.pdf)</label>
                 <md-file
@@ -131,22 +131,11 @@
                 >The work deposit is required</span>
               </md-field>
             </div>
-            <div class="md-layout-item md-size-5">
-              <md-button
-                :disabled="uploadingWorkDeposit"
-                class="md-primary"
-                @click="uploadWorkDeposits()"
-              >Upload</md-button>
-            </div>
           </div>
           <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
               <md-progress-bar v-if="uploadingWorkDeposit" md-mode="indeterminate"></md-progress-bar>
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <div v-if="form.workDepositUrl" class="uploaded-work-deposits">
+              <div v-if="form.workDepositUrl && !uploadingWorkDeposit" class="uploaded-work-deposits">
                 <a class="field-label" :href="form.workDepositUrl">{{form.workDepositName}}</a>
               </div>
             </div>
@@ -645,7 +634,6 @@ export default {
     reviewCopyrightApplication: false,
     savingDraft: false,
     loading: true,
-    workDepositsFormData: null,
     uploadingWorkDeposit: false,
     workPublished: false
   }),
@@ -835,7 +823,7 @@ export default {
     closeFormReview () {
       this.reviewCopyrightApplication = false
     },
-    onWorkDepositsSelection (files) {
+    async onWorkDepositsSelection (files) {
       const formData = new FormData()
       if (!files.length) return
       Array
@@ -844,15 +832,11 @@ export default {
           this.form.workDepositName = files[x].name
           formData.append('file', files[x])
         })
-
-      this.workDepositsFormData = formData
-    },
-    async uploadWorkDeposits () {
       this.uploadingWorkDeposit = true
-      const fileUrl = await this.repository._uploadFile(this.workDepositsFormData, this.form.serviceRequestId)
+      const fileUrl = await this.repository._uploadFile(formData, this.form.serviceRequestId)
       this.form.workDepositUrl = fileUrl
-      this.uploadingWorkDeposit = false
       this.saveDraft()
+      this.uploadingWorkDeposit = false
     },
     toggleAuthorOrganization () {
       if (this.form.authorOrganization === true) {
