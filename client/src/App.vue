@@ -20,11 +20,6 @@
         <md-button class="md-icon-button" md-menu-trigger v-if="currentUserInfo.firstName && currentUserInfo.lastName">
           <initials-avatar :initials="this.currentUserInfo.firstName[0] + this.currentUserInfo.lastName[0]" />
         </md-button>
-        <md-menu-content>
-          <md-menu-item>
-             <md-button @click="logout()">Logout</md-button>
-          </md-menu-item>
-        </md-menu-content>
       </md-menu>
     </md-toolbar>
     <div v-if="currentUserInfo">
