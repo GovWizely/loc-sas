@@ -85,9 +85,27 @@ appbuilder.add_api(CopyrightApplicationModelApi)
 
 
 class CurrentUserApi(BaseApi):
-    @expose('/current-user')
+    @expose('/current-user', methods=['GET'])
     @protect()
     def current_user(self):
+        """An endpoint for returning the current user.
+        ---
+        get:
+          responses:
+            200:
+              description: Returns the current user that is logged in
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                        user_id:
+                            type: string
+                        first_name:
+                            type: string
+                        last_name:
+                            type: string
+        """
         try:
             user = get_user()
             user_id = user.username
@@ -106,8 +124,24 @@ appbuilder.add_api(CurrentUserApi)
 
 
 class CopyrightApplicationServiceRequestApi(BaseApi):
-    @expose('/generate-service-request')
+    @expose('/generate-service-request', methods=['GET'])
+    @protect()
     def generate_service_request(self):
+        """An endpoint for generating a service request id.
+        ---
+        get:
+          responses:
+            200:
+              description: Generates a service request id to be used when uploading a work deposit
+                and submitting a copyright application
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+        """
         # TODO: This ID will eventually come from a different system
         return self.response(200, id=uuid.uuid1())
 
@@ -117,7 +151,39 @@ appbuilder.add_api(CopyrightApplicationServiceRequestApi)
 
 class CopyrightApplicationFileApi(BaseApi):
     @expose('/file-upload', methods=['POST'])
+    @protect()
     def upload_file(self):
+        """An endpoint for uploading a work deposit.
+        ---
+        post:
+          requestBody:
+            content:
+              multipart/form-data:
+                schema:
+                  type: object
+                  properties:
+                    filename:
+                      type: array
+                      items:
+                        type: string
+                        format: binary
+          parameters:
+          - in: path
+            schema:
+              type: string
+            name: service_request_id
+          responses:
+            200:
+              description: Uploads a file (work deposit) and returns it's URL
+                to be used when submitting a copyright application
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      file_url:
+                        type: string
+        """
         service_request_id = request.args.get('service_request_id')
         file = request.files['file']
         filename = secure_filename(service_request_id + '_' + file.filename)
@@ -143,7 +209,20 @@ class CopyrightApplicationFileApi(BaseApi):
             file_url='/api/v1/copyrightapplicationfileapi/file-download/' + filename)
 
     @expose("/file-download/<filename>")
+    @protect()
     def get_file(self, filename):
+        """An endpoint for downloading a work deposit.
+        ---
+        get:
+          parameters:
+          - in: path
+            schema:
+              type: string
+            name: filename
+          responses:
+            200:
+              description: Downloads a file (work deposit)
+        """
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
 

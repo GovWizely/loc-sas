@@ -14,7 +14,7 @@ export default class Repository {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + accessToken
+        Authorization: accessToken
       }
     }).catch(error => this.handleError(error))
 
@@ -40,7 +40,7 @@ export default class Repository {
       method,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + accessToken
+        Authorization: accessToken
       },
       data: {
         ...translatedCopyrightApplication
@@ -57,7 +57,7 @@ export default class Repository {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + accessToken
+        Authorization: accessToken
       }
     }).catch(error => this.handleError(error))
 
@@ -82,7 +82,7 @@ export default class Repository {
         password: 'password',
         provider: 'db'
       }
-    }).then(response => response.data.access_token)
+    }).then(response => 'Bearer ' + response.data.access_token)
       .catch(error => this.handleError(error))
 
     return result
@@ -95,7 +95,7 @@ export default class Repository {
         url: '/api/v1/currentuserapi/current-user',
         method: 'GET',
         headers: {
-          Authorization: 'Bearer ' + accessToken
+          Authorization: accessToken
         }
       }).then(response => response.data.user)
         .catch(error => this.handleError(error))
@@ -109,23 +109,50 @@ export default class Repository {
   }
 
   async _generateServiceRequest () {
+    const accessToken = await this._getAccessToken()
     const serviceRequestId = await axios({
       url: '/api/v1/copyrightapplicationservicerequestapi/generate-service-request',
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        Authorization: accessToken
+      }
     }).then(response => response.data.id)
       .catch(error => this.handleError(error))
     return serviceRequestId
   }
 
   async _uploadFile (formData, serviceRequestId) {
+    const accessToken = await this._getAccessToken()
     const response = await axios({
       url: '/api/v1/copyrightapplicationfileapi/file-upload?service_request_id=' + serviceRequestId,
       method: 'POST',
-      data: formData
+      data: formData,
+      headers: {
+        Authorization: accessToken
+      }
     }).then(response => response.data.file_url)
       .catch(error => this.handleError(error))
 
     return response
+  }
+
+  async _downloadFile (url, fileName) {
+    const accessToken = await this._getAccessToken()
+    axios({
+      url,
+      method: 'GET',
+      responseType: 'blob',
+      headers: {
+        Authorization: accessToken
+      }
+    }).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', fileName)
+      document.body.appendChild(link)
+      link.click()
+    })
   }
 
   handleError = (err) => {
