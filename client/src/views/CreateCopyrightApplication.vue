@@ -81,7 +81,7 @@
                 <span
                   class="md-error"
                   v-else-if="!$v.form.yearCompleted.minValue || !$v.form.yearCompleted.maxValue"
-                >The year completed must be between {{minYearCompleted}} and {{maxYearCompleted}}</span>
+                >The year completed must be between {{minYearCompleted}} and {{thisYear}}</span>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100">
@@ -97,11 +97,15 @@
                 <span
                   class="md-error"
                   v-if="!$v.form.publicationDate.mmddyyyy"
-                >The publication date must valid and formatted as MMDDYYYY</span>
+                >The publication date must be valid and formatted as MMDDYYYY</span>
+                <span
+                  class="md-error"
+                  v-else-if="!$v.form.publicationDate.after"
+                >The work must have been published within the last 95 years</span>
                 <span
                   class="md-error"
                   v-else-if="!$v.form.publicationDate.within"
-                >The publication year must be between the {{this.form.yearCompleted - 95}} and {{this.form.yearCompleted}}</span>
+                >The publication year can not be earlier than the year completed</span>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100" ref="publicationCountry">
@@ -546,8 +550,8 @@ import ClaimantIndividualForm from '@/views/ClaimantIndividualForm'
 import ClaimantOrganizationForm from '@/views/ClaimantOrganizationForm'
 
 let d = new Date()
-let maxYearCompleted = d.getFullYear()
-let minYearCompleted = maxYearCompleted - 125
+let thisYear = d.getFullYear()
+let minYearCompleted = thisYear - 125
 
 export default {
   name: 'CreateCopyrightApplication',
@@ -563,7 +567,7 @@ export default {
   },
   data: () => ({
     minYearCompleted,
-    maxYearCompleted,
+    thisYear,
     form: {
       id: null,
       primaryTitle: null,
@@ -664,15 +668,31 @@ export default {
         yearCompleted: {
           required,
           minValue: minValue(minYearCompleted),
-          maxValue: maxValue(maxYearCompleted)
+          maxValue: maxValue(thisYear)
         },
         publicationDate: {
           mmddyyyy: mmddyyyy,
-          within: (publicatonDate) => {
-            if (!empty(publicatonDate) && !empty(this.form.yearCompleted)) {
-              let publicatonYear = parseInt(publicatonDate.substring(4, 8))
-              return ((publicatonYear <= this.form.yearCompleted) &&
-                (publicatonYear >= this.form.yearCompleted - 95))
+          after: (publicationDate) => {
+            if (!empty(publicationDate)) {
+              let publicationMonth = parseInt(publicationDate.substring(0, 2))
+              let publicationDay = parseInt(publicationDate.substring(2, 4))
+              let publicationYear = parseInt(publicationDate.substring(4, 8))
+
+              let fullPublicationDate = new Date(publicationYear, publicationMonth - 1, publicationDay)
+              let earliestPublicationDate = new Date()
+              earliestPublicationDate.setFullYear(earliestPublicationDate.getFullYear() - 95)
+              earliestPublicationDate.setDate(earliestPublicationDate.getDate() - 1)
+
+              return (fullPublicationDate >= earliestPublicationDate)
+            } else {
+              return true
+            }
+          },
+          within: (publicationDate) => {
+            if (!empty(publicationDate) && !empty(this.form.yearCompleted)) {
+              let publicationYear = parseInt(publicationDate.substring(4, 8))
+              return ((publicationYear >= this.form.yearCompleted) &&
+                (publicationYear >= this.thisYear - 95))
             } else {
               return true
             }

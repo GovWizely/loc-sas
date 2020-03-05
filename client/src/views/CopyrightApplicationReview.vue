@@ -49,7 +49,7 @@
           <label class="field-label">Publication Date:</label>
         </div>
         <div class="col-right">
-          <span>{{application.publicationDate}}</span>
+          <span>{{application.publicationDate.substring(0, 2)}}/{{application.publicationDate.substring(2, 4)}}/{{application.publicationDate.substring(4, 8)}}</span>
         </div>
       </div>
       <div class="col" v-if="application.publicationCountry">
