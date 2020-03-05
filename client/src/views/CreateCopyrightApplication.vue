@@ -136,7 +136,9 @@
             <div class="md-layout-item md-small-size-100">
               <md-progress-bar v-if="uploadingWorkDeposit" md-mode="indeterminate"></md-progress-bar>
               <div v-if="form.workDepositUrl && !uploadingWorkDeposit" class="uploaded-work-deposits">
-                <a class="field-label" :href="form.workDepositUrl">{{form.workDepositName}}</a>
+                <a class="field-label" @click="downloadWorkDeposit(form.workDepositUrl, form.workDepositName)">
+                  {{form.workDepositName}}
+                </a>
               </div>
             </div>
           </div>
@@ -862,6 +864,9 @@ export default {
         this.form.claimantLastName = null
         this.form.claimantSuffix = null
       }
+    },
+    async downloadWorkDeposit (url, fileName) {
+      await this.repository._downloadFile(url, fileName)
     }
   },
   updated () {
@@ -935,5 +940,9 @@ export default {
 .question {
   margin-top: 20px;
   margin-right: 22px;
+}
+
+a.field-label {
+  cursor: pointer;
 }
 </style>
