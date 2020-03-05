@@ -49,7 +49,7 @@
           <label class="field-label">Publication Date:</label>
         </div>
         <div class="col-right">
-          <span>{{application.publicationDate.substring(0, 2)}}/{{application.publicationDate.substring(2, 4)}}/{{application.publicationDate.substring(4, 8)}}</span>
+          <span>{{publicationDate()}}</span>
         </div>
       </div>
       <div class="col" v-if="application.publicationCountry">
@@ -242,6 +242,11 @@ export default {
     certification: false
   }),
   methods: {
+    publicationDate () {
+      return this.application.publicationDate.substring(0, 2) + '/' +
+        this.application.publicationDate.substring(2, 4) + '/' +
+        this.application.publicationDate.substring(4, 8)
+    },
     possibleRightsAndPermissionsPhoneNumber (phoneNumber, extension) {
       if (this.application.possibleRightsAndPermissionsPhoneNumberExtension) {
         return this.application.possibleRightsAndPermissionsPhoneNumber.concat(' X', this.application.possibleRightsAndPermissionsPhoneNumberExtension)
