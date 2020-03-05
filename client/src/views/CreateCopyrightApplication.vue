@@ -104,7 +104,7 @@
                 >The work must have been published within the last 95 years</span>
                 <span
                   class="md-error"
-                  v-else-if="!$v.form.publicationDate.within"
+                  v-else-if="!$v.form.publicationDate.before"
                 >The publication year can not be earlier than the year completed</span>
               </md-field>
             </div>
@@ -548,10 +548,10 @@ import AuthorIndividualForm from '@/views/AuthorIndividualForm'
 import AuthorOrganizationForm from '@/views/AuthorOrganizationForm'
 import ClaimantIndividualForm from '@/views/ClaimantIndividualForm'
 import ClaimantOrganizationForm from '@/views/ClaimantOrganizationForm'
+import moment from 'moment'
 
-let d = new Date()
-let thisYear = d.getFullYear()
-let minYearCompleted = thisYear - 125
+let currentYear = moment().year()
+let minYearCompleted = currentYear - 125
 
 export default {
   name: 'CreateCopyrightApplication',
@@ -567,7 +567,7 @@ export default {
   },
   data: () => ({
     minYearCompleted,
-    thisYear,
+    currentYear,
     form: {
       id: null,
       primaryTitle: null,
@@ -668,31 +668,22 @@ export default {
         yearCompleted: {
           required,
           minValue: minValue(minYearCompleted),
-          maxValue: maxValue(thisYear)
+          maxValue: maxValue(currentYear)
         },
         publicationDate: {
           mmddyyyy: mmddyyyy,
           after: (publicationDate) => {
             if (!empty(publicationDate)) {
-              let publicationMonth = parseInt(publicationDate.substring(0, 2))
-              let publicationDay = parseInt(publicationDate.substring(2, 4))
-              let publicationYear = parseInt(publicationDate.substring(4, 8))
-
-              let fullPublicationDate = new Date(publicationYear, publicationMonth - 1, publicationDay)
-              let earliestPublicationDate = new Date()
-              earliestPublicationDate.setFullYear(earliestPublicationDate.getFullYear() - 95)
-              earliestPublicationDate.setDate(earliestPublicationDate.getDate() - 1)
-
-              return (fullPublicationDate >= earliestPublicationDate)
+              let currentPubicationDate = moment(publicationDate, 'MMDDYYYY')
+              let earliestPublicationDate = moment().subtract(95, 'year').subtract(1, 'day')
+              return currentPubicationDate.isSameOrAfter(earliestPublicationDate)
             } else {
               return true
             }
           },
-          within: (publicationDate) => {
+          before: (publicationDate) => {
             if (!empty(publicationDate) && !empty(this.form.yearCompleted)) {
-              let publicationYear = parseInt(publicationDate.substring(4, 8))
-              return ((publicationYear >= this.form.yearCompleted) &&
-                (publicationYear >= this.thisYear - 95))
+              return (parseInt(publicationDate.substring(4, 8)) >= this.form.yearCompleted)
             } else {
               return true
             }
