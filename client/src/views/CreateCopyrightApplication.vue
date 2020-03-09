@@ -100,12 +100,16 @@
                 >The publication date must be valid and formatted as MMDDYYYY</span>
                 <span
                   class="md-error"
-                  v-else-if="!$v.form.publicationDate.after"
+                  v-else-if="!$v.form.publicationDate.withinLast95years"
                 >The work must have been published within the last 95 years</span>
                 <span
                   class="md-error"
-                  v-else-if="!$v.form.publicationDate.before"
+                  v-else-if="!$v.form.publicationDate.afterYearCompleted"
                 >The publication year can not be earlier than the year completed</span>
+                <span
+                  class="md-error"
+                  v-else-if="!$v.form.publicationDate.onOrBeforeToday"
+                >The work must have been published prior to today</span>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100" ref="publicationCountry">
@@ -672,7 +676,7 @@ export default {
         },
         publicationDate: {
           mmddyyyy: mmddyyyy,
-          after: (publicationDate) => {
+          withinLast95years: (publicationDate) => {
             if (!empty(publicationDate)) {
               let currentPubicationDate = moment(publicationDate, 'MMDDYYYY')
               let earliestPublicationDate = moment().subtract(95, 'year').subtract(1, 'day')
@@ -681,12 +685,17 @@ export default {
               return true
             }
           },
-          before: (publicationDate) => {
+          afterYearCompleted: (publicationDate) => {
             if (!empty(publicationDate) && !empty(this.form.yearCompleted)) {
               return (parseInt(publicationDate.substring(4, 8)) >= this.form.yearCompleted)
             } else {
               return true
             }
+          },
+          onOrBeforeToday: (publicationDate) => {
+            return (!empty(publicationDate))
+              ? moment(publicationDate, 'MMDDYYYY').isSameOrBefore(moment())
+              : false
           }
         },
         authorOrganization: {
