@@ -52,12 +52,12 @@
           <div class="pagination-pages">
             <md-button class="md-icon-button" @click="page--" :disabled="page === 1">
               <md-icon>
-                <img class="sm-icon" src="@/assets/left-sm-caret.png" />
+                <img class="sm-icon" src="@/assets/left-sm-caret.png" alt="Left small caret"/>
               </md-icon>
             </md-button>
             <md-button class="md-icon-button" @click="page = 1" :disabled="page === 1">
               <md-icon>
-                <img class="sm-icon" src="@/assets/far-left-sm-caret.png" />
+                <img class="sm-icon" src="@/assets/far-left-sm-caret.png" alt="Far left small caret" />
               </md-icon>
             </md-button>
             <select v-model="page" class="copyright-select">
@@ -65,12 +65,12 @@
             </select>
             <md-button class="md-icon-button" @click="page = pages" :disabled="page === pages">
               <md-icon>
-                <img class="sm-icon" src="@/assets/far-right-sm-caret.png" />
+                <img class="sm-icon" src="@/assets/far-right-sm-caret.png" alt="Far right small caret" />
               </md-icon>
             </md-button>
             <md-button class="md-icon-button" @click="page++" :disabled="page === pages">
               <md-icon>
-                <img class="sm-icon" src="@/assets/right-sm-caret.png" />
+                <img class="sm-icon" src="@/assets/right-sm-caret.png" alt="Right small caret"/>
               </md-icon>
             </md-button>
           </div>

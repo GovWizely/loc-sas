@@ -29,5 +29,4 @@ test-local: ensure-venv clean  ## Run lint and tests
 	python -m pytest -s --disable-pytest-warnings tests --cov=app --cov-report=html:/tmp/test-artifacts/coverage --cov-fail-under=75 --junitxml=/tmp/test-results/pytest.xml
 
 sonarqube: test-local
-	python -m pytest -s --disable-pytest-warnings tests --cov=app --cov-report=xml:/tmp/scannerwork/coverage.xml --cov-fail-under=75 --junitxml=/tmp/scannerwork/pytest.xml
-	${SONAR_SCANNER} -Dsonar.projectKey=loc-sas -Dsonar.sources=app -Dsonar.host.url=https://code-quality-test.loc.gov -Dsonar.login=c5149db772b1643dc92b6778c2e44d8d2fa6b961 -Dsonar.python.coverage.reportPaths=/tmp/scannerwork/coverage.xml -Dsonar.python.xunit.reportPath=/tmp/scannerwork/pytest.xml -Dsonar.projectVersion=`git rev-parse --abbrev-ref HEAD`
+	${SONAR_SCANNER} -Dsonar.projectKey=foundation-registration -Dsonar.sources=. -Dsonar.host.url=https://code-quality-test.loc.gov -Dsonar.login=c5149db772b1643dc92b6778c2e44d8d2fa6b961 -Dsonar.python.coverage.reportPaths=/tmp/scannerwork/coverage.xml -Dsonar.python.xunit.reportPath=/tmp/scannerwork/pytest.xml -Dsonar.projectVersion=`git rev-parse --abbrev-ref HEAD`
