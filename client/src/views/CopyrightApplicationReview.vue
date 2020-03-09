@@ -68,65 +68,68 @@
           <span>Yes</span>
         </div>
       </div>
-      <div class="col" v-if="application.authorOrganization">
-        <div class="col-left">
-          <label class="field-label">Organization Name:</label>
+
+      <div v-for="author in application.authors" :key="author.id">
+        <div class="col" v-if="author.organization">
+          <div class="col-left">
+            <label class="field-label">Organization Name:</label>
+          </div>
+          <div class="col-right">
+            <span>{{author.organizationName}}</span>
+          </div>
         </div>
-        <div class="col-right">
-          <span>{{application.authorOrganizationName}}</span>
+        <div class="col" v-if="!author.organization && (author.firstName || author.lastName)">
+          <div class="col-left">
+            <label class="field-label">Author:</label>
+          </div>
+          <div class="col-right">
+            <span>{{formatName(
+              author.prefix,
+              author.firstName,
+              author.middleName,
+              author.lastName,
+              author.suffix)}}</span>
+          </div>
         </div>
-      </div>
-      <div class="col" v-if="!application.authorOrganization && (application.authorFirstName || application.authorLastName)">
-        <div class="col-left">
-          <label class="field-label">Author:</label>
+        <div class="col" v-if="!author.organization && author.pseudonym">
+          <div class="col-left">
+            <label class="field-label">Pseudonym:</label>
+          </div>
+          <div class="col-right">
+            <span>{{author.pseudonym}}</span>
+          </div>
         </div>
-        <div class="col-right">
-          <span>{{formatName(
-            application.authorPrefix,
-            application.authorFirstName,
-            application.authorMiddleName,
-            application.authorLastName,
-            application.authorSuffix)}}</span>
+        <div class="col" v-if="!author.organization && author.citizenship">
+          <div class="col-left">
+            <label class="field-label">Citizenship:</label>
+          </div>
+          <div class="col-right">
+            <span>{{author.citizenship}}</span>
+          </div>
         </div>
-      </div>
-      <div class="col" v-if="!application.authorOrganization && application.authorPseudonym">
-        <div class="col-left">
-          <label class="field-label">Pseudonym:</label>
+        <div class="col" v-if="author.domicile">
+          <div class="col-left">
+            <label class="field-label">Domicile:</label>
+          </div>
+          <div class="col-right">
+            <span>{{author.domicile}}</span>
+          </div>
         </div>
-        <div class="col-right">
-          <span>{{application.authorPseudonym}}</span>
+        <div class="col" v-if="!author.organization && author.yearOfBirth">
+          <div class="col-left">
+            <label class="field-label">Year of Birth:</label>
+          </div>
+          <div class="col-right">
+            <span>{{author.yearOfBirth}}</span>
+          </div>
         </div>
-      </div>
-      <div class="col" v-if="!application.authorOrganization && application.authorCitizenship">
-        <div class="col-left">
-          <label class="field-label">Citizenship:</label>
-        </div>
-        <div class="col-right">
-          <span>{{application.authorCitizenship}}</span>
-        </div>
-      </div>
-       <div class="col" v-if="application.domicile">
-        <div class="col-left">
-          <label class="field-label">Domicile:</label>
-        </div>
-        <div class="col-right">
-          <span>{{application.domicile}}</span>
-        </div>
-      </div>
-      <div class="col" v-if="!application.authorOrganization && application.authorYearOfBirth">
-        <div class="col-left">
-          <label class="field-label">Year of Birth:</label>
-        </div>
-        <div class="col-right">
-          <span>{{application.authorYearOfBirth}}</span>
-        </div>
-      </div>
-      <div class="col" v-if="!application.authorOrganization && application.authorYearOfDeath">
-        <div class="col-left">
-          <label class="field-label">Deceased:</label>
-        </div>
-        <div class="col-right">
-          <span>{{application.authorYearOfDeath}}</span>
+        <div class="col" v-if="!author.organization && author.yearOfDeath">
+          <div class="col-left">
+            <label class="field-label">Deceased:</label>
+          </div>
+          <div class="col-right">
+            <span>{{author.yearOfDeath}}</span>
+          </div>
         </div>
       </div>
 

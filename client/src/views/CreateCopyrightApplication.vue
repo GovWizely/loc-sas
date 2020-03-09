@@ -151,34 +151,10 @@
             </div>
           </div>
         </details>
-        <details open>
-          <summary class="md-title">Author</summary>
-          <div class="question-and-answer">
-            <div class="question">
-              <label class="field-label">Is the author an individual or organization?</label>
-            </div>
-            <div class="answer" ref="authorOrganization">
-              <md-radio id="author-individual" v-model="form.authorOrganization" :value="false" @change="toggleAuthorOrganization()">
-                Individual
-              </md-radio>
-              <md-radio id="author-organization" v-model="form.authorOrganization" :value="true" @change="toggleAuthorOrganization()">
-                Organization
-              </md-radio>
-            </div>
-          </div>
-          <author-individual-form
-            v-if="form.authorOrganization === false"
-            ref="authorIndividualForm"
-            v-model="form"
-            :sending="sending"
-          />
-          <author-organization-form
-            v-if="form.authorOrganization === true"
-            ref="authorOrganizationForm"
-            v-model="form"
-            :sending="sending"
-          />
-        </details>
+        <div v-for="(author, index) in form.authors" :key="author.id">
+          <author-form :ref="'authorForm'+index" v-model="form.authors[index]" :sending="sending" />
+        </div>
+        <md-button class="md-raised md-accent add-author" @click="addAuthor">Add Author</md-button>
         <details open>
           <summary class="md-title">Claimant</summary>
           <div class="question-and-answer">
@@ -186,10 +162,10 @@
             <label class="field-label">Is the claimant an individual or organization?</label>
             </div>
             <div class="answer" ref="claimantOrganization">
-              <md-radio id="claimant-individual" v-model="form.claimantOrganization" :value="false" @change="toggleClaimantOrganization()">
+              <md-radio id="claimant-individual" v-model="form.claimantOrganization" :value="false" @change="toggleClaimantOrganization">
                 Individual
               </md-radio>
-              <md-radio id="claimant-organization" v-model="form.claimantOrganization" :value="true" @change="toggleClaimantOrganization()">
+              <md-radio id="claimant-organization" v-model="form.claimantOrganization" :value="true" @change="toggleClaimantOrganization">
                 Organization
               </md-radio>
             </div>
@@ -548,8 +524,7 @@ import { mmddyyyy, empty } from '@/utils/ValidationHelpers'
 import { removeNonIso8895 } from '@/utils/InvalidCharacters'
 import CopyrightApplicationReview from '@/views/CopyrightApplicationReview'
 import CopyrightSelectField from '@/views/CopyrightSelectField'
-import AuthorIndividualForm from '@/views/AuthorIndividualForm'
-import AuthorOrganizationForm from '@/views/AuthorOrganizationForm'
+import AuthorForm from '@/views/AuthorForm'
 import ClaimantIndividualForm from '@/views/ClaimantIndividualForm'
 import ClaimantOrganizationForm from '@/views/ClaimantOrganizationForm'
 import moment from 'moment'
@@ -564,8 +539,7 @@ export default {
   components: {
     'copyright-application-review': CopyrightApplicationReview,
     'copyright-select-field': CopyrightSelectField,
-    'author-individual-form': AuthorIndividualForm,
-    'author-organization-form': AuthorOrganizationForm,
+    'author-form': AuthorForm,
     'claimant-individual-form': ClaimantIndividualForm,
     'claimant-organization-form': ClaimantOrganizationForm
   },
@@ -582,17 +556,7 @@ export default {
       workDepositName: null,
       workDepositUrl: null,
       domicile: null,
-      authorPrefix: null,
-      authorFirstName: null,
-      authorMiddleName: null,
-      authorLastName: null,
-      authorSuffix: null,
-      authorPseudonym: null,
-      authorCitizenship: null,
-      authorYearOfBirth: null,
-      authorYearOfDeath: null,
-      authorOrganization: null,
-      authorOrganizationName: null,
+      authors: [],
       claimantOrganization: null,
       claimantOrganizationName: null,
       claimantPrefix: null,
@@ -655,8 +619,11 @@ export default {
       this.form.id = applicationId
     } else {
       this.form.serviceRequestId = await this.repository._generateServiceRequest()
-      this.saveDraft()
+      const application = await this.repository._saveCopyrightApplication(this.form)
+      this.form.id = application.id
+      await this.addAuthor()
     }
+
     this.loading = false
   },
   validations () {
@@ -697,9 +664,6 @@ export default {
               ? moment(publicationDate, 'MMDDYYYY').isSameOrBefore(moment())
               : true
           }
-        },
-        authorOrganization: {
-          required
         },
         claimantOrganization: {
           required
@@ -776,13 +740,17 @@ export default {
       this.sending = false
     },
     async validateCopyrightApplication () {
-      this.$v.form.$touch()
+      this.$v.$touch()
 
-      if (this.form.authorOrganization === true) {
-        this.$refs.authorOrganizationForm.validate()
-      } else if (this.form.authorOrganization === false) {
-        this.$refs.authorIndividualForm.validate()
-      }
+      let authorSectionInvalid = false
+      Object.keys(this.$refs).forEach(k => {
+        if (k.startsWith('authorForm')) {
+          this.$refs[k][0].validate()
+          if (this.$refs[k][0].invalid && !authorSectionInvalid) {
+            authorSectionInvalid = true
+          }
+        }
+      })
 
       if (this.form.claimantOrganization === true) {
         this.$refs.claimantOrganizationForm.validate()
@@ -790,15 +758,7 @@ export default {
         this.$refs.claimantIndividualForm.validate()
       }
 
-      let authorSectionInvalid = false
       let claimantSectionInvalid = false
-
-      if (this.form.authorOrganization === true) {
-        authorSectionInvalid = this.$refs.authorOrganizationForm.invalid
-      } else if (this.form.authorOrganization === false) {
-        authorSectionInvalid = this.$refs.authorIndividualForm.invalid
-      }
-
       if (this.form.claimantOrganization === true) {
         claimantSectionInvalid = this.$refs.claimantOrganizationForm.invalid
       } else if (this.form.claimantOrganization === false) {
@@ -819,12 +779,8 @@ export default {
     },
     async saveDraft () {
       this.savingDraft = true
-      const application = await this.repository._saveCopyrightApplication(this.form)
-      if (application.id) { this.form.id = application.id }
+      await this.repository._saveCopyrightApplication(this.form)
       this.savingDraft = false
-    },
-    saveDraftWatchFn (oldVal, newVal) {
-      if (oldVal !== newVal) this.saveDraft()
     },
     async saveAndClose () {
       await this.saveDraft()
@@ -857,23 +813,8 @@ export default {
       this.uploadingWorkDeposit = true
       const fileUrl = await this.repository._uploadFile(formData, this.form.serviceRequestId)
       this.form.workDepositUrl = fileUrl
-      this.saveDraft()
+      await this.saveDraft()
       this.uploadingWorkDeposit = false
-    },
-    toggleAuthorOrganization () {
-      if (this.form.authorOrganization === true) {
-        this.form.authorOrganizationName = null
-        this.form.authorPrefix = null
-        this.form.authorFirstName = null
-        this.form.authorMiddleName = null
-        this.form.authorLastName = null
-        this.form.authorSuffix = null
-        this.form.authorPseudonym = null
-        this.form.authorCitizenship = null
-        this.form.domicile = null
-        this.form.authorYearOfBirth = null
-        this.form.authorYearOfDeath = null
-      }
     },
     toggleClaimantOrganization () {
       if (this.form.claimantOrganization === true) {
@@ -887,6 +828,10 @@ export default {
     },
     async downloadWorkDeposit (url, fileName) {
       await this.repository._downloadFile(url, fileName)
+    },
+    async addAuthor () {
+      const newAuthor = await this.repository._saveAuthor(this.form.id, {})
+      this.form.authors.push(newAuthor)
     }
   },
   updated () {
@@ -897,14 +842,6 @@ export default {
         this.form[k] = removeNonIso8895(this.form[k])
       }
     })
-  },
-  watch: {
-    'form.authorPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    'form.authorSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    'form.claimantPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    'form.claimantSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    'form.possibleRightsAndPermissionsPrefix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) },
-    'form.possibleRightsAndPermissionsSuffix': function (oldVal, newVal) { this.saveDraftWatchFn(oldVal, newVal) }
   }
 }
 </script>
@@ -953,16 +890,11 @@ export default {
   justify-content: center;
 }
 
-.question-and-answer {
-  display: flex;
-}
-
-.question {
-  margin-top: 20px;
-  margin-right: 22px;
-}
-
 a.field-label {
   cursor: pointer;
+}
+
+.add-author {
+  margin-bottom: 25px;
 }
 </style>

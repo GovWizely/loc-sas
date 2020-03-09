@@ -14,7 +14,7 @@ from flask_appbuilder.security.decorators import protect
 from werkzeug.utils import secure_filename
 
 from app import app
-from app.models import CopyrightApplication
+from app.models import Author, CopyrightApplication
 from . import appbuilder
 
 
@@ -22,7 +22,7 @@ def get_user():
     return g.user
 
 
-class CopyrightApplicationModelApi(ModelRestApi):
+class CopyrightApplicationApi(ModelRestApi):
     resource_name = 'copyright_application'
     datamodel = SQLAInterface(CopyrightApplication)
     base_filters = [['created_by', FilterEqualFunction, get_user]]
@@ -33,18 +33,7 @@ class CopyrightApplicationModelApi(ModelRestApi):
         'year_completed',
         'publication_date',
         'publication_country',
-        'author_prefix',
-        'author_first_name',
-        'author_middle_name',
-        'author_last_name',
-        'author_suffix',
-        'author_pseudonym',
-        'author_citizenship',
-        'author_year_of_birth',
-        'author_year_of_death',
-        'author_organization',
-        'author_organization_name',
-        'domicile',
+        'authors',
         'claimant_organization',
         'claimant_organization_name',
         'claimant_prefix',
@@ -81,7 +70,30 @@ class CopyrightApplicationModelApi(ModelRestApi):
     ]
 
 
-appbuilder.add_api(CopyrightApplicationModelApi)
+appbuilder.add_api(CopyrightApplicationApi)
+
+
+class AuthorApi(ModelRestApi):
+    resource_name = 'author'
+    datamodel = SQLAInterface(Author)
+    add_columns = [
+        'copyright_application_id',
+        'prefix',
+        'first_name',
+        'middle_name',
+        'last_name',
+        'suffix',
+        'pseudonym',
+        'citizenship',
+        'year_of_birth',
+        'year_of_death',
+        'organization',
+        'organization_name',
+        'domicile'
+    ]
+
+
+appbuilder.add_api(AuthorApi)
 
 
 class CurrentUserApi(BaseApi):

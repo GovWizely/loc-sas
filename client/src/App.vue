@@ -68,8 +68,8 @@ export default {
     errorMessage: null
   }),
   async created () {
-    let accessToken = await this.repository._getAccessToken()
-    let currentUserInfo = await this.repository._getCurrentUserInfo(accessToken)
+    await this.repository._getAccessToken()
+    let currentUserInfo = await this.repository._getCurrentUserInfo()
     if (!currentUserInfo) {
       this.message = 'Please log in.'
     } else if (!currentUserInfo.error) {

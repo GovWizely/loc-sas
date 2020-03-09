@@ -2,9 +2,22 @@ import datetime
 
 from flask_appbuilder import Model
 from flask_appbuilder.models.mixins import AuditMixin
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table
+from sqlalchemy.orm import relationship
 
 date_today = datetime.date.today()
+
+assoc_copyright_application_author = Table(
+                                        'copyright_application_author',
+                                        Model.metadata,
+                                        Column('id', Integer, primary_key=True),
+                                        Column(
+                                            'copyright_application_id',
+                                            Integer,
+                                            ForeignKey('copyright_application.id')
+                                        ),
+                                        Column('author_id', Integer, ForeignKey('author.id'))
+                                    )
 
 
 class CopyrightApplication(AuditMixin, Model):
@@ -14,18 +27,11 @@ class CopyrightApplication(AuditMixin, Model):
     year_completed = Column(Integer)
     publication_date = Column(String(8))
     publication_country = Column(String(255))
-    author_prefix = Column(String(255))
-    author_first_name = Column(String(255))
-    author_middle_name = Column(String(255))
-    author_last_name = Column(String(255))
-    author_suffix = Column(String(255))
-    author_pseudonym = Column(String(255))
-    author_citizenship = Column(String(255))
-    author_year_of_birth = Column(Integer)
-    author_year_of_death = Column(Integer)
-    author_organization = Column(Boolean)
-    author_organization_name = Column(String(255))
-    domicile = Column(String(255))
+    authors = relationship(
+        'Author',
+        secondary=assoc_copyright_application_author,
+        backref='CopyrightApplication'
+    )
     claimant_organization = Column(Boolean)
     claimant_organization_name = Column(String(255))
     claimant_prefix = Column(String(255))
@@ -70,3 +76,24 @@ class CopyrightApplication(AuditMixin, Model):
     def year(self):
         date = self.created_on
         return datetime.datetime(date.year, 1, 1)
+
+
+class Author(Model):
+    id = Column(Integer, primary_key=True)
+    copyright_application_id = Column(
+        Integer,
+        ForeignKey('copyright_application.id'), nullable=False
+    )
+    copyright_application = relationship("CopyrightApplication")
+    prefix = Column(String(255))
+    first_name = Column(String(255))
+    middle_name = Column(String(255))
+    last_name = Column(String(255))
+    suffix = Column(String(255))
+    pseudonym = Column(String(255))
+    citizenship = Column(String(255))
+    year_of_birth = Column(Integer)
+    year_of_death = Column(Integer)
+    organization = Column(Boolean)
+    organization_name = Column(String(255))
+    domicile = Column(String(255))

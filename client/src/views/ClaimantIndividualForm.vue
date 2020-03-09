@@ -3,20 +3,20 @@
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-10">
         <copyright-select-field
-          v-model="form.tmpClaimantPrefix"
+          v-model="form.claimantPrefix"
           name="claimant-prefix"
           label="Prefix"
           :disabled="sending"
           @input="updateField()"
         />
       </div>
-      <div class="md-layout-item md-small-size-100" ref="tmpClaimantFirstName">
-        <md-field :class="getValidationClass('tmpClaimantFirstName')">
+      <div class="md-layout-item md-small-size-100" ref="claimantFirstName">
+        <md-field :class="getValidationClass('claimantFirstName')">
           <label for="claimant-first-name">First Name</label>
           <md-input
             name="claimant-first-name"
             id="claimant-first-name"
-            v-model="form.tmpClaimantFirstName"
+            v-model="form.claimantFirstName"
             :disabled="sending"
             required
             maxlength="255"
@@ -24,7 +24,7 @@
           />
           <span
             class="md-error"
-            v-if="!$v.form.tmpClaimantFirstName.required"
+            v-if="!$v.form.claimantFirstName.required"
           >The claimant first name is required</span>
         </md-field>
       </div>
@@ -34,20 +34,20 @@
           <md-input
             name="claimant-middle-name"
             id="claimant-middle-name"
-            v-model="form.tmpClaimantMiddleName"
+            v-model="form.claimantMiddleName"
             :disabled="sending"
             maxlength="255"
             @input="updateField()"
           />
         </md-field>
       </div>
-      <div class="md-layout-item md-small-size-100" ref="tmpClaimantLastName">
-        <md-field :class="getValidationClass('tmpClaimantLastName')">
+      <div class="md-layout-item md-small-size-100" ref="claimantLastName">
+        <md-field :class="getValidationClass('claimantLastName')">
           <label for="claimant-first-name">Last Name</label>
           <md-input
             name="claimant-last-name"
             id="claimant-last-name"
-            v-model="form.tmpClaimantLastName"
+            v-model="form.claimantLastName"
             :disabled="sending"
             required
             maxlength="255"
@@ -55,7 +55,7 @@
           />
           <span
             class="md-error"
-            v-if="!$v.form.tmpClaimantLastName.required"
+            v-if="!$v.form.claimantLastName.required"
           >The claimant last name is required</span>
         </md-field>
       </div>
@@ -84,39 +84,25 @@ export default {
     'copyright-select-field': CopyrightSelectField
   },
   created () {
-    this.form.tmpClaimantPrefix = this.value.claimantPrefix
-    this.form.tmpClaimantFirstName = this.value.claimantFirstName
-    this.form.tmpClaimantMiddleName = this.value.claimantMiddleName
-    this.form.tmpClaimantLastName = this.value.claimantLastName
-    this.form.tmpClaimantSuffix = this.value.claimantSuffix
+    this.form = this.value
   },
   data: () => ({
-    form: {
-      tmpClaimantPrefix: null,
-      tmpClaimantFirstName: null,
-      tmpClaimantMiddleName: null,
-      tmpClaimantLastName: null,
-      tmpClaimantSuffix: null
-    }
+    invalid: null,
+    form: null
   }),
   validations: {
     form: {
-      tmpClaimantFirstName: {
+      claimantFirstName: {
         required
       },
-      tmpClaimantLastName: {
+      claimantLastName: {
         required
       }
     }
   },
   methods: {
     updateField () {
-      this.value.claimantPrefix = this.form.tmpClaimantPrefix
-      this.value.claimantFirstName = this.form.tmpClaimantFirstName
-      this.value.claimantMiddleName = this.form.tmpClaimantMiddleName
-      this.value.claimantLastName = this.form.tmpClaimantLastName
-      this.value.claimantSuffix = this.form.tmpClaimantSuffix
-      this.$emit('input', this.value)
+      this.$emit('input', this.form)
     },
     getValidationClass (fieldName) {
       let field = this.$v.form[fieldName]
