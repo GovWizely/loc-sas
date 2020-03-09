@@ -150,3 +150,12 @@ summary {
 summary::-webkit-details-marker {
     display: none
 }
+
+.question-and-answer {
+  display: flex;
+}
+
+.question {
+  margin-top: 20px;
+  margin-right: 22px;
+}

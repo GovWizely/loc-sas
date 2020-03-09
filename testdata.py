@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 
 from app import appbuilder, db
-from app.models import CopyrightApplication
+from app.models import Author, CopyrightApplication
 
 log = logging.getLogger(__name__)
 
@@ -42,12 +42,15 @@ if not users_exist:
         c.primary_title = get_random_name(names_list, random.randrange(2, 5))
         c.year_completed = random.choice(range(2013, 2019))
         name = c.primary_title.split()
-        c.author_organization = False
-        c.author_first_name = name[0]
-        c.author_last_name = name[-1]
-        c.author_citizenship = random.choice(["US", "GB", "CA", "MX", "JP"])
-        c.author_domicile = random.choice(["GR", "IT", "KY", "MD"])
-        c.author_year_of_birth = "1990"
+        a = Author()
+        a.copyright_application_id = i
+        a.first_name = name[0]
+        a.last_name = name[-1]
+        a.citizenship = random.choice(["US", "GB", "CA", "MX", "JP"])
+        a.domicile = random.choice(["GR", "IT", "KY", "MD"])
+        a.year_of_birth = "1990"
+        a.organization = False
+        c.authors = [a]
         c.claimant_organization = False
         c.claimant_first_name = name[0]
         c.claimant_last_name = name[-1]

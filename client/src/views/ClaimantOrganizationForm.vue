@@ -1,12 +1,12 @@
 <template>
   <div class="md-layout md-gutter">
-    <div class="md-layout-item md-small-size-100" ref="tmpClaimantOrganizationName">
-      <md-field :class="getValidationClass('tmpClaimantOrganizationName')">
+    <div class="md-layout-item md-small-size-100" ref="claimantOrganizationName">
+      <md-field :class="getValidationClass('claimantOrganizationName')">
         <label for="claimant-organization-name">Organization Name</label>
         <md-input
           name="claimant-organization-name"
           id="claimant-organization-name"
-          v-model="form.tmpClaimantOrganizationName"
+          v-model="form.claimantOrganizationName"
           :disabled="sending"
           maxlength="255"
           required
@@ -14,7 +14,7 @@
         />
         <span
           class="md-error"
-          v-if="!$v.form.tmpClaimantOrganizationName.required"
+          v-if="!$v.form.claimantOrganizationName.required"
         >The organization name is required</span>
       </md-field>
     </div>
@@ -29,25 +29,22 @@ export default {
   props: ['value', 'sending'],
   mixins: [validationMixin],
   created () {
-    this.form.tmpClaimantOrganizationName = this.value.claimantOrganizationName
+    this.form = this.value
   },
   data: () => ({
-    invalid: false,
-    form: {
-      tmpClaimantOrganizationName: null
-    }
+    invalid: null,
+    form: null
   }),
   validations: {
     form: {
-      tmpClaimantOrganizationName: {
+      claimantOrganizationName: {
         required
       }
     }
   },
   methods: {
     updateField () {
-      this.value.claimantOrganizationName = this.form.tmpClaimantOrganizationName
-      this.$emit('input', this.value)
+      this.$emit('input', this.form)
     },
     getValidationClass (fieldName) {
       let field = this.$v.form[fieldName]

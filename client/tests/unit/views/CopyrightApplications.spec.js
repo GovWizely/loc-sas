@@ -5,7 +5,8 @@ import CopyrightApplications from '@/views/CopyrightApplications'
 describe('Copyright Applications', () => {
   it('renders copyright applications', async () => {
     let fakeRepository = {
-      _getCopyrightApplications: () => ({
+      _getAccessToken: () => 'Bearer 123abc',
+      _getCopyrightApplications: (pageSize, page, status) => ({
         count: 2,
         data: [
           {

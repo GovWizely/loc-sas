@@ -6,7 +6,7 @@ describe('Home page', () => {
   it('prompts user to log in', async () => {
     let fakeRepository = {
       _getAccessToken: () => ('abc123'),
-      _getCurrentUserInfo: (_) => (null)
+      _getCurrentUserInfo: () => (null)
     }
 
     const wrapper = renderComponent(App, fakeRepository)
@@ -15,7 +15,7 @@ describe('Home page', () => {
     expect(wrapper.find('#message').text()).to.equal('Please log in.')
   })
 
-  it.only('prompts user when a server error occurs', async () => {
+  it('prompts user when a server error occurs', async () => {
     let fakeRepository = {
       _getAccessToken: () => ({
         error: 'This is a terrible error'

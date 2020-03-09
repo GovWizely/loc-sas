@@ -1,31 +1,31 @@
 <template>
   <div class="md-layout md-gutter">
-    <div class="md-layout-item md-small-size-100" ref="tmpAuthorOrganizationName">
-      <md-field :class="getValidationClass('tmpAuthorOrganizationName')">
-        <label for="author-organization-name">Organization Name</label>
+    <div class="md-layout-item md-small-size-100" ref="organizationName">
+      <md-field :class="getValidationClass('organizationName')">
+        <label for="organization-name">Organization Name</label>
         <md-input
-          name="author-organization-name"
-          id="author-organization-name"
-          v-model="form.tmpAuthorOrganizationName"
+          name="organization-name"
+          id="organization-name"
+          v-model="form.organizationName"
           :disabled="sending"
           maxlength="255"
           @input="updateField()"
         />
         <span
           class="md-error"
-          v-if="!$v.form.tmpAuthorOrganizationName.required"
+          v-if="!$v.form.organizationName.required"
         >The organization name is required</span>
       </md-field>
     </div>
-    <div class="md-layout-item md-small-size-100" ref="tmpDomicile">
+    <div class="md-layout-item md-small-size-100" ref="domicile">
       <copyright-select-field
-        v-model="form.tmpDomicile"
+        v-model="form.domicile"
         name="domicile"
         label="Domicile"
         required="true"
         :disabled="sending"
-        :validationClass="getValidationClass('tmpDomicile')"
-        :displayRequiredError="!$v.form.tmpDomicile.required"
+        :validationClass="getValidationClass('domicile')"
+        :displayRequiredError="!$v.form.domicile.required"
         errorMessage="The domicile is required"
         @input="updateField()"
       />
@@ -45,31 +45,25 @@ export default {
     'copyright-select-field': CopyrightSelectField
   },
   created () {
-    this.form.tmpAuthorOrganizationName = this.value.authorOrganizationName
-    this.form.tmpDomicile = this.value.domicile
+    this.form = this.value
   },
   data: () => ({
-    invalid: false,
-    form: {
-      tmpAuthorOrganizationName: null,
-      tmpDomicile: null
-    }
+    invalid: null,
+    form: null
   }),
   validations: {
     form: {
-      tmpAuthorOrganizationName: {
+      organizationName: {
         required
       },
-      tmpDomicile: {
+      domicile: {
         required
       }
     }
   },
   methods: {
     updateField () {
-      this.value.authorOrganizationName = this.form.tmpAuthorOrganizationName
-      this.value.domicile = this.form.tmpDomicile
-      this.$emit('input', this.value)
+      this.$emit('input', this.form)
     },
     getValidationClass (fieldName) {
       let field = this.$v.form[fieldName]

@@ -11,7 +11,8 @@ describe('Create Copyright Application', () => {
     let _saveCopyrightApplication = Sinon.stub().resolves({ id: 1 })
     let fakeRepository = {
       _saveCopyrightApplication,
-      _generateServiceRequest: () => Promise.resolve('abc123')
+      _generateServiceRequest: () => Promise.resolve('abc123'),
+      _saveAuthor: (id, a) => Promise.resolve({ id: 333 })
     }
 
     const wrapper = renderComponent(CreateCopyrightApplication, fakeRepository)
@@ -19,17 +20,17 @@ describe('Create Copyright Application', () => {
     await wrapper.vm.$nextTick()
 
     wrapper.find('#primary-title').setValue('Zorba')
-    wrapper.find('#year-completed').setValue(2020)
-    wrapper.find('#publication-date').setValue('04281988')
+    wrapper.find('#year-completed').setValue(2010)
+    wrapper.find('#publication-date').setValue('04282012')
 
-    wrapper.vm.form.authorCitizenship = 'GR'
-    wrapper.find('#author-individual').trigger('click')
+    wrapper.vm.form.authors[0].citizenship = 'GR'
+    wrapper.find('.author-form').find('#author-individual').trigger('click')
     await wrapper.vm.$nextTick()
 
-    wrapper.find('#author-first-name').setValue('Ray')
-    wrapper.find('#author-last-name').setValue('Donovan')
-    wrapper.find('#author-year-of-birth').setValue(1988)
-    wrapper.find('#author-year-of-death').setValue(2099)
+    wrapper.find('.author-form').find('#first-name').setValue('Ray')
+    wrapper.find('.author-form').find('#last-name').setValue('Donovan')
+    wrapper.find('.author-form').find('#year-of-birth').setValue(1988)
+    wrapper.find('.author-form').find('#year-of-death').setValue(2099)
 
     wrapper.find('#claimant-individual').trigger('click')
     await wrapper.vm.$nextTick()
@@ -57,14 +58,14 @@ describe('Create Copyright Application', () => {
     expect(_saveCopyrightApplication.called).to.be.true
     const submittedApplication = _saveCopyrightApplication.lastCall.args[0]
     expect(submittedApplication.primaryTitle).to.equal('Zorba')
-    expect(submittedApplication.yearCompleted).to.equal(2020)
-    expect(submittedApplication.publicationDate).to.equal('04281988')
+    expect(submittedApplication.yearCompleted).to.equal(2010)
+    expect(submittedApplication.publicationDate).to.equal('04282012')
 
-    expect(submittedApplication.authorFirstName).to.equal('Ray')
-    expect(submittedApplication.authorLastName).to.equal('Donovan')
-    expect(submittedApplication.authorCitizenship).to.equal('GR')
-    expect(submittedApplication.authorYearOfBirth).to.equal(1988)
-    expect(submittedApplication.authorYearOfDeath).to.equal(2099)
+    expect(submittedApplication.authors[0].firstName).to.equal('Ray')
+    expect(submittedApplication.authors[0].lastName).to.equal('Donovan')
+    expect(submittedApplication.authors[0].citizenship).to.equal('GR')
+    expect(submittedApplication.authors[0].yearOfBirth).to.equal(1988)
+    expect(submittedApplication.authors[0].yearOfDeath).to.equal(2099)
 
     expect(submittedApplication.claimantFirstName).to.equal('George')
     expect(submittedApplication.claimantLastName).to.equal('Washington')

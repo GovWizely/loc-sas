@@ -9,64 +9,64 @@
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-10">
         <copyright-select-field
-          v-model="form.tmpAuthorPrefix"
-          name="author-prefix"
+          v-model="form.prefix"
+          name="prefix"
           label="Prefix"
           :disabled="sending"
           @input="updateField()"
         />
       </div>
-      <div class="md-layout-item md-small-size-100" ref="tmpAuthorFirstName">
-        <md-field :class="getValidationClass('tmpAuthorFirstName')">
-          <label for="author-first-name">First Name</label>
+      <div class="md-layout-item md-small-size-100" ref="firstName">
+        <md-field :class="getValidationClass('firstName')">
+          <label for="first-name">First Name</label>
           <md-input
-            name="author-first-name"
-            id="author-first-name"
-            v-model="form.tmpAuthorFirstName"
+            name="first-name"
+            id="first-name"
+            v-model="form.firstName"
             :disabled="sending"
             maxlength="255"
             @input="updateField()"
           />
           <span
             class="md-error"
-            v-if="!$v.form.tmpAuthorFirstName.requiredIf"
+            v-if="!$v.form.firstName.requiredIf"
           >First name &amp; last name or pseudonym is required</span>
         </md-field>
       </div>
       <div class="md-layout-item md-small-size-100">
         <md-field>
-          <label for="author-middle-name">Middle Name</label>
+          <label for="middle-name">Middle Name</label>
           <md-input
-            name="author-middle-name"
-            id="author-middle-name"
-            v-model="form.tmpAuthorMiddleName"
+            name="middle-name"
+            id="middle-name"
+            v-model="form.middleName"
             :disabled="sending"
             maxlength="255"
             @input="updateField()"
           />
         </md-field>
       </div>
-      <div class="md-layout-item md-small-size-100" ref="tmpAuthorLastName">
-        <md-field :class="getValidationClass('tmpAuthorLastName')">
-          <label for="author-last-name">Last Name</label>
+      <div class="md-layout-item md-small-size-100" ref="lastName">
+        <md-field :class="getValidationClass('lastName')">
+          <label for="last-name">Last Name</label>
           <md-input
-            name="author-last-name"
-            id="author-last-name"
-            v-model="form.tmpAuthorLastName"
+            name="last-name"
+            id="last-name"
+            v-model="form.lastName"
             :disabled="sending"
             maxlength="255"
             @input="updateField()"
           />
           <span
             class="md-error"
-            v-if="!$v.form.tmpAuthorLastName.requiredIf"
+            v-if="!$v.form.lastName.requiredIf"
           >First name &amp; last name or pseudonym is required</span>
         </md-field>
       </div>
       <div class="md-layout-item md-size-10">
         <copyright-select-field
-          v-model="form.tmpAuthorSuffix"
-          name="author-suffix"
+          v-model="form.suffix"
+          name="suffix"
           label="Suffix"
           :disabled="sending"
           @input="updateField()"
@@ -74,20 +74,20 @@
       </div>
     </div>
     <div class="md-layout md-gutter">
-      <div class="md-layout-item md-small-size-100" ref="tmpAuthorPseudonym">
-        <md-field :class="getValidationClass('tmpAuthorPseudonym')">
-          <label for="author-pseudonym">Pseudonym</label>
+      <div class="md-layout-item md-small-size-100" ref="pseudonym">
+        <md-field :class="getValidationClass('pseudonym')">
+          <label for="pseudonym">Pseudonym</label>
           <md-input
-            name="author-pseudonym"
-            id="author-pseudonym"
-            v-model="form.tmpAuthorPseudonym"
+            name="pseudonym"
+            id="pseudonym"
+            v-model="form.pseudonym"
             :disabled="sending"
             maxlength="255"
             @input="updateField()"
           />
           <span
             class="md-error"
-            v-if="!$v.form.tmpAuthorPseudonym.requiredIf"
+            v-if="!$v.form.pseudonym.requiredIf"
           >First name &amp; last name or pseudonym is required</span>
         </md-field>
       </div>
@@ -97,62 +97,62 @@
       <md-tooltip md-direction="right">Citizenship or domicile is required</md-tooltip>
     </label>
     <div class="md-layout md-gutter">
-      <div class="md-layout-item md-small-size-100" ref="tmpAuthorCitizenship">
+      <div class="md-layout-item md-small-size-100" ref="citizenship">
         <copyright-select-field
-          v-model="form.tmpAuthorCitizenship"
-          name="author-citizenship"
+          v-model="form.citizenship"
+          name="citizenship"
           label="Citizenship"
           :disabled="sending"
-          :validationClass="getValidationClass('tmpAuthorCitizenship')"
-          :displayRequiredError="!$v.form.tmpAuthorCitizenship.requiredIf"
+          :validationClass="getValidationClass('citizenship')"
+          :displayRequiredError="!$v.form.citizenship.requiredIf"
           errorMessage="The author citizenship or domicile is required'"
           @input="updateField()"
         />
       </div>
       <div class="or">- or -</div>
-      <div class="md-layout-item md-small-size-100" ref="tmpDomicile">
+      <div class="md-layout-item md-small-size-100" ref="domicile">
         <copyright-select-field
-          v-model="form.tmpDomicile"
+          v-model="form.domicile"
           name="domicile"
           label="Domicile"
           :disabled="sending"
-          :validationClass="getValidationClass('tmpDomicile')"
-          :displayRequiredError="!$v.form.tmpDomicile.requiredIf"
+          :validationClass="getValidationClass('domicile')"
+          :displayRequiredError="!$v.form.domicile.requiredIf"
           errorMessage="The author citizenship or domicile is required"
           @input="updateField()"
         />
       </div>
-      <div class="md-layout-item md-small-size-100" ref="tmpAuthorYearOfBirth">
-        <md-field :class="getValidationClass('tmpAuthorYearOfBirth')">
-          <label for="author-year-of-birth">Year of Birth (YYYY)</label>
+      <div class="md-layout-item md-small-size-100" ref="yearOfBirth">
+        <md-field :class="getValidationClass('yearOfBirth')">
+          <label for="year-of-birth">Year of Birth (YYYY)</label>
           <md-input
-            name="author-year-of-birth"
-            id="author-year-of-birth"
+            name="year-of-birth"
+            id="year-of-birth"
             type="number"
-            v-model.number="form.tmpAuthorYearOfBirth"
+            v-model.number="form.yearOfBirth"
             :disabled="sending"
             @input="updateField()"
           />
           <span
             class="md-error"
-            v-if="!$v.form.tmpAuthorYearOfBirth.minValue || !$v.form.tmpAuthorYearOfBirth.maxValue"
+            v-if="!$v.form.yearOfBirth.minValue || !$v.form.yearOfBirth.maxValue"
           >The year of birth must be between {{minAuthorYearOfBirth}} and {{maxAuthorYearOfBirth}}</span>
         </md-field>
       </div>
-      <div class="md-layout-item md-small-size-100" ref="tmpAuthorYearOfDeath">
-        <md-field :class="getValidationClass('tmpAuthorYearOfDeath')">
-          <label for="author-year-of-death">Deceased (YYYY)</label>
+      <div class="md-layout-item md-small-size-100" ref="yearOfDeath">
+        <md-field :class="getValidationClass('yearOfDeath')">
+          <label for="year-of-death">Deceased (YYYY)</label>
           <md-input
-            name="author-year-of-death"
-            id="author-year-of-death"
+            name="year-of-death"
+            id="year-of-death"
             type="number"
-            v-model.number="form.tmpAuthorYearOfDeath"
+            v-model.number="form.yearOfDeath"
             :disabled="sending"
             @input="updateField()"
           />
           <span
             class="md-error"
-            v-if="!$v.form.tmpAuthorYearOfDeath.minYearOfDeath"
+            v-if="!$v.form.yearOfDeath.minYearOfDeath"
           >The author's year of death, if applicable, must be after the year of birth</span>
         </md-field>
       </div>
@@ -178,74 +178,55 @@ export default {
     'copyright-select-field': CopyrightSelectField
   },
   created () {
-    this.form.tmpAuthorPrefix = this.value.authorPrefix
-    this.form.tmpAuthorFirstName = this.value.authorFirstName
-    this.form.tmpAuthorMiddleName = this.value.authorMiddleName
-    this.form.tmpAuthorLastName = this.value.authorLastName
-    this.form.tmpAuthorSuffix = this.value.authorSuffix
-    this.form.tmpAuthorPseudonym = this.value.authorPseudonym
-    this.form.tmpAuthorCitizenship = this.value.authorCitizenship
-    this.form.tmpDomicile = this.value.domicile
-    this.form.tmpAuthorYearOfBirth = this.value.authorYearOfBirth
-    this.form.tmpAuthorYearOfDeath = this.value.authorYearOfDeath
+    this.form = this.value
   },
   data: () => ({
     minAuthorYearOfBirth,
     maxAuthorYearOfBirth,
-    form: {
-      tmpAuthorPrefix: null,
-      tmpAuthorFirstName: null,
-      tmpAuthorMiddleName: null,
-      tmpAuthorLastName: null,
-      tmpAuthorSuffix: null,
-      tmpAuthorPseudonym: null,
-      tmpAuthorCitizenship: null,
-      tmpDomicile: null,
-      tmpAuthorYearOfBirth: null,
-      tmpAuthorYearOfDeath: null
-    }
+    invalid: null,
+    form: null
   }),
   validations () {
     return {
       form: {
-        tmpAuthorYearOfBirth: {
+        yearOfBirth: {
           minValue: minValue(minAuthorYearOfBirth),
           maxValue: maxValue(maxAuthorYearOfBirth)
         },
-        tmpAuthorYearOfDeath: {
+        yearOfDeath: {
           minYearOfDeath: (yearOfDeath) => {
-            let yearOfBirth = this.form.tmpAuthorYearOfBirth
+            let yearOfBirth = this.form.yearOfBirth
             return (!empty(yearOfBirth) && !empty(yearOfDeath)) ? yearOfBirth <= yearOfDeath : true
           }
         },
-        tmpDomicile: {
+        domicile: {
           requiredIf: (domicile) => {
-            return (empty(this.form.tmpAuthorCitizenship)) ? !empty(domicile) : true
+            return (empty(this.form.citizenship)) ? !empty(domicile) : true
           }
         },
-        tmpAuthorCitizenship: {
-          requiredIf: (authorCitizenship) => {
-            return (empty(this.form.tmpDomicile)) ? !empty(authorCitizenship) : true
+        citizenship: {
+          requiredIf: (citizenship) => {
+            return (empty(this.form.domicile)) ? !empty(citizenship) : true
           }
         },
-        tmpAuthorFirstName: {
-          requiredIf: (authorFirstName) => {
-            return (empty(this.form.tmpAuthorPseudonym))
-              ? !empty(authorFirstName) && !empty(this.form.tmpAuthorLastName)
+        firstName: {
+          requiredIf: (firstName) => {
+            return (empty(this.form.pseudonym))
+              ? !empty(firstName) && !empty(this.form.lastName)
               : true
           }
         },
-        tmpAuthorLastName: {
-          requiredIf: (authorLastName) => {
-            return (empty(this.form.tmpAuthorPseudonym))
-              ? !empty(authorLastName) && !empty(this.form.tmpAuthorFirstName)
+        lastName: {
+          requiredIf: (lastName) => {
+            return (empty(this.form.pseudonym))
+              ? !empty(lastName) && !empty(this.form.firstName)
               : true
           }
         },
-        tmpAuthorPseudonym: {
-          requiredIf: (authorPseudonym) => {
-            return (empty(this.form.tmpAuthorFirstName) && empty(this.form.tmpAuthorLastName))
-              ? !empty(authorPseudonym)
+        pseudonym: {
+          requiredIf: (pseudonym) => {
+            return (empty(this.form.firstName) && empty(this.form.lastName))
+              ? !empty(pseudonym)
               : true
           }
         }
@@ -254,17 +235,7 @@ export default {
   },
   methods: {
     updateField () {
-      this.value.authorPrefix = this.form.tmpAuthorPrefix
-      this.value.authorFirstName = this.form.tmpAuthorFirstName
-      this.value.authorMiddleName = this.form.tmpAuthorMiddleName
-      this.value.authorLastName = this.form.tmpAuthorLastName
-      this.value.authorSuffix = this.form.tmpAuthorSuffix
-      this.value.authorPseudonym = this.form.tmpAuthorPseudonym
-      this.value.authorCitizenship = this.form.tmpAuthorCitizenship
-      this.value.domicile = this.form.tmpDomicile
-      this.value.authorYearOfBirth = this.form.tmpAuthorYearOfBirth
-      this.value.authorYearOfDeath = this.form.tmpAuthorYearOfDeath
-      this.$emit('input', this.value)
+      this.$emit('input', this.form)
     },
     getValidationClass (fieldName) {
       let field = this.$v.form[fieldName]
