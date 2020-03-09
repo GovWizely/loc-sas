@@ -2,7 +2,7 @@
   <div id="app">
     <md-toolbar class="md-primary" md-elevation="1">
       <div class="title-container">
-        <img id="logo" height="20px" src="./assets/copyrightLogo.png"/>
+        <img id="logo" height="20px" src="./assets/copyrightLogo.png" alt="Copyright Logo"/>
         <h1 class="md-title">| U.S. Copyright Office Registration System</h1>
       </div>
       <div v-if="currentUserInfo">
