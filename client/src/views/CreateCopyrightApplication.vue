@@ -81,7 +81,7 @@
                 <span
                   class="md-error"
                   v-else-if="!$v.form.yearCompleted.minValue || !$v.form.yearCompleted.maxValue"
-                >The year completed must be between {{minYearCompleted}} and {{thisYear}}</span>
+                >The year completed must be between {{minYearCompleted}} and {{currentYear}}</span>
               </md-field>
             </div>
             <div class="md-layout-item md-small-size-100">
