@@ -695,7 +695,7 @@ export default {
           onOrBeforeToday: (publicationDate) => {
             return (!empty(publicationDate))
               ? moment(publicationDate, 'MMDDYYYY').isSameOrBefore(moment())
-              : false
+              : true
           }
         },
         authorOrganization: {
