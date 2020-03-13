@@ -1,0 +1,23 @@
+stages:
+  - test
+
+pytest:
+  image: python:3.7
+  stage: test
+  script:
+    - pip install --upgrade pip
+    - pip install -r requirements-test.txt
+    - flake8
+    - mkdir -p /tmp/test-results && mkdir -p /tmp/test-artifacts
+    - python -m pytest --disable-pytest-warnings tests --cov=app --cov-report=html:/tmp/test-artifacts/coverage --cov-fail-under=75 --junitxml=/tmp/test-results/pytest.xml
+  tags:
+    - docker
+
+uitest:
+  image: node:10.19.0
+  stage: test
+  script:
+    - cd client && npm ci
+    - npm test
+  tags:
+    - docker
