@@ -159,3 +159,11 @@ summary::-webkit-details-marker {
   margin-top: 20px;
   margin-right: 22px;
 }
+
+.md-button.delete-btn {
+  background-color: get-copyright-color('lighter');
+}
+
+.md-button.delete-btn .md-icon {
+  margin-left: 12px;
+}

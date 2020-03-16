@@ -152,7 +152,7 @@
           </div>
         </details>
         <div v-for="(author, index) in form.authors" :key="author.id">
-          <author-form :ref="'authorForm'+index" v-model="form.authors[index]" :sending="sending" />
+          <author-form :ref="'authorForm'+index" v-model="form.authors[index]" :sending="sending" :deleteFn="deleteAuthor" :hideDelete="index === 0" />
         </div>
         <md-button class="md-raised md-accent add-author" @click="addAuthor">Add Author</md-button>
         <details open>
@@ -744,7 +744,7 @@ export default {
 
       let authorSectionInvalid = false
       Object.keys(this.$refs).forEach(k => {
-        if (k.startsWith('authorForm')) {
+        if (k.startsWith('authorForm') && this.$refs[k][0]) {
           this.$refs[k][0].validate()
           if (this.$refs[k][0].invalid && !authorSectionInvalid) {
             authorSectionInvalid = true
@@ -832,6 +832,10 @@ export default {
     async addAuthor () {
       const newAuthor = await this.repository._saveAuthor(this.form.id, {})
       this.form.authors.push(newAuthor)
+    },
+    deleteAuthor (id) {
+      this.repository._deleteAuthor(id)
+      this.form.authors = this.form.authors.filter(a => a.id !== id)
     }
   },
   updated () {
