@@ -47,6 +47,17 @@ export default class Repository {
     )
   }
 
+  _deleteAuthor (id) {
+    axios({
+      url: '/api/v1/author/' + id,
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.accessToken
+      }
+    }).catch(error => this.handleError(error))
+  }
+
   async saveRequest (baseUrl, entity) {
     const id = entity.id
     const url = (id) ? baseUrl + id : baseUrl
