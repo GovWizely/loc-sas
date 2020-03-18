@@ -1,5 +1,5 @@
 <template>
-  <details open class="author-form">
+  <details open>
     <summary class="md-title">Author</summary>
     <div class="delete-container" v-if="!hideDelete">
       <md-button class="delete-btn md-mini" @click="deleteAuthor(form.id)">Delete
