@@ -14,7 +14,7 @@ from flask_appbuilder.security.decorators import protect
 from werkzeug.utils import secure_filename
 
 from app import app
-from app.models import Author, CopyrightApplication
+from app.models import Author, Claimant, CopyrightApplication
 from . import appbuilder
 
 
@@ -34,19 +34,7 @@ class CopyrightApplicationApi(ModelRestApi):
         'publication_date',
         'publication_country',
         'authors',
-        'claimant_organization',
-        'claimant_organization_name',
-        'claimant_prefix',
-        'claimant_first_name',
-        'claimant_middle_name',
-        'claimant_last_name',
-        'claimant_suffix',
-        'claimant_address',
-        'claimant_address2',
-        'claimant_city',
-        'claimant_state',
-        'claimant_postal_code',
-        'claimant_country',
+        'claimants',
         'possible_rights_and_permissions_organization_name',
         'possible_rights_and_permissions_prefix',
         'possible_rights_and_permissions_first_name',
@@ -94,6 +82,30 @@ class AuthorApi(ModelRestApi):
 
 
 appbuilder.add_api(AuthorApi)
+
+
+class ClaimantApi(ModelRestApi):
+    resource_name = 'claimant'
+    datamodel = SQLAInterface(Claimant)
+    add_columns = [
+        'copyright_application_id',
+        'organization',
+        'organization_name',
+        'prefix',
+        'first_name',
+        'middle_name',
+        'last_name',
+        'suffix',
+        'address',
+        'address2',
+        'city',
+        'state',
+        'postal_code',
+        'country',
+    ]
+
+
+appbuilder.add_api(ClaimantApi)
 
 
 class CurrentUserApi(BaseApi):

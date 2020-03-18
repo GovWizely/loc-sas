@@ -1,12 +1,12 @@
 <template>
   <div class="md-layout md-gutter">
-    <div class="md-layout-item md-small-size-100" ref="claimantOrganizationName">
-      <md-field :class="getValidationClass('claimantOrganizationName')">
-        <label for="claimant-organization-name">Organization Name</label>
+    <div class="md-layout-item md-small-size-100" ref="organizationName">
+      <md-field :class="getValidationClass('organizationName')">
+        <label for="organization-name">Organization Name</label>
         <md-input
-          name="claimant-organization-name"
-          id="claimant-organization-name"
-          v-model="form.claimantOrganizationName"
+          name="organization-name"
+          id="organization-name"
+          v-model="form.organizationName"
           :disabled="sending"
           maxlength="255"
           required
@@ -14,7 +14,7 @@
         />
         <span
           class="md-error"
-          v-if="!$v.form.claimantOrganizationName.required"
+          v-if="!$v.form.organizationName.required"
         >The organization name is required</span>
       </md-field>
     </div>
@@ -37,7 +37,7 @@ export default {
   }),
   validations: {
     form: {
-      claimantOrganizationName: {
+      organizationName: {
         required
       }
     }

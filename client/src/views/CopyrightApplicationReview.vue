@@ -133,30 +133,33 @@
         </div>
       </div>
 
-      <div class="col">
-        <div class="col-left">
-          <label class="field-label">Copyright Claimant:</label>
-        </div>
-        <div class="col-right">
-          <div v-if="application.claimantOrganization">
-            <span>{{application.claimantOrganizationName}}</span>
+      <div v-for="claimant in application.claimants" :key="claimant.id">
+        <div class="col">
+          <div class="col-left">
+            <label class="field-label">Copyright Claimant:</label>
           </div>
-          <div v-else>
-          <span>{{formatName(
-            application.claimantPrefix,
-            application.claimantFirstName,
-            application.claimantMiddleName,
-            application.claimantLastName,
-            application.claimantSuffix)}}</span>
+          <div class="col-right">
+            <div v-if="claimant.organization">
+              <span>{{claimant.organizationName}}</span>
+            </div>
+            <div v-else>
+            <span>{{formatName(
+              claimant.prefix,
+              claimant.firstName,
+              claimant.middleName,
+              claimant.lastName,
+              claimant.suffix)}}</span>
+            </div>
+            <span>{{claimant.address}} {{claimant.address2}}</span><br />
+            <span>{{formatCityStateZipCountry(
+              claimant.city,
+              claimant.state,
+              claimant.postalCode,
+              claimant.country)}}</span>
           </div>
-          <span>{{application.claimantAddress}} {{application.claimantAddress2}}</span><br />
-          <span>{{formatCityStateZipCountry(
-            application.claimantCity,
-            application.claimantState,
-            application.claimantPostalCode,
-            application.claimantCountry)}}</span>
         </div>
       </div>
+
       <div class="col" v-if="hasRightsAndPermissonsAddress()">
         <div class="col-left">
           <label class="field-label">Rights and Permissions:</label>

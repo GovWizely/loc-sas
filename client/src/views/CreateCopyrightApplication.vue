@@ -151,131 +151,26 @@
             </div>
           </div>
         </details>
-        <div v-for="(author, index) in form.authors" :key="author.id">
-          <author-form :ref="'authorForm'+index" v-model="form.authors[index]" :sending="sending" :deleteFn="deleteAuthor" :hideDelete="index === 0" />
+        <div v-for="(author, index) in form.authors" :key="'author_'+author.id">
+          <author-form
+            :id="'author-'+author.id"
+            :ref="'authorForm'+index"
+            v-model="form.authors[index]"
+            :sending="sending"
+            :deleteFn="deleteAuthor"
+            :hideDelete="index === 0"
+          />
         </div>
-        <md-button class="md-raised md-accent add-author" @click="addAuthor">Add Author</md-button>
-        <details open>
-          <summary class="md-title">Claimant</summary>
-          <div class="question-and-answer">
-            <div class="question">
-            <label class="field-label">Is the claimant an individual or organization?</label>
-            </div>
-            <div class="answer" ref="claimantOrganization">
-              <md-radio id="claimant-individual" v-model="form.claimantOrganization" :value="false" @change="toggleClaimantOrganization">
-                Individual
-              </md-radio>
-              <md-radio id="claimant-organization" v-model="form.claimantOrganization" :value="true" @change="toggleClaimantOrganization">
-                Organization
-              </md-radio>
-            </div>
-          </div>
-          <claimant-individual-form
-            v-if="form.claimantOrganization === false"
-            ref="claimantIndividualForm"
-            v-model="form"
+        <md-button class="md-raised md-accent add-btn" @click="addAuthor">Add Author</md-button>
+        <div v-for="(claimant, index) in form.claimants" :key="'claimant_'+claimant.id">
+          <claimant-form
+            :id="'claimant-'+claimant.id"
+            :ref="'claimantForm'+index"
+            v-model="form.claimants[index]"
             :sending="sending"
           />
-          <claimant-organization-form
-            v-if="form.claimantOrganization === true"
-            ref="claimantOrganizationForm"
-            v-model="form"
-            :sending="sending"
-          />
-           <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="getValidationClass('claimantAddress')">
-                <label for="claimant-address" ref="claimantAddress">Address</label>
-                <md-input
-                  name="claimant-address"
-                  id="claimant-address"
-                  v-model="form.claimantAddress"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.claimantAddress.required"
-                >The claimant address is required</span>
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label for="claimant-address2">Address 2</label>
-                <md-input
-                  name="claimant-address2"
-                  id="claimant-address2"
-                  v-model="form.claimantAddress2"
-                  :disabled="sending"
-                  maxlength="255"
-                />
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-20">
-              <md-field :class="getValidationClass('claimantCity')">
-                <label for="claimant-city" ref="claimantCity">City</label>
-                <md-input
-                  name="claimant-city"
-                  id="claimant-city"
-                  v-model="form.claimantCity"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.claimantCity.required"
-                >The claimant city is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-size-20" ref="claimantState">
-              <copyright-select-field
-                v-model="form.claimantState"
-                name="claimant-state"
-                label="State"
-                required="true"
-                :disabled="sending"
-                :validationClass="getValidationClass('claimantState')"
-                :displayRequiredError="!$v.form.claimantState.required"
-                errorMessage="The claimant state is required"
-              />
-            </div>
-            <div class="md-layout-item md-size-20">
-              <md-field :class="getValidationClass('claimantPostalCode')">
-                <label for="claimant-postal-code" ref="claimantPostalCode">Postal Code</label>
-                <md-input
-                  name="claimant-postal-code"
-                  id="claimant-postal-code"
-                  v-model="form.claimantPostalCode"
-                  :disabled="sending"
-                  required
-                  maxlength="255"
-                />
-                <span
-                  class="md-error"
-                  v-if="!$v.form.claimantPostalCode.required"
-                >The claimant postal code is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100" ref="claimantCountry">
-              <copyright-select-field
-                v-model="form.claimantCountry"
-                name="claimant-country"
-                label="Country"
-                required="true"
-                :disabled="sending"
-                :validationClass="getValidationClass('claimantCountry')"
-                :displayRequiredError="!$v.form.claimantCountry.required"
-                errorMessage="The claimant country is required"
-              />
-            </div>
-          </div>
-        </details>
+        </div>
+        <md-button class="md-raised md-accent add-btn" @click="addClaimant">Add Claimant</md-button>
         <details open>
           <summary class="md-title">Rights &amp; Permissions</summary>
           <div class="md-layout md-gutter">
@@ -525,8 +420,7 @@ import { removeNonIso8895 } from '@/utils/InvalidCharacters'
 import CopyrightApplicationReview from '@/views/CopyrightApplicationReview'
 import CopyrightSelectField from '@/views/CopyrightSelectField'
 import AuthorForm from '@/views/AuthorForm'
-import ClaimantIndividualForm from '@/views/ClaimantIndividualForm'
-import ClaimantOrganizationForm from '@/views/ClaimantOrganizationForm'
+import ClaimantForm from '@/views/ClaimantForm'
 import moment from 'moment'
 
 let currentYear = moment().year()
@@ -540,8 +434,7 @@ export default {
     'copyright-application-review': CopyrightApplicationReview,
     'copyright-select-field': CopyrightSelectField,
     'author-form': AuthorForm,
-    'claimant-individual-form': ClaimantIndividualForm,
-    'claimant-organization-form': ClaimantOrganizationForm
+    'claimant-form': ClaimantForm
   },
   data: () => ({
     minYearCompleted,
@@ -557,19 +450,7 @@ export default {
       workDepositUrl: null,
       domicile: null,
       authors: [],
-      claimantOrganization: null,
-      claimantOrganizationName: null,
-      claimantPrefix: null,
-      claimantFirstName: null,
-      claimantMiddleName: null,
-      claimantLastName: null,
-      claimantSuffix: null,
-      claimantAddress: null,
-      claimantAddress2: null,
-      claimantCity: null,
-      claimantState: null,
-      claimantPostalCode: null,
-      claimantCountry: null,
+      claimants: [],
       possibleRightsAndPermissionOrganizationName: null,
       possibleRightsAndPermissionsPrefix: null,
       possibleRightsAndPermissionsFirstName: null,
@@ -622,6 +503,7 @@ export default {
       const application = await this.repository._saveCopyrightApplication(this.form)
       this.form.id = application.id
       await this.addAuthor()
+      await this.addClaimant()
     }
 
     this.loading = false
@@ -664,24 +546,6 @@ export default {
               ? moment(publicationDate, 'MMDDYYYY').isSameOrBefore(moment())
               : true
           }
-        },
-        claimantOrganization: {
-          required
-        },
-        claimantAddress: {
-          required
-        },
-        claimantCity: {
-          required
-        },
-        claimantState: {
-          required
-        },
-        claimantPostalCode: {
-          required
-        },
-        claimantCountry: {
-          required
         },
         possibleRightsAndPermissionsEmail: {
           email
@@ -741,36 +605,26 @@ export default {
     },
     async validateCopyrightApplication () {
       this.$v.$touch()
-
-      let authorSectionInvalid = false
-      Object.keys(this.$refs).forEach(k => {
-        if (k.startsWith('authorForm') && this.$refs[k][0]) {
-          this.$refs[k][0].validate()
-          if (this.$refs[k][0].invalid && !authorSectionInvalid) {
-            authorSectionInvalid = true
-          }
-        }
-      })
-
-      if (this.form.claimantOrganization === true) {
-        this.$refs.claimantOrganizationForm.validate()
-      } else if (this.form.claimantOrganization === false) {
-        this.$refs.claimantIndividualForm.validate()
-      }
-
-      let claimantSectionInvalid = false
-      if (this.form.claimantOrganization === true) {
-        claimantSectionInvalid = this.$refs.claimantOrganizationForm.invalid
-      } else if (this.form.claimantOrganization === false) {
-        claimantSectionInvalid = this.$refs.claimantIndividualForm.invalid
-      }
-
+      let authorSectionInvalid = this.validateForm('authorForm')
+      let claimantSectionInvalid = this.validateForm('claimantForm')
       if (!this.$v.$invalid && !authorSectionInvalid && !claimantSectionInvalid) {
         this.reviewCopyrightApplication = true
         window.scrollTo(0, 0)
       } else {
         this.scrollToInvalidField()
       }
+    },
+    validateForm (formName) {
+      let invalid = false
+      Object.keys(this.$refs).forEach(k => {
+        if (k.startsWith(formName) && this.$refs[k][0]) {
+          this.$refs[k][0].validate()
+          if (this.$refs[k][0].invalid && !invalid) {
+            invalid = true
+          }
+        }
+      })
+      return invalid
     },
     validateField (field) {
       if (this.$v.form[field]) {
@@ -816,16 +670,6 @@ export default {
       await this.saveDraft()
       this.uploadingWorkDeposit = false
     },
-    toggleClaimantOrganization () {
-      if (this.form.claimantOrganization === true) {
-        this.form.claimantOrganizationName = null
-        this.form.claimantPrefix = null
-        this.form.claimantFirstName = null
-        this.form.claimantMiddleName = null
-        this.form.claimantLastName = null
-        this.form.claimantSuffix = null
-      }
-    },
     async downloadWorkDeposit (url, fileName) {
       await this.repository._downloadFile(url, fileName)
     },
@@ -836,6 +680,10 @@ export default {
     deleteAuthor (id) {
       this.repository._deleteAuthor(id)
       this.form.authors = this.form.authors.filter(a => a.id !== id)
+    },
+    async addClaimant () {
+      const newClaimant = await this.repository._saveClaimant(this.form.id, {})
+      this.form.claimants.push(newClaimant)
     }
   },
   updated () {
@@ -898,7 +746,7 @@ a.field-label {
   cursor: pointer;
 }
 
-.add-author {
+.add-btn {
   margin-bottom: 25px;
 }
 </style>
