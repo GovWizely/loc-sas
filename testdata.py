@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 
 from app import appbuilder, db
-from app.models import Author, CopyrightApplication
+from app.models import Author, Claimant, CopyrightApplication
 
 log = logging.getLogger(__name__)
 
@@ -51,14 +51,17 @@ if not users_exist:
         a.year_of_birth = "1990"
         a.organization = False
         c.authors = [a]
-        c.claimant_organization = False
-        c.claimant_first_name = name[0]
-        c.claimant_last_name = name[-1]
-        c.claimant_address = "3333 Fairfax Dr"
-        c.claimant_city = "Arlington"
-        c.claimant_state = "VA"
-        c.claimant_postal_code = "22203"
-        c.claimant_country = "US"
+        cl = Claimant()
+        cl.copyright_application_id = i
+        cl.organization = False
+        cl.first_name = name[0]
+        cl.last_name = name[-1]
+        cl.address = "3333 Fairfax Dr"
+        cl.city = "Arlington"
+        cl.state = "VA"
+        cl.postal_code = "22203"
+        cl.country = "US"
+        c.claimants = [cl]
         month = random.choice(range(1, 12))
         day = random.choice(range(1, 28))
         c.created_on = datetime(int(c.year_completed), month, day)

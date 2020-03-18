@@ -19,6 +19,18 @@ assoc_copyright_application_author = Table(
                                         Column('author_id', Integer, ForeignKey('author.id'))
                                     )
 
+assoc_copyright_application_claimant = Table(
+                                        'copyright_application_claimant',
+                                        Model.metadata,
+                                        Column('id', Integer, primary_key=True),
+                                        Column(
+                                            'copyright_application_id',
+                                            Integer,
+                                            ForeignKey('copyright_application.id')
+                                        ),
+                                        Column('claimant_id', Integer, ForeignKey('claimant.id'))
+                                    )
+
 
 class CopyrightApplication(AuditMixin, Model):
     id = Column(Integer, primary_key=True)
@@ -32,19 +44,11 @@ class CopyrightApplication(AuditMixin, Model):
         secondary=assoc_copyright_application_author,
         backref='CopyrightApplication'
     )
-    claimant_organization = Column(Boolean)
-    claimant_organization_name = Column(String(255))
-    claimant_prefix = Column(String(255))
-    claimant_first_name = Column(String(255))
-    claimant_middle_name = Column(String(255))
-    claimant_last_name = Column(String(255))
-    claimant_suffix = Column(String(255))
-    claimant_address = Column(String(255))
-    claimant_address2 = Column(String(255))
-    claimant_city = Column(String(255))
-    claimant_state = Column(String(255))
-    claimant_postal_code = Column(String(255))
-    claimant_country = Column(String(255))
+    claimants = relationship(
+        'Claimant',
+        secondary=assoc_copyright_application_claimant,
+        backref='CopyrightApplication'
+    )
     possible_rights_and_permissions_organization_name = Column(String(255))
     possible_rights_and_permissions_prefix = Column(String(255))
     possible_rights_and_permissions_first_name = Column(String(255))
@@ -97,3 +101,25 @@ class Author(Model):
     organization = Column(Boolean)
     organization_name = Column(String(255))
     domicile = Column(String(255))
+
+
+class Claimant(Model):
+    id = Column(Integer, primary_key=True)
+    copyright_application_id = Column(
+        Integer,
+        ForeignKey('copyright_application.id'), nullable=False
+    )
+    copyright_application = relationship("CopyrightApplication")
+    organization = Column(Boolean)
+    organization_name = Column(String(255))
+    prefix = Column(String(255))
+    first_name = Column(String(255))
+    middle_name = Column(String(255))
+    last_name = Column(String(255))
+    suffix = Column(String(255))
+    address = Column(String(255))
+    address2 = Column(String(255))
+    city = Column(String(255))
+    state = Column(String(255))
+    postal_code = Column(String(255))
+    country = Column(String(255))

@@ -1,12 +1,12 @@
 <template>
   <details open class="author-form">
-      <summary class="md-title">Author</summary>
-      <div class="delete-container" v-if="!hideDelete">
-        <md-button class="delete-btn md-mini" @click="deleteAuthor(form.id)">Delete
-          <md-icon>delete</md-icon>
-        </md-button>
-      </div>
-      <div class="question-and-answer">
+    <summary class="md-title">Author</summary>
+    <div class="delete-container" v-if="!hideDelete">
+      <md-button class="delete-btn md-mini" @click="deleteAuthor(form.id)">Delete
+        <md-icon>delete</md-icon>
+      </md-button>
+    </div>
+    <div class="question-and-answer">
       <div class="question">
         <label class="field-label">Is the author an individual or organization?</label>
       </div>

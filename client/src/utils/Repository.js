@@ -29,8 +29,10 @@ export default class Repository {
 
   async _saveCopyrightApplication (copyrightApplication) {
     await this._saveAuthors(copyrightApplication.id, copyrightApplication.authors)
+    await this._saveClaimants(copyrightApplication.id, copyrightApplication.claimants)
     const tmpCopyrightApplication = { ...copyrightApplication }
     tmpCopyrightApplication.authors = copyrightApplication.authors.map(a => a.id)
+    tmpCopyrightApplication.claimants = copyrightApplication.claimants.map(c => c.id)
     return this.saveRequest('/api/v1/copyright_application/', tmpCopyrightApplication)
   }
 
@@ -56,6 +58,19 @@ export default class Repository {
         Authorization: localStorage.accessToken
       }
     }).catch(error => this.handleError(error))
+  }
+
+  async _saveClaimant (copyrightApplicationId, claimant) {
+    claimant.copyrightApplicationId = copyrightApplicationId
+    return this.saveRequest('/api/v1/claimant/', claimant)
+  }
+
+  async _saveClaimants (copyrightApplicationId, claimants) {
+    Promise.all(
+      claimants.map(async c => {
+        return this._saveClaimant(copyrightApplicationId, c)
+      })
+    )
   }
 
   async saveRequest (baseUrl, entity) {
