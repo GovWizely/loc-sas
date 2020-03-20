@@ -50,14 +50,11 @@ export default class Repository {
   }
 
   _deleteAuthor (id) {
-    axios({
-      url: '/api/v1/author/' + id,
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: localStorage.accessToken
-      }
-    }).catch(error => this.handleError(error))
+    this.deleteRequest('author', id)
+  }
+
+  _deleteClaimant (id) {
+    this.deleteRequest('claimant', id)
   }
 
   async _saveClaimant (copyrightApplicationId, claimant) {
@@ -71,6 +68,17 @@ export default class Repository {
         return this._saveClaimant(copyrightApplicationId, c)
       })
     )
+  }
+
+  deleteRequest (entity, id) {
+    axios({
+      url: '/api/v1/' + entity + '/' + id,
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: localStorage.accessToken
+      }
+    }).catch(error => this.handleError(error))
   }
 
   async saveRequest (baseUrl, entity) {
