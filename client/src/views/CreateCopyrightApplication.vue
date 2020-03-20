@@ -168,6 +168,8 @@
             :ref="'claimantForm'+index"
             v-model="form.claimants[index]"
             :sending="sending"
+            :deleteFn="deleteClaimant"
+            :hideDelete="index === 0"
           />
         </div>
         <md-button class="md-raised md-accent add-btn" @click="addClaimant">Add Claimant</md-button>
@@ -680,6 +682,10 @@ export default {
     deleteAuthor (id) {
       this.repository._deleteAuthor(id)
       this.form.authors = this.form.authors.filter(a => a.id !== id)
+    },
+    deleteClaimant (id) {
+      this.repository._deleteClaimant(id)
+      this.form.claimants = this.form.claimants.filter(c => c.id !== id)
     },
     async addClaimant () {
       const newClaimant = await this.repository._saveClaimant(this.form.id, {})

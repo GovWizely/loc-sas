@@ -1,6 +1,11 @@
 <template>
   <details open>
     <summary class="md-title">Claimant</summary>
+    <div class="delete-container" v-if="!hideDelete">
+      <md-button class="delete-btn md-mini" @click="deleteClaimant(form.id)">Delete
+        <md-icon>delete</md-icon>
+      </md-button>
+    </div>
     <div class="question-and-answer">
       <div class="question">
         <label class="field-label">Is the claimant an individual or organization?</label>
@@ -141,7 +146,7 @@ import ClaimantOrganizationForm from '@/views/ClaimantOrganizationForm'
 
 export default {
   name: 'ClaimantForm',
-  props: ['value', 'sending'],
+  props: ['value', 'sending', 'deleteFn', 'hideDelete'],
   mixins: [validationMixin],
   components: {
     'copyright-select-field': CopyrightSelectField,
@@ -224,7 +229,21 @@ export default {
       } else {
         this.invalid = false
       }
+    },
+    deleteClaimant (id) {
+      this.deleteFn(id)
     }
   }
 }
 </script>
+<style scoped>
+.delete-btn {
+  top: -32px;
+}
+
+.delete-container {
+  height: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+</style>
