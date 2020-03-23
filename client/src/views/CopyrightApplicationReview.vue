@@ -12,7 +12,7 @@
           <span>*-APPLICATION-*</span>
         </div>
       </div>
-      <div class="col">
+      <div class="col" id="service-request-id">
         <div class="col-left">
           <label class="field-label">Service Request Number:</label>
         </div>
@@ -20,7 +20,7 @@
           <span>{{application.serviceRequestId}}</span>
         </div>
       </div>
-      <div class="col">
+      <div class="col" id="primary-title">
         <div class="col-left">
           <label class="field-label">Primary Title:</label>
         </div>
@@ -28,7 +28,7 @@
           <span>{{application.primaryTitle}}</span>
         </div>
       </div>
-      <div class="col" v-if="application.alternateTitle">
+      <div class="col" id="alternate-title" v-if="application.alternateTitle">
         <div class="col-left">
           <label class="field-label">Alternate Title:</label>
         </div>
@@ -36,7 +36,7 @@
           <span>{{application.alternateTitle}}</span>
         </div>
       </div>
-      <div class="col">
+      <div class="col" id="year-completed">
         <div class="col-left">
           <label class="field-label">Year Completed:</label>
         </div>
@@ -44,7 +44,7 @@
           <span>{{application.yearCompleted}}</span>
         </div>
       </div>
-      <div class="col" v-if="application.publicationDate">
+      <div class="col" id="publication-date" v-if="application.publicationDate">
         <div class="col-left">
           <label class="field-label">Publication Date:</label>
         </div>
@@ -52,7 +52,7 @@
           <span>{{publicationDate()}}</span>
         </div>
       </div>
-      <div class="col" v-if="application.publicationCountry">
+      <div class="col" id="nation-of-first-publication" v-if="application.publicationCountry">
         <div class="col-left">
           <label class="field-label">Nation of First Publication:</label>
         </div>
@@ -60,17 +60,8 @@
           <span>{{application.publicationCountry}}</span>
         </div>
       </div>
-      <div class="col" v-if="application.authorOrganization">
-        <div class="col-left">
-          <label class="field-label">Work Made For Hire:</label>
-        </div>
-        <div class="col-right">
-          <span>Yes</span>
-        </div>
-      </div>
-
-      <div v-for="author in application.authors" :key="author.id">
-        <div class="col" v-if="author.organization">
+      <div v-for="author in application.authors" :key="'author-'+author.id" :id="'author-'+author.id">
+        <div class="col organization-name" v-if="author.organization">
           <div class="col-left">
             <label class="field-label">Organization Name:</label>
           </div>
@@ -78,7 +69,7 @@
             <span>{{author.organizationName}}</span>
           </div>
         </div>
-        <div class="col" v-if="!author.organization && (author.firstName || author.lastName)">
+        <div class="col full-name" v-if="!author.organization && (author.firstName || author.lastName)">
           <div class="col-left">
             <label class="field-label">Author:</label>
           </div>
@@ -91,7 +82,7 @@
               author.suffix)}}</span>
           </div>
         </div>
-        <div class="col" v-if="!author.organization && author.pseudonym">
+        <div class="col pseudonym" v-if="!author.organization && author.pseudonym">
           <div class="col-left">
             <label class="field-label">Pseudonym:</label>
           </div>
@@ -99,7 +90,7 @@
             <span>{{author.pseudonym}}</span>
           </div>
         </div>
-        <div class="col" v-if="!author.organization && author.citizenship">
+        <div class="col citizenship" v-if="!author.organization && author.citizenship">
           <div class="col-left">
             <label class="field-label">Citizenship:</label>
           </div>
@@ -107,7 +98,7 @@
             <span>{{author.citizenship}}</span>
           </div>
         </div>
-        <div class="col" v-if="author.domicile">
+        <div class="col domicile" v-if="author.domicile">
           <div class="col-left">
             <label class="field-label">Domicile:</label>
           </div>
@@ -115,7 +106,7 @@
             <span>{{author.domicile}}</span>
           </div>
         </div>
-        <div class="col" v-if="!author.organization && author.yearOfBirth">
+        <div class="col year-of-birth" v-if="!author.organization && author.yearOfBirth">
           <div class="col-left">
             <label class="field-label">Year of Birth:</label>
           </div>
@@ -123,7 +114,7 @@
             <span>{{author.yearOfBirth}}</span>
           </div>
         </div>
-        <div class="col" v-if="!author.organization && author.yearOfDeath">
+        <div class="col deceased" v-if="!author.organization && author.yearOfDeath">
           <div class="col-left">
             <label class="field-label">Deceased:</label>
           </div>
@@ -131,18 +122,27 @@
             <span>{{author.yearOfDeath}}</span>
           </div>
         </div>
+        <div class="col work-made-for-hire">
+          <div class="col-left">
+            <label class="field-label">Work Made For Hire:</label>
+          </div>
+          <div class="col-right">
+            <span v-if="author.organization">Yes</span>
+            <span v-else>No</span>
+          </div>
+        </div>
       </div>
 
-      <div v-for="claimant in application.claimants" :key="claimant.id">
+      <div v-for="claimant in application.claimants" :key="'claimant-'+claimant.id" :id="'claimant-'+ claimant.id">
         <div class="col">
           <div class="col-left">
             <label class="field-label">Copyright Claimant:</label>
           </div>
           <div class="col-right">
-            <div v-if="claimant.organization">
+            <div class="organization-name" v-if="claimant.organization">
               <span>{{claimant.organizationName}}</span>
             </div>
-            <div v-else>
+            <div v-else class="full-name">
             <span>{{formatName(
               claimant.prefix,
               claimant.firstName,
@@ -150,8 +150,8 @@
               claimant.lastName,
               claimant.suffix)}}</span>
             </div>
-            <span>{{claimant.address}} {{claimant.address2}}</span><br />
-            <span>{{formatCityStateZipCountry(
+            <span class="address-line-1">{{claimant.address}} {{claimant.address2}}</span><br />
+            <span class="address-line-2">{{formatCityStateZipCountry(
               claimant.city,
               claimant.state,
               claimant.postalCode,
@@ -160,41 +160,41 @@
         </div>
       </div>
 
-      <div class="col" v-if="hasRightsAndPermissonsAddress()">
+      <div id="possible-rights-and-permissions" class="col" v-if="hasRightsAndPermissonsAddress()">
         <div class="col-left">
           <label class="field-label">Rights and Permissions:</label>
         </div>
         <div class="col-right">
-          <span>{{formatName(
+          <span class="full-name">{{formatName(
             application.possibleRightsAndPermissionsPrefix,
             application.possibleRightsAndPermissionsFirstName,
             application.possibleRightsAndPermissionsMiddleName,
             application.possibleRightsAndPermissionsLastName,
             application.possibleRightsAndPermissionsSuffix)}}</span><br />
-          <div v-if="application.possibleRightsAndPermissionsOrganizationName">
+          <div class="organization-name" v-if="application.possibleRightsAndPermissionsOrganizationName">
             <span>
               {{application.possibleRightsAndPermissionsOrganizationName}}
             </span><br />
           </div>
-          <span>{{application.possibleRightsAndPermissionsAddress}} {{application.possibleRightsAndPermissionsAddress2}}</span><br />
-          <span>{{formatCityStateZipCountry(
+          <span class="address-line-1">{{application.possibleRightsAndPermissionsAddress}} {{application.possibleRightsAndPermissionsAddress2}}</span><br />
+          <span class="address-line-2">{{formatCityStateZipCountry(
             application.possibleRightsAndPermissionsCity,
             application.possibleRightsAndPermissionsState,
             application.possibleRightsAndPermissionsPostalCode,
             application.possibleRightsAndPermissionsCountry)}}</span><br />
-          <span>{{possibleRightsAndPermissionsPhoneNumber()}}</span><br />
-          <span>{{application.possibleRightsAndPermissionsEmail}}</span>
+          <span class="phone-number">{{possibleRightsAndPermissionsPhoneNumber()}}</span><br />
+          <span class="email">{{application.possibleRightsAndPermissionsEmail}}</span>
         </div>
       </div>
       <div class="col" v-if="application.notesToUsco">
         <div class="col-left">
           <label class="field-label">Notes to USCO</label>
         </div>
-        <div class="col-right">
+        <div id="notes-to-usco" class="col-right">
           <span>{{application.notesToUsco}}</span>
         </div>
       </div>
-      <div class="col">
+      <div class="col" id="work-deposit-name">
         <div class="col-left">
           <label class="field-label">Work Deposit:</label>
         </div>

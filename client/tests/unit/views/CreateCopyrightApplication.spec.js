@@ -16,7 +16,7 @@ describe('Create Copyright Application', () => {
       _saveClaimant: (id, c) => Promise.resolve({ id: 999 })
     }
 
-    const wrapper = renderComponent(CreateCopyrightApplication, fakeRepository)
+    const wrapper = renderComponent(CreateCopyrightApplication, { repository: fakeRepository })
     await forIt(10)
     await wrapper.vm.$nextTick()
 
@@ -68,13 +68,14 @@ describe('Create Copyright Application', () => {
     expect(submittedApplication.authors[0].yearOfBirth).to.equal(1988)
     expect(submittedApplication.authors[0].yearOfDeath).to.equal(2099)
 
-    // expect(submittedApplication.claimantFirstName).to.equal('George')
-    // expect(submittedApplication.claimantLastName).to.equal('Washington')
-    // expect(submittedApplication.claimantAddress).to.equal('1234 Cool Ln')
-    // expect(submittedApplication.claimantCity).to.equal('Arlington')
-    // expect(submittedApplication.claimantState).to.equal('VA')
-    // expect(submittedApplication.claimantPostalCode).to.equal('12345')
-    // expect(submittedApplication.claimantCountry).to.equal('US')
-    // expect(submittedApplication.serviceRequestId).to.equal('abc123')
+    expect(submittedApplication.claimants[0].firstName).to.equal('George')
+    expect(submittedApplication.claimants[0].lastName).to.equal('Washington')
+    expect(submittedApplication.claimants[0].address).to.equal('1234 Cool Ln')
+    expect(submittedApplication.claimants[0].city).to.equal('Arlington')
+    expect(submittedApplication.claimants[0].state).to.equal('VA')
+    expect(submittedApplication.claimants[0].postalCode).to.equal('12345')
+    expect(submittedApplication.claimants[0].country).to.equal('US')
+
+    expect(submittedApplication.serviceRequestId).to.equal('abc123')
   })
 })
