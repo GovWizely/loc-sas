@@ -27,7 +27,7 @@ describe('Copyright Applications', () => {
       })
     }
 
-    const wrapper = renderComponent(CopyrightApplications, fakeRepository)
+    const wrapper = renderComponent(CopyrightApplications, { repository: fakeRepository })
     await wrapper.vm.$nextTick()
 
     const application1 = wrapper.find('#app-id-1').text()

@@ -9,7 +9,7 @@ describe('Home page', () => {
       _getCurrentUserInfo: () => (null)
     }
 
-    const wrapper = renderComponent(App, fakeRepository)
+    const wrapper = renderComponent(App, { repository: fakeRepository })
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('#message').text()).to.equal('Please log in.')
@@ -27,7 +27,7 @@ describe('Home page', () => {
       )
     }
 
-    const wrapper = renderComponent(App, fakeRepository)
+    const wrapper = renderComponent(App, { repository: fakeRepository })
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.md-dialog-content').text()).to.equal('This is a terrible error')
@@ -45,7 +45,7 @@ describe('Home page', () => {
       )
     }
 
-    const wrapper = renderComponent(App, fakeRepository)
+    const wrapper = renderComponent(App, { repository: fakeRepository })
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('#initials').text()).to.equal('JW')
