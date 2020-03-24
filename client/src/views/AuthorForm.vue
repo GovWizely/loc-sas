@@ -73,7 +73,6 @@ export default {
   },
   methods: {
     updateField () {
-      this.value = this.form
       this.$emit('input', this.form)
     },
     toggleAuthorOrganization () {

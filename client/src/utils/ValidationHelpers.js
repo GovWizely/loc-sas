@@ -17,3 +17,8 @@ export function mmddyyyy (v) {
     return moment(v, 'MMDDYYYY')._isValid
   }
 }
+
+export function emptyStringToNull (v) {
+  if (v === '') return null
+  else return v
+}
