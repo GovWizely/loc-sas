@@ -324,7 +324,7 @@
                   name="possible-rights-and-permissions-phone-number"
                   id="possible-rights-and-permissions-phone-number"
                   autocomplete="tel"
-                  v-model.number="form.possibleRightsAndPermissionsPhoneNumber"
+                  v-model="form.possibleRightsAndPermissionsPhoneNumber"
                   :disabled="sending"
                 />
                 <span
