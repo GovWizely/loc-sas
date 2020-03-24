@@ -162,7 +162,7 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import { minValue, maxValue } from 'vuelidate/lib/validators'
-import { empty } from '@/utils/ValidationHelpers'
+import { empty, emptyStringToNull } from '@/utils/ValidationHelpers'
 import CopyrightSelectField from '@/views/CopyrightSelectField'
 
 let d = new Date()
@@ -235,6 +235,8 @@ export default {
   },
   methods: {
     updateField () {
+      this.form.yearOfBirth = emptyStringToNull(this.form.yearOfBirth)
+      this.form.yearOfDeath = emptyStringToNull(this.form.yearOfDeath)
       this.$emit('input', this.form)
     },
     getValidationClass (fieldName) {

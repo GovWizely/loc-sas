@@ -417,7 +417,7 @@ import {
   maxLength
 } from 'vuelidate/lib/validators'
 import { formatPhoneNumber, isValidPhoneNumber } from '@/utils/PhoneNumberFormatter'
-import { mmddyyyy, empty } from '@/utils/ValidationHelpers'
+import { mmddyyyy, empty, emptyStringToNull } from '@/utils/ValidationHelpers'
 import { removeNonIso8895 } from '@/utils/InvalidCharacters'
 import CopyrightApplicationReview from '@/views/CopyrightApplicationReview'
 import CopyrightSelectField from '@/views/CopyrightSelectField'
@@ -696,6 +696,8 @@ export default {
     Object.keys(this.form).forEach(k => {
       if (k === 'possibleRightsAndPermissionsPhoneNumber') {
         this.form[k] = formatPhoneNumber(this.form[k])
+      } else if (k === 'possibleRightsAndPermissionsPhoneNumberExtension') {
+        this.form[k] = emptyStringToNull(this.form[k])
       } else {
         this.form[k] = removeNonIso8895(this.form[k])
       }
