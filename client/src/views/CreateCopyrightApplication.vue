@@ -585,7 +585,7 @@ export default {
     clearForm () {
       this.$v.$reset()
 
-      Object.keys(this.form).map(k => {
+      Object.keys(this.form).forEach(k => {
         typeof this.form[k] === 'boolean' ? this.form[k] = false : this.form[k] = null
       })
     },
@@ -662,7 +662,7 @@ export default {
       if (!files.length) return
       Array
         .from(Array(files.length).keys())
-        .map(x => {
+        .forEach(x => {
           this.form.workDepositName = files[x].name
           formData.append('file', files[x])
         })
