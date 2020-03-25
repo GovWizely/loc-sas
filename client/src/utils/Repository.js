@@ -180,7 +180,7 @@ export default class Repository {
       headers: {
         Authorization: localStorage.accessToken
       }
-    }).then(response => response.data.file_url)
+    }).then(resp => resp.data.file_url)
       .catch(error => this.handleError(error))
 
     return response
@@ -195,9 +195,9 @@ export default class Repository {
         Authorization: localStorage.accessToken
       }
     }).then((response) => {
-      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const linkhref = window.URL.createObjectURL(new Blob([response.data]))
       const link = document.createElement('a')
-      link.href = url
+      link.href = linkhref
       link.setAttribute('download', fileName)
       document.body.appendChild(link)
       link.click()
