@@ -453,7 +453,7 @@ export default {
       domicile: null,
       authors: [],
       claimants: [],
-      possibleRightsAndPermissionOrganizationName: null,
+      possibleRightsAndPermissionsOrganizationName: null,
       possibleRightsAndPermissionsPrefix: null,
       possibleRightsAndPermissionsFirstName: null,
       possibleRightsAndPermissionsMiddleName: null,
