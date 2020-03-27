@@ -93,7 +93,7 @@ describe('Copyright Application Review', () => {
     expect(author111.find('.work-made-for-hire').text()).to.equal('Work Made For Hire:No')
 
     const author222 = wrapper.find('#author-222')
-    expect(author222.find('.organization-name').text()).to.equal('Organization Name:Amazon')
+    expect(author222.find('.organization-name').text()).to.equal('Author:Amazon')
     expect(author222.find('.work-made-for-hire').text()).to.equal('Work Made For Hire:Yes')
     expect(author222.find('.domicile').text()).to.equal('Domicile:MARS')
   })
