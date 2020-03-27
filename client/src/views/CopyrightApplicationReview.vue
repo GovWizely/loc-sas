@@ -63,7 +63,7 @@
       <div v-for="author in application.authors" :key="'author-'+author.id" :id="'author-'+author.id">
         <div class="col organization-name" v-if="author.organization">
           <div class="col-left">
-            <label class="field-label">Organization Name:</label>
+            <label class="field-label">Author:</label>
           </div>
           <div class="col-right">
             <span>{{author.organizationName}}</span>
