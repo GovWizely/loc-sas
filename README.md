@@ -1,15 +1,12 @@
 # LoC SAS
 
-[![CircleCI](https://circleci.com/gh/GovWizely/loc-sas.svg?style=svg)](https://circleci.com/gh/GovWizely/loc-sas)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=GovWizely/loc-sas)](https://dependabot.com)
-
 A web application that enables users to submit copyright applications via an online portal.
 
 ## Installation
 
 ### Dependencies
 
-- This project is built on [Flask-AppBuilder](https://github.com/dpgaspar/Flask-AppBuilder) and tested against Python 3.6+ in [CircleCI](https://app.circleci.com/github/GovWizely/loc-sas/pipelines).
+- This project is built on [Flask-AppBuilder](https://github.com/dpgaspar/Flask-AppBuilder) and tested against Python 3.6+.
 - The frontend utilizes Vue JS; NPM is required to build and run it [Install NPM](https://www.npmjs.com/get-npm)
 
 ### Local Development
@@ -17,7 +14,7 @@ A web application that enables users to submit copyright applications via an onl
 Set up your virtual environment with all the necessary packages:
 
 ```bash
-git clone git@github.com:GovWizely/loc-sas.git
+git clone git@git.loc.gov:799/DLR/reporting.git
 cd loc-sas
 mkvirtualenv -p /usr/local/bin/python3.7 -r requirements.txt loc-sas
 ```
@@ -116,7 +113,7 @@ Configure the SonarLint plugin for this project:
 Here is an example of what the integration looks like in PyCharm:
 ![Example SonarLint Issue](screenshots/example_sonarlint_issue.png)
 
-## Applicantion Screenshots
+## Application Screenshots
 
 Home Page
 ![Home Page](screenshots/loc-copyright-home-page.png)
