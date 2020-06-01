@@ -1,6 +1,6 @@
 apispec[yaml]<2,>=1.1.1
 attrs==19.3.0
-boto3==1.12.33
+boto3==1.13.19
 botocore==1.15.33
 Babel==2.8.0
 Click==7.1.1
